@@ -19,6 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const customRatioYInput = document.getElementById('custom_ratio_y');
     const applyAspectRatioBtn = document.getElementById('apply_aspect_ratio_btn');
     const showFrameCheckbox = document.getElementById('picture_show_frame_current');
+    const removePlaceholderImageBtn = document.getElementById('remove_placeholder_image_btn');
+    const placeholderPath = document.getElementById('placeholder_path');
+    const placeholderSelectorParent = placeholderPath.closest('.adminImageSelection');
+    const placeholderPreviewElement = placeholderSelectorParent.querySelector('.adminImageSelection-preview');
+    const placeholderTextElement = placeholderSelectorParent.querySelector('.adminImageSelection-text');
 
     // Store the last custom ratio values locally. Initialized to a common aspect ratio.
     let lastCustomRatioX = 16;
@@ -121,6 +126,26 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- Update Frame checkbox ---
         if (showFrameCheckbox) {
             showFrameCheckbox.checked = window.activeElement.show_frame === true;
+        }
+
+        if(window.activeElement.src){
+            if(removePlaceholderImageBtn){
+                removePlaceholderImageBtn.parentElement.classList.remove('hidden');
+
+                placeholderPath.value = window.activeElement.src;
+                placeholderTextElement.textContent = window.activeElement.src;
+                placeholderPreviewElement.src = '../../' + window.activeElement.src;
+                placeholderPreviewElement.parentElement.classList.remove('hidden');
+
+            }
+        } else {
+            if(removePlaceholderImageBtn){
+                removePlaceholderImageBtn.parentElement.classList.add('hidden');
+
+                placeholderPath.value = '';
+                placeholderTextElement.textContent = '';
+                placeholderPreviewElement.parentElement.classList.add('hidden');
+            }
         }
     };
 
@@ -229,8 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             applyAspectRatio('custom', ratioW, ratioH);
         });
-        
-        // No initial setTimeout needed anymore, updateImageSettingsPanel will handle button visibility.
     }
 
     /**
@@ -249,7 +272,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /**
+     * Sets up event listeners for the placeholder selector.
+     */
+    function setupPlaceholderPathListener() {
+        if (placeholderPath) {
+            placeholderPath.addEventListener('change', (e) => {
+                const filePath = e.target.value; // The new file path is in the input's value
+                window.saveState(); // Save state BEFORE applying changes
+                window.activeElement.src = filePath; // Update the active element's SRC if needed
+                window.updateImageSettingsPanel(); // Update the panel to reflect removal
+                window.drawCanvas(); // Redraw canvas to reflect any changes
+            });
+        }
+    }
+
+    /**
+     * Sets up event listeners for the remove placeholder button.
+     */
+    function setupRemovePlaceholderButtonListener() {
+        if (removePlaceholderImageBtn) {
+            removePlaceholderImageBtn.addEventListener('click', () => {
+                window.saveState(); // Save state BEFORE applying changes
+                window.activeElement.src = ''; // Clear the active element's source
+                window.updateImageSettingsPanel(); // Update the panel to reflect removal
+                window.drawCanvas(); // Redraw canvas to reflect any changes
+            });
+        }
+    }
+
     // Initialize event listeners
     setupAspectRatioEventListeners();
     setupFrameCheckboxListener();
+    setupPlaceholderPathListener();
+    setupRemovePlaceholderButtonListener();
 });

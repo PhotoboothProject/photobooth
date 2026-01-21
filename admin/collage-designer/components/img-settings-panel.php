@@ -2,6 +2,7 @@
 // admin/collage-designer/components/img-settings-panel.php
 
 use Photobooth\Utility\AdminInput;
+use Photobooth\Utility\PathUtility;
 
 ?>
 
@@ -59,7 +60,7 @@ use Photobooth\Utility\AdminInput;
     <!-- Apply Frame Section -->
     <div id="image_frame_settings" class="mt-4">
         <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
-            <i class="material-icons text-brand-1">photo_frame</i> <?= $languageService->translate('apply_Frame') ?>
+            <i class="material-icons text-brand-1">filter_frames</i> <?= $languageService->translate('apply_Frame') ?>
         </h3>
         <div class="mt-4 flex items-center justify-start">
             <?=
@@ -74,4 +75,37 @@ use Photobooth\Utility\AdminInput;
 ?>
         </div>
     </div>
+
+    <!-- Placeholder Settings Section -->
+    <div id="placeholder_settings" class="mt-4 gap-4">
+        <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+            <i class="material-icons text-brand-1">photo_frame</i> <?= $languageService->translate('placeholder') ?>
+        </h3>
+        <div class="mt-4 flex items-center justify-start hidden">
+            <?=
+                AdminInput::renderCta(
+                    'remove_placeholder_image',
+                    'remove_placeholder_image_btn'
+                )
+?>
+        </div>
+        <div class="col-span-2 flex flex-col">
+            <?=
+                AdminInput::renderImageSelect(
+                [
+                    'name' => 'placeholder_image',
+                    'value' => '',
+                    'paths' => [
+                        PathUtility::getAbsolutePath('resources/img/demo'),
+                        PathUtility::getAbsolutePath('private/images/placeholder'),
+                    ],
+                    'attributes' => ['data-trigger' => 'general', 'id' => 'placeholder_path']
+                ],
+                'choose_placeholder'
+            )
+?>
+        </div>
+    </div>
+
+
 </div>

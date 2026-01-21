@@ -153,7 +153,6 @@ include 'components/txt-settings-panel.php';       // Text fields management
                     </span>
 <?php
 include 'components/general-settings.php';     // General settings
-include 'components/placeholder-settings.php'; // Placeholder settings
 ?>
                 </div> <!-- End bottom-panel -->
 

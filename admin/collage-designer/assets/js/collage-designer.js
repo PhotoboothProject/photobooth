@@ -1,7 +1,7 @@
 // admin/collage-designer/assets/js/collage-designer.js
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Collage Designer JS loaded.');
+    //console.log('Collage Designer JS loaded.');
 
     //=================================================================================
     // --- Global Variables (exposed via window for external scripts) ---
@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.collageElements = [];
     window.activeElement = null; // Represents the *single* element currently being interacted with (dragged, resized, rotated)
 
+    window.loadedFrames = {}; // Globaler Cache for frame images
+    window.imageCache = {}; // Globaler Cache for loaded images
 
     // Global setting for aspect ratio lock during resizing
     window.globalLockAspectRatio = false; // standard locked
@@ -144,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
             switch (this.type) {
                 case 'image':
                     this.image = data.image || null; // HTMLImageElement
+                    this.src = data.src || null; // Original source path (can be null for demo images)
                     this.originalLayoutDataIndex = data.originalLayoutDataIndex !== undefined ? data.originalLayoutDataIndex : -1; // -1 for dynamically added images
                     this.show_frame = data.show_frame || false; // New property for image frames
                     // Potentially: aspect_ratio, original_aspect_ratio, etc. (if stored per element)
@@ -153,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     this.font_family = data.font_family || 'Arial';
                     this.font_color = data.font_color || '#000000';
                     this.font_size = data.font_size !== undefined ? data.font_size : 2; // Default font size (e.g., in %)
+                    this.text_align = data.text_align || 'center';
                     // Potentially: text_align, line_height, etc.
                     break;
                 // Add more cases for other types if needed (e.g., 'background', 'shape')
@@ -258,8 +262,11 @@ document.addEventListener('DOMContentLoaded', () => {
         window.collageCanvasWrapper.style.aspectRatio = aspect_ratio.replace(':', ' / ');
     }
 
-    window.loadedFrames = {}; // Globaler Cache for frame images
-
+    /**
+     * Loads the global frame image based on the configuration.
+     * 
+     * @returns {Image|null} The loaded Image object or null if not defined or failed to load.
+     */
     function loadFrameImg() { 
         const frameId = 'global_frame';
 
@@ -282,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
         img.crossOrigin = "anonymous";
         img.src = framePath;
         img.onload = () => {
-            console.log("Global frame image loaded successfully:", img.src);
+            //console.log("Global frame image loaded successfully:", img.src);
             window.loadedFrames[frameId] = img;
         };
         img.onerror = () => {
@@ -292,6 +299,57 @@ document.addEventListener('DOMContentLoaded', () => {
         
         window.loadedFrames[frameId] = img; 
         return img;
+    }
+
+    /**
+     * Loads an image and stores it in the cache.
+     *
+     * @param {string} src - the path to the image.
+     * @returns {Promise<Image|null>} a promise that resolves to the loaded Image object or null on error.
+     */
+    async function loadImageFromSrc(src) {
+        if (!src || typeof src !== 'string' || src.trim() === '') {
+            console.warn('loadImageFromSrc: Empty or invalid source provided.');
+            return null;
+        }
+
+        src = `../../` + src; // Adjust path to be relative to the base URL
+
+        // test if image is already in the cache
+        if (imageCache[src]) {
+            // If it's an Image object and successfully loaded
+            if (imageCache[src].complete && imageCache[src].naturalWidth !== 0) {
+                return imageCache[src];
+            }
+            // If it's a Promise, wait for it
+            if (imageCache[src] instanceof Promise) {
+                return imageCache[src];
+            }
+            // If null is in the cache (previous loading error), try again
+            if (imageCache[src] === null) {
+                delete imageCache[src]; // Remove to attempt a new load
+            }
+        }
+
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+
+        const loadingPromise = new Promise((resolve) => {
+            img.onload = () => {
+                //console.log(`Image loaded successfully: ${src}`);
+                imageCache[src] = img;
+                resolve(img);
+            };
+            img.onerror = (e) => {
+                console.error(`Failed to load image from src: ${src}`, e);
+                imageCache[src] = null; // mark as failed in cache
+                resolve(null); // resolve Promise with null
+            };
+        });
+
+        imageCache[src] = loadingPromise; // save promise to cache, to prevent multiple loads
+        img.src = src;
+        return loadingPromise;
     }
 
     async function loadDemoImages() {
@@ -382,11 +440,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     data = {
                         image: imgElement, // Assign the loaded demo image
-                        // The 'src' property from JSON might still exist for potential future specific placeholders
-                        // or for the *final* image path which would be set by the backend.
-                        // For now, in the designer, we always use the demo image for visualization.
+                        src: elementData.src || null, // Original source from JSON (can be null)
                         originalLayoutDataIndex: imagePlaceholderCount, // Use this for consistent demo image assignment
-                        show_frame: elementData.apply_frame || false // Using apply_frame from new JSON
+                        show_frame: elementData.show_frame || false // Using show_frame from new JSON
                     };
                     imagePlaceholderCount++; // Increment for the next image element
                     break;
@@ -568,6 +624,7 @@ document.addEventListener('DOMContentLoaded', () => {
             switch (el.type) {
                 case 'image':
                     snapshotEl.imageSrc = el.image ? el.image.src : null;
+                    snapshotEl.src = el.src || null;
                     snapshotEl.originalLayoutDataIndex = el.originalLayoutDataIndex;
                     snapshotEl.show_frame = el.show_frame;
                     break;
@@ -576,6 +633,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     snapshotEl.font_family = el.font_family;
                     snapshotEl.font_color = el.font_color;
                     snapshotEl.font_size = el.font_size;
+                    snapshotEl.text_align = el.text_align; 
                     break;
             }
             return snapshotEl;
@@ -612,7 +670,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (snapEl.imageSrc !== (currentEl.image ? currentEl.image.src : null)) {
                             const newImage = new Image();
                             newImage.crossOrigin = "anonymous";
-                            newImage.src = snapEl.imageSrc || window.phpFallbackImageUrl;
+                            newImage.src = snapEl.src;
                             newImage.onload = window.drawCanvas;
                             newImage.onerror = () => { console.error(`Failed to load restored image: ${newImage.src}`); window.drawCanvas(); };
                             currentEl.image = newImage;
@@ -625,6 +683,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         currentEl.font_family = snapEl.font_family;
                         currentEl.font_color = snapEl.font_color;
                         currentEl.font_size = snapEl.font_size;
+                        currentEl.text_align = snapEl.text_align;
                         break;
                 }
                 newCollageElements.push(currentEl);
@@ -651,7 +710,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             content: snapEl.content,
                             font_family: snapEl.font_family,
                             font_color: snapEl.font_color,
-                            font_size: snapEl.font_size
+                            font_size: snapEl.font_size,
+                            text_align: snapEl.text_align
                         };
                         break;
                 }
@@ -725,7 +785,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Canvas Drawing Function ---
     //=================================================================================
 
-    window.drawCanvas = function() {
+    window.drawCanvas = async function() {
         window.ctx.clearRect(0, 0, window.collageCanvas.width, window.collageCanvas.height);
 
         // calculate the current visual scaling factor to adjust handle sizes
@@ -741,38 +801,44 @@ document.addEventListener('DOMContentLoaded', () => {
         const effectiveRotationHandleOffset = ROTATION_HANDLE_OFFSET * inverseScale;
         const effectiveDeleteHandleOffset = DELETE_HANDLE_OFFSET * inverseScale;
 
-        window.collageElements.forEach((element) => {
-            const { x, y, width, height, rotation, type } = element;
-            frameImage = window.loadedFrames['global_frame'];
+        const frameImage = window.loadedFrames['global_frame'];
 
+        for (const element of window.collageElements) { 
+            const { x, y, width, height, rotation, type } = element;
+            
             if (type === 'image') {
-                const { image, show_frame } = element;
+                let image = element.image;
+
+                // If a specific src is defined, load that image instead
+                if (element.src && element.src.trim() !== '') {
+                    image = await loadImageFromSrc(element.src);
+                }
+
                 if (image) {
-                    let img = image;
-                    if (show_frame && frameImage && frameImage.complete) {
+                    if (element.show_frame && frameImage && frameImage.complete) {
                         // if frame active, create combined image with frame
-                        img = combineImages(image, frameImage, width, height);
+                        image = combineImages(image, frameImage, width, height);
                     }
 
                     if (rotation !== 0) {
-                        const preparedImageCanvas = prepareRotatedImage(img, rotation, width, height);
+                        const preparedImageCanvas = prepareRotatedImage(image, rotation, width, height);
                         window.ctx.drawImage(preparedImageCanvas, x, y, width, height);
                     } else {
-                        const imgAspectRatio = img.width / img.height;
+                        const imgAspectRatio = image.width / image.height;
                         const boxAspectRatio = width / height;
                         let sx, sy, sWidth, sHeight;
                         if (imgAspectRatio > boxAspectRatio) {
-                            sHeight = img.height;
+                            sHeight = image.height;
                             sWidth = sHeight * boxAspectRatio;
-                            sx = (img.width - sWidth) / 2;
+                            sx = (image.width - sWidth) / 2;
                             sy = 0;
                         } else {
-                            sWidth = img.width;
+                            sWidth = image.width;
                             sHeight = sWidth / boxAspectRatio;
                             sx = 0;
-                            sy = (img.height - sHeight) / 2;
+                            sy = (image.height - sHeight) / 2;
                         }
-                        window.ctx.drawImage(img, sx, sy, sWidth, sHeight, x, y, width, height);
+                        window.ctx.drawImage(image, sx, sy, sWidth, sHeight, x, y, width, height);
                     }
                 } else {
                     window.ctx.fillStyle = '#CCCCCC';
@@ -823,7 +889,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.ctx.strokeRect(x, y, width, height);
                 }
             }
-        });
+        };
 
         // --- Draw Resizing Handles for active element OR group bounding box ---
         // --- Draw Rotation Handle ONLY FOR THE ACTIVE ELEMENT ---
