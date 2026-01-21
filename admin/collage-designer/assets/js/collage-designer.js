@@ -670,11 +670,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (snapEl.imageSrc !== (currentEl.image ? currentEl.image.src : null)) {
                             const newImage = new Image();
                             newImage.crossOrigin = "anonymous";
-                            newImage.src = snapEl.src;
+                            newImage.src = snapEl.imageSrc;
                             newImage.onload = window.drawCanvas;
                             newImage.onerror = () => { console.error(`Failed to load restored image: ${newImage.src}`); window.drawCanvas(); };
                             currentEl.image = newImage;
                         }
+                        currentEl.src = snapEl.src;
                         currentEl.originalLayoutDataIndex = snapEl.originalLayoutDataIndex;
                         currentEl.show_frame = snapEl.show_frame;
                         break;
@@ -701,6 +702,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         recreatedImage.onerror = () => { console.error(`Failed to load recreated image: ${recreatedImage.src}`); window.drawCanvas(); };
                         recreatedData = {
                             image: recreatedImage,
+                            src: snapEl.src,
                             originalLayoutDataIndex: snapEl.originalLayoutDataIndex !== undefined ? snapEl.originalLayoutDataIndex : -1,
                             show_frame: snapEl.show_frame
                         };

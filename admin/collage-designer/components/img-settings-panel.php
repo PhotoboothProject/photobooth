@@ -79,9 +79,9 @@ use Photobooth\Utility\PathUtility;
     <!-- Placeholder Settings Section -->
     <div id="placeholder_settings" class="mt-4 gap-4">
         <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
-            <i class="material-icons text-brand-1">photo_frame</i> <?= $languageService->translate('placeholder') ?>
+            <i class="material-icons text-brand-1">broken_image</i> <?= $languageService->translate('placeholder') ?>
         </h3>
-        <div class="mt-4 flex items-center justify-start hidden">
+        <div class="mt-4 mb-4 flex items-center justify-start hidden">
             <?=
                 AdminInput::renderCta(
                     'remove_placeholder_image',
