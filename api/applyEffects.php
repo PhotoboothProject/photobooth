@@ -132,10 +132,10 @@ try {
         if (!$vars['isChroma']) {
             if ($vars['isCollage'] && $vars['fileName'] != $vars['singleImageFile']) {
                 $vars['editSingleCollage'] = true;
-                $imageHandler->framePath = $config['collage']['take_frame'] === 'always' ? $config['collage']['frame'] : $config['picture']['frame'];
+                $imageHandler->framePath = PathUtility::getPublicPath($config['collage']['take_frame'] === 'always' ? $config['collage']['frame'] : $config['picture']['frame']);
             } else {
                 $vars['editSingleCollage'] = false;
-                $imageHandler->framePath = $config['picture']['frame'];
+                $imageHandler->framePath = PathUtility::getPublicPath($config['picture']['frame']);
             }
 
             if (!$vars['isCollage'] || $vars['editSingleCollage']) {
