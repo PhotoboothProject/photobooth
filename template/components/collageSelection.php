@@ -161,15 +161,8 @@ function getLayoutPreviewSvg(string $layoutId, string $orientation = 'landscape'
         );
     }
 
-    // Add cut line for 2x4 and 2x3 layouts (shows where strip is cut)
-    if (
-        $layout === CollageLayoutEnum::TWO_X_FOUR_1 ||
-        $layout === CollageLayoutEnum::TWO_X_FOUR_2 ||
-        $layout === CollageLayoutEnum::TWO_X_FOUR_3 ||
-        $layout === CollageLayoutEnum::TWO_X_FOUR_4 ||
-        $layout === CollageLayoutEnum::TWO_X_THREE_1 ||
-        $layout === CollageLayoutEnum::TWO_X_THREE_2
-    ) {
+    // Add cut line for photostrip layouts (2x*)
+    if ($isPhotostrip) {
         // Dashed line in middle showing where it will be cut
         if ($width > $height) {
             // Landscape layout (e.g. 1800x1200) -> Horizontal cut
