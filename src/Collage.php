@@ -172,10 +172,7 @@ class Collage
 
         $layoutName = str_ends_with($layoutId, '.json') ? substr($layoutId, 0, -5) : $layoutId;
 
-        self::$drawDashedLine =
-            $layoutName === '2x4-2' ||
-            $layoutName === '2x4-3' ||
-            $layoutName === '2x3-1';
+        self::$drawDashedLine = str_starts_with($layoutName, '2x');
 
         $layoutFile = str_ends_with($layoutId, '.json') ? $layoutId : $layoutId . '.json';
 
@@ -568,15 +565,66 @@ class Collage
             self::$collageWidth = (int) imagesx($my_collage);
             self::$collageHeight = (int) imagesy($my_collage);
             $imageHandler->dashedLineColor = (string)imagecolorallocate($my_collage, (int)$dashed_r, (int)$dashed_g, (int)$dashed_b);
+            $replace = ['x' => self::$collageWidth, 'y' => self::$collageHeight];
             if (self::$pictureOrientation === 'portrait') {
+                $midY = self::$collageHeight / 2;
+                if (isset($layoutConfigArray) && is_array($layoutConfigArray)) {
+                    $layoutCount = count($layoutConfigArray);
+                    $uniquePhotoCount = (int) ($layoutCount / 2);
+                    $topMax = null;
+                    $bottomMin = null;
+
+                    for ($i = 0; $i < $layoutCount; $i++) {
+                        $entry = $layoutConfigArray[$i];
+                        if (!is_array($entry) || count($entry) < 4) {
+                            continue;
+                        }
+                        $y = (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $entry[1]));
+                        $h = (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $entry[3]));
+                        if ($i < $uniquePhotoCount) {
+                            $topMax = $topMax === null ? ($y + $h) : max($topMax, $y + $h);
+                        } else {
+                            $bottomMin = $bottomMin === null ? $y : min($bottomMin, $y);
+                        }
+                    }
+
+                    if ($topMax !== null && $bottomMin !== null) {
+                        $midY = ($topMax + $bottomMin) / 2;
+                    }
+                }
                 $imageHandler->dashedLineStartX = intval(self::$collageWidth * 0.03);
-                $imageHandler->dashedLineStartY = intval(self::$collageHeight / 2);
+                $imageHandler->dashedLineStartY = (int) round($midY);
                 $imageHandler->dashedLineEndX = intval(self::$collageWidth * 0.97);
-                $imageHandler->dashedLineEndY = intval(self::$collageHeight / 2);
+                $imageHandler->dashedLineEndY = (int) round($midY);
             } else {
-                $imageHandler->dashedLineStartX = intval(self::$collageWidth / 2);
+                $midX = self::$collageWidth / 2;
+                if (isset($layoutConfigArray) && is_array($layoutConfigArray)) {
+                    $layoutCount = count($layoutConfigArray);
+                    $uniquePhotoCount = (int) ($layoutCount / 2);
+                    $leftMax = null;
+                    $rightMin = null;
+
+                    for ($i = 0; $i < $layoutCount; $i++) {
+                        $entry = $layoutConfigArray[$i];
+                        if (!is_array($entry) || count($entry) < 4) {
+                            continue;
+                        }
+                        $x = (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $entry[0]));
+                        $w = (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $entry[2]));
+                        if ($i < $uniquePhotoCount) {
+                            $leftMax = $leftMax === null ? ($x + $w) : max($leftMax, $x + $w);
+                        } else {
+                            $rightMin = $rightMin === null ? $x : min($rightMin, $x);
+                        }
+                    }
+
+                    if ($leftMax !== null && $rightMin !== null) {
+                        $midX = ($leftMax + $rightMin) / 2;
+                    }
+                }
+                $imageHandler->dashedLineStartX = (int) round($midX);
                 $imageHandler->dashedLineStartY = 0;
-                $imageHandler->dashedLineEndX = intval(self::$collageWidth / 2);
+                $imageHandler->dashedLineEndX = (int) round($midX);
                 $imageHandler->dashedLineEndY = intval(self::$collageHeight);
             }
             $imageHandler->drawDashedLine($my_collage);
@@ -626,6 +674,30 @@ class Collage
                     // Landscape: duplicate horizontally (shift X to right half)
                     $origX = $imageHandler->fontLocationX;
                     $shift = (int) (self::$collageWidth / 2);
+                    if (isset($layoutConfigArray) && is_array($layoutConfigArray)) {
+                        $layoutCount = count($layoutConfigArray);
+                        $uniquePhotoCount = (int) ($layoutCount / 2);
+                        $firstX = null;
+                        $secondX = null;
+                        $replace = ['x' => self::$collageWidth, 'y' => self::$collageHeight];
+
+                        for ($i = 0; $i < $layoutCount; $i++) {
+                            $entry = $layoutConfigArray[$i];
+                            if (!is_array($entry) || count($entry) < 2) {
+                                continue;
+                            }
+                            $x = (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $entry[0]));
+                            if ($i < $uniquePhotoCount) {
+                                $firstX = $firstX === null ? $x : min($firstX, $x);
+                            } else {
+                                $secondX = $secondX === null ? $x : min($secondX, $x);
+                            }
+                        }
+
+                        if ($firstX !== null && $secondX !== null) {
+                            $shift = (int) round($secondX - $firstX);
+                        }
+                    }
                     $imageHandler->fontLocationX = $origX + $shift;
 
                     // Apply text again with zone mode support
@@ -646,6 +718,30 @@ class Collage
                     // Portrait: duplicate vertically (shift Y to bottom half)
                     $origY = $imageHandler->fontLocationY;
                     $shift = (int) (self::$collageHeight / 2);
+                    if (isset($layoutConfigArray) && is_array($layoutConfigArray)) {
+                        $layoutCount = count($layoutConfigArray);
+                        $uniquePhotoCount = (int) ($layoutCount / 2);
+                        $firstY = null;
+                        $secondY = null;
+                        $replace = ['x' => self::$collageWidth, 'y' => self::$collageHeight];
+
+                        for ($i = 0; $i < $layoutCount; $i++) {
+                            $entry = $layoutConfigArray[$i];
+                            if (!is_array($entry) || count($entry) < 2) {
+                                continue;
+                            }
+                            $y = (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $entry[1]));
+                            if ($i < $uniquePhotoCount) {
+                                $firstY = $firstY === null ? $y : min($firstY, $y);
+                            } else {
+                                $secondY = $secondY === null ? $y : min($secondY, $y);
+                            }
+                        }
+
+                        if ($firstY !== null && $secondY !== null) {
+                            $shift = (int) round($secondY - $firstY);
+                        }
+                    }
                     $imageHandler->fontLocationY = $origY + $shift;
 
                     // Apply text again with zone mode support
