@@ -156,8 +156,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     this.font_family = data.font_family || 'Arial';
                     this.font_color = data.font_color || '#000000';
                     this.font_size = data.font_size !== undefined ? data.font_size : 2; // Default font size (e.g., in %)
-                    this.text_align = data.text_align || 'center';
-                    // Potentially: text_align, line_height, etc.
+                    this.text_horizontal_align = data.text_horizontal_align || 'center';
+                    this.text_vertical_align = data.text_vertical_align || 'center';
+                    this.font_bold = data.font_bold || false;
+                    this.font_italic = data.font_italic || false;
+                    this.font_underline = data.font_underline || false;
                     break;
                 // Add more cases for other types if needed (e.g., 'background', 'shape')
                 default:
@@ -453,7 +456,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         font_family: elementData.font_family || 'Arial',
                         font_color: elementData.font_color || '#000000',
                         font_size: elementData.font_size !== undefined ? parseFloat(elementData.font_size) : 2, // Ensure number
-                        text_align: elementData.text_align || 'center' // Assuming text_align in new JSON
+                        text_horizontal_align: elementData.text_horizontal_align || 'center',
+                        text_vertical_align: elementData.text_vertical_align || 'center'
                     };
                     break;
 
@@ -633,7 +637,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     snapshotEl.font_family = el.font_family;
                     snapshotEl.font_color = el.font_color;
                     snapshotEl.font_size = el.font_size;
-                    snapshotEl.text_align = el.text_align; 
+                    snapshotEl.text_horizontal_align = el.text_horizontal_align; 
+                    snapshotEl.text_vertical_align = el.text_vertical_align;
+                    snapshotEl.font_bold = el.font_bold;
+                    snapshotEl.font_italic = el.font_italic;
+                    snapshotEl.font_underline = el.font_underline;
                     break;
             }
             return snapshotEl;
@@ -684,7 +692,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         currentEl.font_family = snapEl.font_family;
                         currentEl.font_color = snapEl.font_color;
                         currentEl.font_size = snapEl.font_size;
-                        currentEl.text_align = snapEl.text_align;
+                        currentEl.text_horizontal_align = snapEl.text_horizontal_align;
+                        currentEl.text_vertical_align = snapEl.text_vertical_align;
+                        currentEl.font_bold = snapEl.font_bold;
+                        currentEl.font_italic = snapEl.font_italic;
+                        currentEl.font_underline = snapEl.font_underline;
                         break;
                 }
                 newCollageElements.push(currentEl);
@@ -713,7 +725,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             font_family: snapEl.font_family,
                             font_color: snapEl.font_color,
                             font_size: snapEl.font_size,
-                            text_align: snapEl.text_align
+                            text_horizontal_align: snapEl.text_horizontal_align,
+                            text_vertical_align: snapEl.text_vertical_align,
+                            font_bold: snapEl.font_bold,
+                            font_italic: snapEl.font_italic,
+                            font_underline: snapEl.font_underline
                         };
                         break;
                 }
@@ -854,17 +870,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             } else if (type === 'text') {
-                const { content, font_family, font_color, font_size } = element;
+                const { content, font_family, font_color, font_size, text_horizontal_align, text_vertical_align, font_bold, font_italic, font_underline } = element;
                 if (content) {
                     window.ctx.fillStyle = font_color;
-                    // Font size should be calculated relative to canvas/element height
-                    // font_size is a percentage (e.g., 2% of canvas height or element height)
-                    const effectiveFontSizePx = (font_size / 100) * window.collageCanvas.height; // Or relative to element.height if element.height is fixed for text
-                    window.ctx.font = `${effectiveFontSizePx}px ${font_family}`;
-                    window.ctx.textAlign = 'center';
-                    window.ctx.textBaseline = 'middle';
-                    // Need to consider wrapping for long text content. For now, single line.
-                    window.ctx.fillText(content, x + width / 2, y + height / 2);
+                    
+                    // Build the font string
+                    let fontStyle = '';
+                    if (font_italic) fontStyle += 'italic ';
+                    let fontWeight = '';
+                    if (font_bold) fontWeight += 'bold ';
+
+                    const effectiveFontSizePx = (font_size / 100) * window.collageCanvas.height;
+                    
+                    window.ctx.font = `${fontStyle}${fontWeight}${effectiveFontSizePx}px ${font_family}`;
+
+                    window.ctx.textAlign = text_horizontal_align; // Directly use element.text_horizontal_align
+                    window.ctx.textBaseline = 'middle'; // Center vertically in the bounding box
+
+                    let translateX = 0;
+                    if (text_horizontal_align === 'left') {
+                        translateX = x
+                    } else if (text_horizontal_align === 'right') {
+                        translateX = x + width;
+                    } else { // 'center'
+                        translateX = x + width / 2;
+                    }
+
+                    let translateY = 0;
+                    if (text_vertical_align === 'top') {
+                        translateY = y + effectiveFontSizePx / 2;
+                    } else if (text_vertical_align === 'bottom') {
+                        translateY = y + height - effectiveFontSizePx / 2;
+                    } else { // 'center'
+                        translateY = y + height / 2;
+                    }
+
+                    window.ctx.fillText(content, translateX, translateY);
+
+                    // --- Underline Logic ---
+                    if (font_underline) {
+                        const metrics = window.ctx.measureText(content);
+                        const textWidth = metrics.width;
+                        // Calculate underline position. It needs to be below the text.
+                        // `actualBoundingBoxDescent` gives the distance from baseline to bottom of text
+                        const underlineOffset = metrics.actualBoundingBoxDescent + 2; // +2 for a small gap
+                        
+                        let underlineXStart;
+                        if (text_horizontal_align === 'left') {
+                            underlineXStart = -width / 2;
+                        } else if (text_horizontal_align === 'right') {
+                            underlineXStart = width / 2 - textWidth;
+                        } else { // 'center'
+                            underlineXStart = -textWidth / 2;
+                        }
+
+                        window.ctx.strokeStyle = font_color;
+                        window.ctx.lineWidth = 2; // Adjust underline thickness as needed
+                        window.ctx.beginPath();
+                        window.ctx.moveTo(x + width/2 + underlineXStart, translateY + underlineOffset);
+                        window.ctx.lineTo(x + width/2 + underlineXStart + textWidth, translateY + underlineOffset);
+                        window.ctx.stroke();
+                    }
                 } else {
                     // Fallback for empty text content
                     window.ctx.fillStyle = '#AAAAAA';
@@ -1548,40 +1614,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // add / remove buttons
-    document.getElementById('addBtn').addEventListener('click', () => {
-        // When clicking the button, add a new element
-        window.addNewElement(); // Calls the function to add a new element with default parameters
-    });
-    // Remove Button
-    document.getElementById('removeBtn').addEventListener('click', () => {
-        window.deleteSelectedElements();
-    });
 
-    // --- Keyboard Shortcut for Delete ---
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Delete') {
-            const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
-            if (selectedElementsCount > 0) {
-                event.preventDefault(); // prevents default browser behavior (e.g., navigating back in browser)
-                window.deleteSelectedElements(); // Delete the selected elements
-            }
-        }
-    });
-
-    // --- Layering Buttons ---
-    document.getElementById('sendToBackBtn').addEventListener('click', () => {
-        window.changeZOrder('back');
-    });
-    document.getElementById('sendBackwardBtn').addEventListener('click', () => {
-        window.changeZOrder('backward');
-    });
-    document.getElementById('bringForwardBtn').addEventListener('click', () => {
-        window.changeZOrder('forward');
-    });
-    document.getElementById('bringToFrontBtn').addEventListener('click', () => {
-        window.changeZOrder('front');
-    });
 
     //=================================================================================
     // --- Initialize the designer and save the very first state

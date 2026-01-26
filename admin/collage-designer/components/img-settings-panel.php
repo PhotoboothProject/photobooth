@@ -15,8 +15,8 @@ use Photobooth\Utility\PathUtility;
     </span>
 
     <!-- Aspect Ratio Section for Images -->
-    <div id="image_aspect_ratio_settings" class="mt-4">
-        <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+    <div id="image_aspect_ratio_settings" class="">
+        <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-4">
             <i class="material-icons text-brand-1">aspect_ratio</i> <?= $languageService->translate('aspect_ratio') ?>
         </h3>
         <div class="flex flex-col gap-3">

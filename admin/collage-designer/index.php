@@ -188,6 +188,7 @@ echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/c
 echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-tools.js') . '"></script>'; // Tools JS
 echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-elemntSetPnl.js') . '"></script>'; // Element Settings Panel JS
 echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-imgSetPnl.js') . '"></script>'; // Image Settings Panel JS
+echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-txtSetPnl.js') . '"></script>'; // Text Settings Panel JS
 // Optional: Specific toasts/messages depending on PHP processing
 if (isset($_SESSION['designer_message'])) {
     echo '<script>setTimeout(function(){openToast("' . $_SESSION['designer_message']['text'] . '", "' . $_SESSION['designer_message']['type'] . '", 5000)},500);</script>';

@@ -10,8 +10,11 @@
     <!-- Separator -->
     <div class="border-l border-gray-300 h-6 mx-2"></div> <!-- with vertical line, just spacing: <div class="w-4"></div> -->
     <!-- Add / Remove Buttons (Img) -->
-    <button id="addBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('add_image') ?>">
+    <button id="addImg" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('add_image') ?>">
         <i class="material-icons">add_photo_alternate</i>
+    </button>
+    <button id="addTxt" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('add_text') ?>">
+        <i class="material-icons">post_add</i>
     </button>
     <button id="removeBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('delete') ?>">
         <i class="material-icons">delete</i>

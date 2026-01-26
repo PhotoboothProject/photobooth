@@ -14,9 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- DOM Elements (Defined once at load) ---
     const elementSettingsPanel = document.getElementById('element_settings_panel');
-    const noElementSelectedMessage = document.getElementById('no_element_selected_message'); // Stellen Sie sicher, dass diese ID in Ihrem HTML existiert
-    const imageSpecificSettingsPanel = document.getElementById('image_specific_settings_panel'); // KORRIGIERT!
-    const textSpecificSettingsPanel = document.getElementById('text_specific_settings_panel');   // Annahme: ID für Text-Panel (falls vorhanden)
+    const noElementSelectedMessage = document.getElementById('no_element_selected_message');
+    const imageSpecificSettingsPanel = document.getElementById('image_specific_settings_panel');
+    const textSpecificSettingsPanel = document.getElementById('text_specific_settings_panel');
     const lockAspectRatioCheckbox = document.getElementById('lock_aspect_ratio');
 
     // All other panel input elements should be defined here as well, 
