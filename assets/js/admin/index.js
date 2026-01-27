@@ -45,7 +45,11 @@ function initCollageLayoutOptions() {
 }
 
 function fetchCollageLayouts() {
-    const url = environment.publicFolders.api + '/getCollageLayouts.php';
+    let orientation = 'landscape';
+    if (typeof config !== 'undefined' && config.collage && config.collage.orientation) {
+        orientation = String(config.collage.orientation);
+    }
+    const url = environment.publicFolders.api + '/getCollageLayouts.php?orientation=' + encodeURIComponent(orientation);
     return new Promise(function (resolve) {
         $.ajax({
             url: url,
@@ -116,21 +120,23 @@ function updateCollageLayoutsEnabled(gridEl, layouts) {
         seen[id] = true;
         ordered.push({
             id: id,
-            label: layout.label ? String(layout.label) : id
+            label: layout.label ? String(layout.label) : id,
+            preview: layout.preview ? String(layout.preview) : ''
         });
     });
     selected.forEach(function (id) {
         if (!seen[id]) {
             ordered.push({
                 id: id,
-                label: id
+                label: id,
+                preview: ''
             });
         }
     });
     gridEl.innerHTML = '';
     ordered.forEach(function (layout) {
         const isSelected = selected.indexOf(layout.id) !== -1;
-        gridEl.appendChild(buildLayoutToggleOption(layout.id, layout.label, isSelected));
+        gridEl.appendChild(buildLayoutToggleOption(layout.id, layout.label, isSelected, layout.preview));
     });
     bindToggleButtons(gridEl);
     setupAllowSelectionGuard(gridEl);
@@ -147,7 +153,7 @@ function readSelectedLayouts() {
     return selected;
 }
 
-function buildLayoutToggleOption(layoutId, label, isSelected) {
+function buildLayoutToggleOption(layoutId, label, isSelected, previewSvg) {
     const wrapper = document.createElement('label');
     wrapper.className = 'relative cursor-pointer';
     const input = document.createElement('input');
@@ -162,8 +168,31 @@ function buildLayoutToggleOption(layoutId, label, isSelected) {
         ? 'bg-brand-1 text-white border-brand-1'
         : 'bg-white text-gray-700 border-gray-300 hover:border-brand-1';
     const button = document.createElement('div');
-    button.className = 'toggle-button px-3 py-1.5 border text-sm rounded-md text-center transition-all ' + activeClass;
-    button.textContent = label;
+    button.className = 'toggle-button px-3 py-2 border text-sm rounded-md text-center transition-all ' + activeClass;
+    button.style.display = 'flex';
+    button.style.flexDirection = 'column';
+    button.style.alignItems = 'center';
+    button.style.gap = '0.5rem';
+    if (previewSvg) {
+        const preview = document.createElement('div');
+        preview.className = 'bg-white border border-gray-200 rounded overflow-hidden';
+        preview.style.display = 'flex';
+        preview.style.alignItems = 'center';
+        preview.style.justifyContent = 'center';
+        preview.style.width = '112px';
+        preview.style.height = '80px';
+        preview.innerHTML = previewSvg;
+        const previewSvgNode = preview.querySelector('svg');
+        if (previewSvgNode) {
+            previewSvgNode.setAttribute('width', '112');
+            previewSvgNode.setAttribute('height', '80');
+        }
+        button.appendChild(preview);
+    }
+    const labelEl = document.createElement('div');
+    labelEl.className = 'text-xs font-medium';
+    labelEl.textContent = label;
+    button.appendChild(labelEl);
     wrapper.appendChild(input);
     wrapper.appendChild(button);
     return wrapper;
