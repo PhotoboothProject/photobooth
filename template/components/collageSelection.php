@@ -59,6 +59,7 @@ function loadCollageLayoutFromJson(string $layoutId, string $orientation = 'land
  */
 function getLayoutPreviewSvg(string $layoutId, string $orientation = 'landscape', ?array $layoutData = null): string
 {
+    $isPhotostrip = false;
     // Try to load layout from JSON
     if ($layoutData === null) {
         $layoutData = loadCollageLayoutFromJson($layoutId, $orientation);
