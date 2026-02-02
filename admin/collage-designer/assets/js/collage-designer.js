@@ -472,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let imagePlaceholderCount = 0; // To correctly map demo images to image elements
 
         currentDesignName = document.getElementById('currentDesignName');
-        currentDesignName.textContent = photoboothTools.getTranslation('selected_design') + ': ' + (currentLayout.name || 'Unnamed Design');
+        currentDesignName.textContent = currentLayout.name || 'Unnamed Design';
 
         currentLayout.elements.forEach((elementData) => {
             // Parse x, y, width, height, rotation - assuming they might still contain 'x'/'y' placeholders or be strings
@@ -995,10 +995,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Only draw default border if not selected
-            if (window.globalShowElementOutlines) { 
+            if (window.globalShowElementOutlines && !element.isSelected) { 
                 window.ctx.strokeStyle = BORDER_COLOR;
                 window.ctx.lineWidth = BORDER_WIDTH;
                 window.ctx.strokeRect(x, y, width, height);
+            }
+            if (element.isSelected) {
+                window.ctx.strokeStyle = SELECTION_COLOR;
+                window.ctx.lineWidth = BORDER_WIDTH;
+                window.ctx.strokeRect(element.x, element.y, element.width, element.height);
             }
 
             window.ctx.restore(); // Restore context to original state before next element
