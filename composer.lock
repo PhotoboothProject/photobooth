@@ -532,16 +532,16 @@
         },
         {
             "name": "league/flysystem-ftp",
-            "version": "3.29.0",
+            "version": "3.31.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-ftp.git",
-                "reference": "17e8e422cb43a7fefa06ec8ddf36ee8ec936d138"
+                "reference": "cd6ab064a695bc340e3090c360021d26cd417e67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-ftp/zipball/17e8e422cb43a7fefa06ec8ddf36ee8ec936d138",
-                "reference": "17e8e422cb43a7fefa06ec8ddf36ee8ec936d138",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-ftp/zipball/cd6ab064a695bc340e3090c360021d26cd417e67",
+                "reference": "cd6ab064a695bc340e3090c360021d26cd417e67",
                 "shasum": ""
             },
             "require": {
@@ -576,9 +576,9 @@
                 "ftpd"
             ],
             "support": {
-                "source": "https://github.com/thephpleague/flysystem-ftp/tree/3.29.0"
+                "source": "https://github.com/thephpleague/flysystem-ftp/tree/3.31.0"
             },
-            "time": "2024-06-12T09:46:12+00:00"
+            "time": "2026-01-23T15:30:45+00:00"
         },
         {
             "name": "league/flysystem-local",
