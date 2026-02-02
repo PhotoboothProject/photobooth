@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof window.collageCanvas === 'undefined' || typeof window.drawCanvas === 'undefined' ||
         typeof window.collageElements === 'undefined' || typeof window.activeElement === 'undefined' ||
         typeof window.CollageElement === 'undefined' || typeof window.createSnapshot === 'undefined' ||
-        typeof window.restoreSnapshot === 'undefined' || typeof window.saveState === 'undefined'
+        typeof window.restoreSnapshot === 'undefined' || typeof window.saveState === 'undefined' ||
+        typeof window.getSelectedElements === 'undefined'
     ) {
         console.error('collage-designer-txtSetPnl.js: Dependent main designer variables/functions not found. Ensure collage-designer.js is loaded first and exposes necessary variables globally.');
         return;
@@ -19,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const txtIncrBtn = document.getElementById('txtIncr');
     const txtDecrBtn = document.getElementById('txtDecr');
     const txtBoldBtn = document.getElementById('txtBold');
-    const txtItalicBtn = document.getElementById('txtIalic'); // ACHTUNG: ID ist 'txtIalic'
+    const txtItalicBtn = document.getElementById('txtIalic');
     const txtUnderlineBtn = document.getElementById('txtUnderline');
     const txtAlignLeftBtn = document.getElementById('txtAlignLeft');
     const txtAlignHorCenterBtn = document.getElementById('txtAlignHorCenter');
@@ -27,6 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const txtAlignVerTopBtn = document.getElementById('txtAlignVerTop');
     const txtAlignVerCenterBtn = document.getElementById('txtAlignVerCenter');
     const txtAlignVerBottomBtn = document.getElementById('txtAlignVerBottom');
+    const active_txt_element_content = document.querySelector('input[name="active_txt_element_content"]');
+
+    const fontHiddenInput = document.querySelector('input[name="textoncollage[font]"]'); // the hidden Input, which saves the font-path
+    const fontPreviewTextElement = fontHiddenInput ? fontHiddenInput.closest('.adminFontSelection')?.querySelector('.adminFontSelection-text') : null;
+    const fontPreviewImageElement = fontHiddenInput ? fontHiddenInput.closest('.adminFontSelection')?.querySelector('.adminFontSelection-preview') : null; // preview_img
+    const fontColorInput = document.querySelector('input[name="textoncollage[font_color]"]'); // the hidden Input, which saves the font-path
 
     // Helper to toggle active class for buttons
     function toggleButtonActiveState(button, isActive) {
@@ -47,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
             text_specific_settings_panel.classList.add('hidden');
             return;
         }
+        active_txt_element_content.value = window.activeElement.content;
 
         text_specific_settings_panel.classList.remove('hidden');
         selectedTextElementIdDisplay.textContent = `ID: ${window.activeElement.id}`;
@@ -67,6 +75,14 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleButtonActiveState(txtAlignVerCenterBtn, window.activeElement.text_vertical_align === 'center');
         toggleButtonActiveState(txtAlignVerBottomBtn, window.activeElement.text_vertical_align === 'bottom');
 
+        if (fontHiddenInput) {
+            fontHiddenInput.value = window.activeElement.font_family;
+            //TODO Font Preview Update via API(?)
+
+        }
+        if (fontColorInput) {
+            fontColorInput.value = window.activeElement.font_color;
+        }
     };
 
     //=================================================================================
@@ -182,6 +198,29 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedElements.forEach(element => {
             element.text_vertical_align = 'bottom'; // Set text vertical alignment to bottom
         });
+        window.drawCanvas();
+    });
+
+    // Font Selector
+    fontHiddenInput.addEventListener('change', (e) => {
+        window.saveState();
+        window.activeElement.font_family = e.target.value;
+        window.updateImageSettingsPanel();
+        window.drawCanvas();
+    });
+
+    // Color Selector
+    fontColorInput.addEventListener('change', (e) => {
+        window.saveState();
+        window.activeElement.font_color = e.target.value;
+        window.updateImageSettingsPanel();
+        window.drawCanvas();
+    });
+
+    // Content Input
+    active_txt_element_content.addEventListener('input', (e) => {
+        window.saveState();
+        window.activeElement.content = e.target.value;
         window.drawCanvas();
     });
 });

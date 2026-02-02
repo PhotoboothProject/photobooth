@@ -1,6 +1,9 @@
 <?php
 // admin/collage-designer/components/text-fields-manager.php
 
+use Photobooth\Utility\AdminInput;
+use Photobooth\Utility\PathUtility;
+
 ?>
 
 <div id="text_specific_settings_panel" class="flex flex-col gap-4 p-4 rounded-md bg-white w-full">
@@ -46,5 +49,39 @@
             <i class="material-icons">vertical_align_bottom</i>
         </button>
     </div>
+    <input
+        type="input"
+        class="w-full h-10 border-2 border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 mt-auto"
+        name="active_txt_element_content"
+        value=""
+    />
+    <div class="col-span-2 flex flex-col">
+            <?=
+                AdminInput::renderFontSelect(
+                    [   
+                        'name' => 'textoncollage[font]',
+                        'value' => '',
+                        'paths' => [
+                            PathUtility::getAbsolutePath('resources/fonts'),
+                            PathUtility::getAbsolutePath('private/fonts'),
+                        ]
+                    ],
+                    'collage:textoncollage_font'
+                )
+            ?>
+    </div>
+    <div class="col-span-2 flex flex-col">
+            <?=
+                AdminInput::renderColor(
+                    [
+                        'name' => 'textoncollage[font_color]',
+                        'value' => '',
+                        'placeholder' => $defaultConfig['textoncollage']['font_color'],
+                    ],
+                    'collage:textoncollage_font_color'
+                )
+            ?>
+    </div>
+    
 
 </div>

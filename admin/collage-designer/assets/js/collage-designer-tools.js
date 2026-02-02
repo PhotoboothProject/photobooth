@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'text':
                 elementData.content = elementData.content || photoboothTools.getTranslation('new_text_element'); // New translation key
-                elementData.font_family = elementData.font_family || 'Arial'; // Default or from global settings
+                elementData.font_family = elementData.font_family || 'resources/fonts/GreatVibes-Regular.ttf'; // Default or from global settings
                 elementData.font_color = elementData.font_color || '#000000';
                 elementData.font_size = elementData.font_size !== undefined ? elementData.font_size : 5; // Default font size
                 elementData.font_bold = elementData.font_bold || false;
