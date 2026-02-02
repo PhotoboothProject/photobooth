@@ -131,21 +131,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if(window.activeElement.src){
             if(removePlaceholderImageBtn){
                 removePlaceholderImageBtn.parentElement.classList.remove('hidden');
-
-                placeholderPath.value = window.activeElement.src;
-                placeholderTextElement.textContent = window.activeElement.src;
-                placeholderPreviewElement.src = '../../' + window.activeElement.src;
-                placeholderPreviewElement.parentElement.classList.remove('hidden');
-
             }
+            placeholderPath.value = window.activeElement.src;
+            placeholderTextElement.textContent = window.activeElement.src;
+            placeholderPreviewElement.src = '../../' + window.activeElement.src;
+            placeholderPreviewElement.parentElement.classList.remove('hidden');
         } else {
             if(removePlaceholderImageBtn){
                 removePlaceholderImageBtn.parentElement.classList.add('hidden');
-
-                placeholderPath.value = '';
-                placeholderTextElement.textContent = '';
-                placeholderPreviewElement.parentElement.classList.add('hidden');
             }
+            placeholderPath.value = '';
+            placeholderTextElement.textContent = '';
+            placeholderPreviewElement.parentElement.classList.add('hidden');
         }
     };
 
