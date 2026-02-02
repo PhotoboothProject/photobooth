@@ -14,8 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.collageElements = [];
     window.activeElement = null; // Represents the *single* element currently being interacted with (dragged, resized, rotated)
 
-    window.loadedFrames = {}; // Globaler Cache for frame images
-    window.imageCache = {}; // Globaler Cache for loaded images
+    window.loadedFrames = {}; // globale cache for frame images
+    window.loadedFontsMap = new Map(); // Global cache for fonts
+    window.imageCache = {}; // globale cache for loaded images
 
     // Global setting for aspect ratio lock during resizing
     window.globalLockAspectRatio = false; // standard locked
@@ -124,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // DELETE HANDLE
     const DELETE_HANDLE_SIZE = BASE_HANDLE_SIZE;
-    const DELETE_HANDLE_OFFSET = 10; 
+    const DELETE_HANDLE_OFFSET = 25; 
     const DELETE_HANDLE_COLOR = '#dc3545';
     const DELETE_HANDLE_STROKE_COLOR = '#FFFFFF';
     const DELETE_HANDLE_ICON_FONT_SIZE = `${DELETE_HANDLE_SIZE * 0.7}px Arial`;
@@ -153,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 'text':
                     this.content = data.content || ''; // The actual text string
-                    this.font_family = data.font_family || 'Arial';
+                    this.font_family = data.font_family || 'resources/fonts/GreatVibes-Regular.ttf';
                     this.font_color = data.font_color || '#000000';
                     this.font_size = data.font_size !== undefined ? data.font_size : 2; // Default font size (e.g., in %)
                     this.text_horizontal_align = data.text_horizontal_align || 'center';
@@ -303,6 +304,50 @@ document.addEventListener('DOMContentLoaded', () => {
         window.loadedFrames[frameId] = img; 
         return img;
     }
+
+    /**
+     * Dynamically loads a font if it hasn't been loaded yet.
+     * @param {string} fontPath The project-relative path to the font file (e.g., 'private/fonts/ArchivoBlack-Regular.ttf').
+     * @returns {Promise<string>} A promise that resolves with the CSS font-family name once the font is loaded.
+     */
+    window.loadFont = async function(fontPath) {
+        if (!fontPath || fontPath.trim() === '') {
+            return 'Arial'; // Default fallback font if no path is provided
+        }
+
+        // Derive a unique CSS font-family name from the path
+        // e.g., 'private/fonts/ArchivoBlack-Regular.ttf' -> 'ArchivoBlack-Regular'
+        const fontCssName = fontPath.split('/').pop().split('.')[0];
+
+        // Check if the font is already in our loaded map
+        if (window.loadedFontsMap.has(fontPath)) {
+            return window.loadedFontsMap.get(fontPath);
+        }
+
+        // Check if the font is already loaded by the browser (Font Loading API)
+        // The `document.fonts.check()` method is useful here.
+        // Note: It checks for `fontCssName`
+        if (document.fonts.check(`1em "${fontCssName}"`)) {
+            window.loadedFontsMap.set(fontPath, fontCssName);
+            return fontCssName;
+        }
+
+        const fontUrl = `../../${fontPath}`; // Adjust if `fontPath` needs further transformation to be a valid public URL
+
+        // Create a new FontFace object and load it
+        const fontFace = new FontFace(fontCssName, `url(${fontUrl})`);
+
+        try {
+            await fontFace.load();
+            document.fonts.add(fontFace); // Add the loaded font to the document's font set
+            window.loadedFontsMap.set(fontPath, fontCssName); // Store in our map
+            console.log(`Font "${fontCssName}" loaded successfully from ${fontUrl}`);
+            return fontCssName;
+        } catch (error) {
+            console.error(`Failed to load font "${fontCssName}" from ${fontUrl}:`, error);
+            return 'Arial'; // Fallback to a safe font on error
+        }
+    };
 
     /**
      * Loads an image and stores it in the cache.
@@ -804,6 +849,9 @@ document.addEventListener('DOMContentLoaded', () => {
     //=================================================================================
 
     window.drawCanvas = async function() {
+        // get selected elements count
+        const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
+
         window.ctx.clearRect(0, 0, window.collageCanvas.width, window.collageCanvas.height);
 
         // calculate the current visual scaling factor to adjust handle sizes
@@ -823,6 +871,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (const element of window.collageElements) { 
             const { x, y, width, height, rotation, type } = element;
+
+            window.ctx.save(); // Save the current context state
             
             if (type === 'image') {
                 let image = element.image;
@@ -872,6 +922,14 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (type === 'text') {
                 const { content, font_family, font_color, font_size, text_horizontal_align, text_vertical_align, font_bold, font_italic, font_underline } = element;
                 if (content) {
+
+                    const pivotX = x + width / 2;
+                    const pivotY = y + height / 2;
+                    if (rotation !== 0) {
+                        window.ctx.translate(pivotX, pivotY);
+                        window.ctx.rotate(-rotation * Math.PI / 180);
+                        window.ctx.translate(-pivotX, -pivotY);
+                    }
                     window.ctx.fillStyle = font_color;
                     
                     // Build the font string
@@ -880,9 +938,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     let fontWeight = '';
                     if (font_bold) fontWeight += 'bold ';
 
+                    const cssFontName = await window.loadFont(font_family);
+
                     const effectiveFontSizePx = (font_size / 100) * window.collageCanvas.height;
                     
-                    window.ctx.font = `${fontStyle}${fontWeight}${effectiveFontSizePx}px ${font_family}`;
+                    window.ctx.font = `${fontStyle}${fontWeight}${effectiveFontSizePx}px "${cssFontName}", sans-serif`; 
 
                     window.ctx.textAlign = text_horizontal_align; // Directly use element.text_horizontal_align
                     window.ctx.textBaseline = 'middle'; // Center vertically in the bounding box
@@ -942,26 +1002,71 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.ctx.fillText(`Text Placeholder`, x + width / 2, y + height / 2);
                 }
             }
-            window.ctx.restore(); // Restore context to original state before next element
 
-            // Draw selection border for ALL selected elements
+            // Draw delete handle if just one element is selected
+            if(selectedElementsCount === 1 && element.isSelected) {
+                // Position of the handle (top right of the active element)
+                const deleteHandleX = window.activeElement.x + window.activeElement.width - effectiveDeleteHandleOffset;
+                const deleteHandleY = window.activeElement.y + effectiveDeleteHandleOffset;
+
+                // draw the circle for the handle
+                window.ctx.beginPath();
+                window.ctx.arc(deleteHandleX, deleteHandleY, effectiveDeleteHandleSize / 2, 0, Math.PI * 2);
+                window.ctx.fillStyle = DELETE_HANDLE_COLOR;
+                window.ctx.fill();
+                window.ctx.strokeStyle = DELETE_HANDLE_STROKE_COLOR;
+                window.ctx.lineWidth = HANDLE_BORDER_WIDTH;
+                window.ctx.stroke();
+
+                // draw the X-Symbol in the handle
+                window.ctx.fillStyle = DELETE_HANDLE_STROKE_COLOR;
+                window.ctx.font = `${effectiveDeleteHandleSize * 0.7}px Arial`;
+                window.ctx.textAlign = 'center';
+                window.ctx.textBaseline = 'middle';
+                window.ctx.fillText('X', deleteHandleX, deleteHandleY);
+            }
+
+            // Draw selection border and Handles for ALL selected elements
             if (element.isSelected) { 
+                // Draw selection border
                 window.ctx.strokeStyle = SELECTION_COLOR;
                 window.ctx.lineWidth = BORDER_WIDTH;
                 window.ctx.strokeRect(x, y, width, height);
+
              } else {
-                // Only draw default border if not selected and not a text element (text usually has no default border)
-                if (type === 'image') { // Only draw border for images by default
+                // Only draw default border if not selected
+                //TODO: DRAW HITBOXES FOR ELEMENTS via checkbox...
+                if (true) { 
                     window.ctx.strokeStyle = BORDER_COLOR;
                     window.ctx.lineWidth = BORDER_WIDTH;
                     window.ctx.strokeRect(x, y, width, height);
                 }
             }
+
+            // Draw Rotation Handle
+            if (window.activeElement && window.activeElement.isSelected) { // Check if it's selected and active
+                const rotationHandleX = window.activeElement.x + window.activeElement.width / 2;
+                const rotationHandleY = window.activeElement.y - effectiveRotationHandleOffset;
+                window.ctx.beginPath();
+                window.ctx.arc(rotationHandleX, rotationHandleY, effectiveRotationHandleSize / 2, 0, Math.PI * 2);
+                window.ctx.fillStyle = ROTATION_HANDLE_COLOR;
+                window.ctx.fill();
+                window.ctx.strokeStyle = ROTATION_HANDLE_STROKE_COLOR;
+                window.ctx.lineWidth = HANDLE_BORDER_WIDTH;
+                window.ctx.stroke();
+                window.ctx.fillStyle = ROTATION_HANDLE_STROKE_COLOR;
+                window.ctx.font = `${effectiveRotationHandleSize * 0.7}px Arial`;
+                window.ctx.textAlign = 'center';
+                window.ctx.textBaseline = 'middle';
+                window.ctx.fillText(ROTATION_HANDLE_ICON, rotationHandleX, rotationHandleY);
+            }
+
+            window.ctx.restore(); // Restore context to original state before next element
         };
 
         // --- Draw Resizing Handles for active element OR group bounding box ---
         // --- Draw Rotation Handle ONLY FOR THE ACTIVE ELEMENT ---
-        const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
+        //const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
 
         let targetForHandles = null; // Either activeElement or groupBoundingBox for resizing
         let targetX = 0, targetY = 0, targetWidth = 0, targetHeight = 0;
@@ -994,10 +1099,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const handles = [
-                { x: targetX,               y: targetY,              cursor: 'nwse-resize', name: 'top-left' },
-                { x: targetX + targetWidth, y: targetY,              cursor: 'nesw-resize', name: 'top-right' },
-                { x: targetX,               y: targetY + targetHeight,     cursor: 'nesw-resize', name: 'bottom-left' },
-                { x: targetX + targetWidth, y: targetY + targetHeight,     cursor: 'nwse-resize', name: 'bottom-right' }
+                { x: targetX,               y: targetY,                     cursor: 'nwse-resize', name: 'top-left' },
+                { x: targetX + targetWidth, y: targetY,                     cursor: 'nesw-resize', name: 'top-right' },
+                { x: targetX,               y: targetY + targetHeight,      cursor: 'nesw-resize', name: 'bottom-left' },
+                { x: targetX + targetWidth, y: targetY + targetHeight,      cursor: 'nwse-resize', name: 'bottom-right' }
             ];
             handles.forEach(handle => {
                 window.ctx.fillStyle = RESIZE_HANDLE_COLOR;
@@ -1006,49 +1111,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.ctx.fillRect(handle.x - effectiveResizeHandleSize / 2, handle.y - effectiveResizeHandleSize / 2, effectiveResizeHandleSize, effectiveResizeHandleSize);
                 window.ctx.strokeRect(handle.x - effectiveResizeHandleSize / 2, handle.y - effectiveResizeHandleSize / 2, effectiveResizeHandleSize, effectiveResizeHandleSize);
             });
-        }
-        
-        // --- Draw Delete Handle ONLY FOR THE ACTIVE ELEMENT (if single element selected) ---
-        if (selectedElementsCount === 1 && window.activeElement && window.activeElement.isSelected) {
+        }           
             
-            // Position of the handle (top right of the active element)
-            const deleteHandleX = window.activeElement.x + window.activeElement.width - effectiveDeleteHandleOffset;
-            const deleteHandleY = window.activeElement.y + effectiveDeleteHandleOffset;
 
-            // draw the circle for the handle
-            window.ctx.beginPath();
-            window.ctx.arc(deleteHandleX, deleteHandleY, effectiveDeleteHandleSize / 2, 0, Math.PI * 2);
-            window.ctx.fillStyle = DELETE_HANDLE_COLOR;
-            window.ctx.fill();
-            window.ctx.strokeStyle = DELETE_HANDLE_STROKE_COLOR;
-            window.ctx.lineWidth = HANDLE_BORDER_WIDTH;
-            window.ctx.stroke();
 
-            // draw the X-Symbol in the handle
-            window.ctx.fillStyle = DELETE_HANDLE_STROKE_COLOR;
-            window.ctx.font = `${effectiveDeleteHandleSize * 0.7}px Arial`;
-            window.ctx.textAlign = 'center';
-            window.ctx.textBaseline = 'middle';
-            window.ctx.fillText('X', deleteHandleX, deleteHandleY);
-        }
-
-        // Draw Rotation Handle
-        if (window.activeElement && window.activeElement.isSelected) { // Check if it's selected and active
-            const rotationHandleX = window.activeElement.x + window.activeElement.width / 2;
-            const rotationHandleY = window.activeElement.y - effectiveRotationHandleOffset;
-            window.ctx.beginPath();
-            window.ctx.arc(rotationHandleX, rotationHandleY, effectiveRotationHandleSize / 2, 0, Math.PI * 2);
-            window.ctx.fillStyle = ROTATION_HANDLE_COLOR;
-            window.ctx.fill();
-            window.ctx.strokeStyle = ROTATION_HANDLE_STROKE_COLOR;
-            window.ctx.lineWidth = HANDLE_BORDER_WIDTH;
-            window.ctx.stroke();
-            window.ctx.fillStyle = ROTATION_HANDLE_STROKE_COLOR;
-            window.ctx.font = `${effectiveRotationHandleSize * 0.7}px Arial`;
-            window.ctx.textAlign = 'center';
-            window.ctx.textBaseline = 'middle';
-            window.ctx.fillText(ROTATION_HANDLE_ICON, rotationHandleX, rotationHandleY);
-        }
         
         window.updateRemoveButtonState();
         window.updateLayerButtonStates();
