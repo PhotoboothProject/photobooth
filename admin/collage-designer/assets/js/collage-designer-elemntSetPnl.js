@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const activeEl = window.activeElement;
 
             // Update basic info
-            document.getElementById('selected_element_type_display').textContent = photoboothTools.getTranslation('image');
+            document.getElementById('selected_element_type_display').textContent = photoboothTools.getTranslation(selectedElements[0].type);
             document.getElementById('selected_element_id_display').textContent = `ID: ${activeEl.id}`;
 
             const canvasWidth = window.collageCanvas.width;
