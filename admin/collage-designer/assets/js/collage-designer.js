@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.loadedFontsMap = new Map(); // Global cache for fonts
     window.imageCache = {}; // globale cache for loaded images
 
+    // Global setting for showing element outlines
+    window.globalShowElementOutlines = true; // standard enabled
+
     // Global setting for aspect ratio lock during resizing
     window.globalLockAspectRatio = false; // standard locked
 

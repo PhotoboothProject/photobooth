@@ -522,6 +522,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Event Listeners ---
     //=================================================================================
 
+    // show / hide element outlines
+    document.getElementById('showElmntOutline').addEventListener('click', () => {
+        window.globalShowElementOutlines = !window.globalShowElementOutlines; // toggle
+        window.drawCanvas();
+    });
+
     // add / remove buttons
     document.getElementById('addImg').addEventListener('click', () => {
         // When clicking the button, add a new element

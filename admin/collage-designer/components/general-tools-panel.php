@@ -1,5 +1,10 @@
 <!-- components/general-tools-panel.php -->
 <div class="flex flex-wrap gap-2 h-min">
+    <button id="showElmntOutline" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('show_element_outlines') ?>">
+        <i class="material-icons">filter_frames</i>
+    </button>    
+    <!-- Separator -->
+    <div class="border-l border-gray-300 h-6 mx-2"></div> <!-- with vertical line, just spacing: <div class="w-4"></div> -->
      <!-- Undo/Redo Buttons -->
     <button id="undoBtn" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('undo') ?>">
         <i class="material-icons">undo</i>
