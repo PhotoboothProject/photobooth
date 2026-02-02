@@ -672,6 +672,37 @@ document.addEventListener('DOMContentLoaded', () => {
         if (distributeV) distributeV.disabled = false;
     };
 
+    /**
+     * Update outline toggle button state.
+     */
+    window.updateOutlineToggleButtonState = function() {
+        const outlineToggleBtn = document.getElementById('showElmntOutlineBtn');
+        if (outlineToggleBtn) {
+            if (window.globalShowElementOutlines) {
+                outlineToggleBtn.classList.add('active');
+                outlineToggleBtn.title = photoboothTools.getTranslation('Element Outlines: ON (Click to toggle)');
+            } else {
+                outlineToggleBtn.classList.remove('active');
+                outlineToggleBtn.title = photoboothTools.getTranslation('Element Outlines: OFF (Click to toggle)');
+            }
+        }
+    };
+
+    /**
+     * Update aspect ratio lock toggle button state.
+     */
+    window.updateAspectRatioLockButtonState = function() {
+        const aspectRatioLockBtn = document.getElementById('lockAspectRatioBtn');
+        if (aspectRatioLockBtn) {
+            if (window.globalLockAspectRatio) {
+                aspectRatioLockBtn.classList.add('active');
+                aspectRatioLockBtn.title = photoboothTools.getTranslation('Aspect Ratio Lock: ON (Click to toggle)');
+            } else {
+                aspectRatioLockBtn.classList.remove('active');
+                aspectRatioLockBtn.title = photoboothTools.getTranslation('Aspect Ratio Lock: OFF (Click to toggle)');
+            }
+        }
+    };
 
     //=================================================================================
     // --- Undo/Redo Functionality ---
@@ -1034,6 +1065,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.updateRemoveButtonState();
         window.updateLayerButtonStates();
         window.updateDistributionButtonStates();
+        window.updateOutlineToggleButtonState();
         window.updateElementSettingsPanel();
     };
 

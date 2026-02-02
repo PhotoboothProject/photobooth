@@ -523,7 +523,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //=================================================================================
 
     // show / hide element outlines
-    document.getElementById('showElmntOutline').addEventListener('click', () => {
+    document.getElementById('showElmntOutlineBtn').addEventListener('click', () => {
         window.globalShowElementOutlines = !window.globalShowElementOutlines; // toggle
         window.drawCanvas();
     });
@@ -552,6 +552,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+    document.getElementById('lockAspectRatioBtn').addEventListener('click', () => {
+        window.globalLockAspectRatio = !window.globalLockAspectRatio; // toggle
+        window.updateAspectRatioLockButtonState();
+    });
+
     //=================================================================================
 
     // --- Layering Buttons ---

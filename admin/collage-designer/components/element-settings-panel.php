@@ -67,19 +67,6 @@ $font_family_options = [
                     </div>
                 </div>
             </div>
-            <!-- Lock Aspect Ratio -->
-            <div class="mt-4 flex items-center justify-start">
-                <?=
-                    AdminInput::renderCheckbox(
-                        [
-                            'name' => 'lock_aspect_ratio',
-                            'value' => 'false',
-                            'attributes' => ['id' => 'lock_aspect_ratio']
-                        ],
-                        'collage-designer:lock_aspect_ratio' // language key
-                    )
-?>
-            </div>
         </div>
 
         <!-- Rotation Section -->

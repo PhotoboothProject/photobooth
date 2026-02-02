@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const noElementSelectedMessage = document.getElementById('no_element_selected_message');
     const imageSpecificSettingsPanel = document.getElementById('image_specific_settings_panel');
     const textSpecificSettingsPanel = document.getElementById('text_specific_settings_panel');
-    const lockAspectRatioCheckbox = document.getElementById('lock_aspect_ratio');
 
     // All other panel input elements should be defined here as well, 
     // or accessed dynamically inside updateElementSettingsPanel to avoid many global const.
@@ -117,11 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const interactiveElements = elementSettingsPanel.querySelectorAll(
             'input:not([type="checkbox"]), textarea, select, button' // Exclude checkboxes if they should always be active for "lock aspect ratio" etc.
         );
-
-        if (lockAspectRatioCheckbox) {
-                lockAspectRatioCheckbox.disabled = false; // Enable if it should be interactive
-                lockAspectRatioCheckbox.checked = window.globalLockAspectRatio; // Reflect global setting
-            }
 
         if (selectedElements.length === 1 && window.activeElement) {
             // Activate panel
@@ -258,14 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         });
-
-        // Event listener for the lock aspect ratio checkbox
-        if (lockAspectRatioCheckbox) {
-            lockAspectRatioCheckbox.addEventListener('change', () => {
-                window.globalLockAspectRatio = lockAspectRatioCheckbox.checked;
-                window.updateElementSettingsPanel();
-            });
-        }
 
         // Event listener for the delete button inside the panel
         const deleteElementBtn = document.getElementById('panelDeleteElementBtn');
