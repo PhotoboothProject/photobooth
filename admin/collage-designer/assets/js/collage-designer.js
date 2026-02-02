@@ -471,6 +471,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let imagePlaceholderCount = 0; // To correctly map demo images to image elements
 
+        currentDesignName = document.getElementById('currentDesignName');
+        currentDesignName.textContent = photoboothTools.getTranslation('selected_design') + ': ' + (currentLayout.name || 'Unnamed Design');
+
         currentLayout.elements.forEach((elementData) => {
             // Parse x, y, width, height, rotation - assuming they might still contain 'x'/'y' placeholders or be strings
             const x = eval(String(elementData.x).replace(/x/g, canvasWidth).replace(/y/g, canvasHeight));

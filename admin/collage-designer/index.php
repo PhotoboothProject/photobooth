@@ -93,7 +93,7 @@ include PathUtility::getAbsolutePath('admin/helper/index.php'); // Contains e.g.
         <div class="w-full max-w-[1500px] rounded-lg p-4 md:p-8 bg-white flex flex-col shadow-xl place-items-center relative">
 
             <div class="w-full flex items-center justify-center relative">
-                <div class="absolute left-0 top-1/2 -translate-y-1/2 ml-4 md:ml-8">
+                <div class="absolute left-0 top-1/2 -translate-y-1/2">
                     <?= getBackBtn(false, false); ?>
                 </div>
                 <div class="text-center text-2xl font-bold text-brand-1 mb-2">
@@ -139,7 +139,7 @@ include 'components/txt-settings-panel.php';       // Text fields management
                         <!-- RIGHT PANEL: PREVIEW -->
                         <div class="right-panel w-full flex flex-col gap-2 rounded-md">
                             <span class="w-full flex flex-col items-center text-xl font-bold text-brand-1 mb-2">
-                                <?= $languageService->translate('preview_title') //TODO: show current design name?> 
+                                <span id="currentDesignName" class="text-brand-2 ml-2"></span> 
                             </span>
                             <?php include 'components/preview-canvas.php'; // Contains #result_canvas?>
                         </div><!-- End right-panel -->
