@@ -1,4 +1,54 @@
 <!-- components/general-tools-panel.php -->
+
+<!-- TODO: designs might need some more love and fine tune... -->
+<style>
+/* Default style for all 'btn-outline-primary' buttons */
+.btn-outline-primary {
+    transition: all 0.1s ease-in-out;   /* Smooth transition for all visual changes */
+    border: 1px solid var(--gray-300);  /* Default gray border */
+    color: var(--gray-600);             /* Default darker gray text/icon */
+    background-color: transparent;      /* Default transparent background */
+    box-shadow: none;                   /* No shadow in resting state */
+    transform: none;                    /* No transform (shift/scale) in resting state */
+}
+
+/* Style when hovering over a NON-disabled button */
+.btn-outline-primary:hover:not(:disabled) {
+    border-color: var(--brand-1);                   /* Border changes to primary brand color */
+    color: var(--brand-1);                          /* Text and icons also change to primary brand color */
+    background-color: var(--gray-100);              /* A very light, subtle background to highlight the button */
+    box-shadow: 0 2px 4px var(--shadow-color);      /* A subtle shadow to make the button appear to "lift" */
+    transform: translateY(-0.5px);                  /* A very slight upward shift for a "lift" effect */
+}
+
+/* Style for the "pressed" state (on click) and for the permanently "active" state of a NON-disabled button */
+.btn-outline-primary:active:not(:disabled),
+.btn-outline-primary.active:not(:disabled) {    /* The .active class is set via JavaScript */
+    border-color: var(--brand-1);               /* Border remains in primary brand color */
+    color: var(--brand-2);                      /* Text and icons turn white, as the background is now colored */
+    background-color: var(--brand-1);           /* The button completely fills with the primary brand color */
+    box-shadow: inset 0 1px 2px var(--shadow-inset-color); /* An inset shadow creates the impression of the button being "pressed in" */
+    transform: translateY(0.5px);               /* A slight downward shift to enhance the "pressed" effect */
+}
+
+/* Style for disabled buttons */
+.btn-outline-primary:disabled {
+    opacity: 0.5;                       /* Button is slightly transparent to indicate it's disabled */
+    cursor: not-allowed;                /* Cursor changes to indicate no action is possible */
+    border-color: var(--gray-200);      /* Lighter, gray border */
+    color: var(--gray-300);             /* Lighter, gray text/icon to appear "passive" */
+    background-color: var(--gray-100);  /* A very light gray background */
+    box-shadow: none;                   /* No shadow for disabled buttons */
+    transform: none;                    /* No transform for disabled buttons */
+}
+
+/* Specific adjustments for buttons with rounded corners (like 'rounded-md'), if necessary */
+.btn.rounded-md {
+    border-radius: 0.375rem;
+}
+</style>
+
+
 <div class="flex flex-wrap gap-2 h-min">
     <button id="showElmntOutline" class="btn btn-sm btn-outline-primary rounded-md flex items-center justify-center" title="<?= $languageService->translate('show_element_outlines') ?>">
         <i class="material-icons">filter_frames</i>

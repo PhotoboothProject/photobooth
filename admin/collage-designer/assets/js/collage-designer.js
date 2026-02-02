@@ -653,6 +653,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (bringToFrontBtn) bringToFrontBtn.disabled = (maxSelectedIndex === window.collageElements.length - 1);
     };
 
+    /**
+     * Updates the enabled/disabled state of the distribution buttons.
+     */
+    window.updateDistributionButtonStates = function() {
+        const selectedElements = window.collageElements.filter(el => el.isSelected);
+        const distributeH = document.getElementById('distributeHBtn');
+        const distributeV = document.getElementById('distributeVBtn');
+
+        if (selectedElements.length < 3) {
+            // Less than 3 elements selected, disable all distribution buttons
+            if (distributeH) distributeH.disabled = true;
+            if (distributeV) distributeV.disabled = true;
+            return;
+        }
+        // Enable all distribution buttons
+        if (distributeH) distributeH.disabled = false;
+        if (distributeV) distributeV.disabled = false;
+    };
+
 
     //=================================================================================
     // --- Undo/Redo Functionality ---
@@ -1014,6 +1033,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         window.updateRemoveButtonState();
         window.updateLayerButtonStates();
+        window.updateDistributionButtonStates();
         window.updateElementSettingsPanel();
     };
 
