@@ -5,7 +5,6 @@ use Photobooth\Service\ApplicationService;
 use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Utility\PathUtility;
-use Photobooth\Utility\FontUtility;
 use Photobooth\Service\AssetService;
 use Photobooth\Utility\CollageLayoutScanner;
 
@@ -29,28 +28,6 @@ $assetService = AssetService::getInstance();
 
 $defaultConfig = $configurationService->getDefaultConfiguration();
 
-// Example: Load available fonts
-$font_paths = [
-    PathUtility::getAbsolutePath('resources/fonts'),
-    PathUtility::getAbsolutePath('private/fonts')
-];
-$font_styles = '<style>';
-$font_family_options = [];
-foreach ($font_paths as $path) {
-    try {
-        $files = FontUtility::getFontsFromPath($path, false);
-        $files = array_map(fn ($file): string => PathUtility::getPublicPath($file), $files);
-        if (count($files) > 0) {
-            foreach ($files as $name => $path) {
-                $font_styles .= '@font-face { font-family: "' . $name . '"; src: url(' . $path . ') format("truetype"); }';
-                $font_family_options[$path] = $name;
-            }
-        }
-    } catch (\Exception $e) { // Handle error or log
-    }
-}
-$font_styles .= '</style>';
-
 // Initial loading of a collage layout or empty design
 $currentLayout = $config['collage']['layout']; // künftig direkt in js verfübar durch skript siehe unten (footer.scripts.php)
 //TEST:
@@ -68,10 +45,6 @@ echo '<script type="text/javascript">';
 echo 'const initialCollageLayout = ' . json_encode($currentLayoutData) . ';';
 echo '</script>';
 
-// Base URL for the designer (for AJAX calls etc.)
-$designerUrl = PathUtility::getPublicPath('admin/collage-designer');
-$designerUrl = rtrim($designerUrl, '/') . '/'; // make sure, the path ends with a slash
-
 // =============================================================
 // Standard Admin Panel Head & Body
 // =============================================================
@@ -82,13 +55,6 @@ include PathUtility::getAbsolutePath('admin/helper/index.php'); // Contains e.g.
 ?>
 
 <div class="w-full h-screen bg-brand-2 px-3 md:px-6 py-6 md:py-12 overflow-x-hidden overflow-y-auto">
-    <?= $font_styles ?>
-     <!-- Modal styles and other general designer styles go here -->
-    <style>
-        /* Your modal and other general designer styles */
-    </style>
-    <style id="fontselectedStyle"></style>
-
     <div class="w-full flex items-center justify-center flex-col">
         <div class="w-full max-w-[1500px] rounded-lg p-4 md:p-8 bg-white flex flex-col shadow-xl place-items-center relative">
 
@@ -179,10 +145,6 @@ if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
         </div>
     </div>
 </div>
-
-<script>
-    window.AppBaseUrl = <?php echo json_encode($designerUrl); ?>; 
-</script>
 
 <?php
 include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
