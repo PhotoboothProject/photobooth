@@ -174,8 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         isHit(mouseX, mouseY) {
-            return mouseX >= this.x && mouseX <= this.x + this.width &&
-                   mouseY >= this.y && mouseY <= this.y + this.height;
+            const {x: localX, y: localY } = getLocalMouseCoordinates(mouseX, mouseY, this);
+            return isPointInRect(localX, localY, 0, 0, this.width, this.height);
         }
     }
 
@@ -852,23 +852,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //=================================================================================
 
     window.drawCanvas = async function() {
-        // get selected elements count
-        const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
-
         window.ctx.clearRect(0, 0, window.collageCanvas.width, window.collageCanvas.height);
-
-        // calculate the current visual scaling factor to adjust handle sizes
-        const visualScale = getCanvasVisualScale();
-        const inverseScale = 1 / visualScale; // This is our multiplier for the canvas handle sizes
-
-        // Calculate the effective handle sizes in canvas coordinates
-        const effectiveResizeHandleSize = RESIZE_HANDLE_SIZE * inverseScale;
-        const effectiveRotationHandleSize = ROTATION_HANDLE_SIZE * inverseScale;
-        const effectiveDeleteHandleSize = DELETE_HANDLE_SIZE * inverseScale;
-
-        // Pass the offset for rotation handle to ensure it always has a constant *visual* distance
-        const effectiveRotationHandleOffset = ROTATION_HANDLE_OFFSET * inverseScale;
-        const effectiveDeleteHandleOffset = DELETE_HANDLE_OFFSET * inverseScale;
 
         const frameImage = window.loadedFrames['global_frame'];
 
@@ -926,6 +910,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const { content, font_family, font_color, font_size, text_horizontal_align, text_vertical_align, font_bold, font_italic, font_underline } = element;
                 if (content) {
 
+                    // apply rotation around center
                     const pivotX = x + width / 2;
                     const pivotY = y + height / 2;
                     if (rotation !== 0) {
@@ -933,6 +918,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         window.ctx.rotate(-rotation * Math.PI / 180);
                         window.ctx.translate(-pivotX, -pivotY);
                     }
+
                     window.ctx.fillStyle = font_color;
                     
                     // Build the font string
@@ -942,7 +928,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (font_bold) fontWeight += 'bold ';
 
                     const cssFontName = await window.loadFont(font_family);
-
                     const effectiveFontSizePx = (font_size / 100) * window.collageCanvas.height;
                     
                     window.ctx.font = `${fontStyle}${fontWeight}${effectiveFontSizePx}px "${cssFontName}", sans-serif`; 
@@ -950,22 +935,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.ctx.textAlign = text_horizontal_align; // Directly use element.text_horizontal_align
                     window.ctx.textBaseline = 'middle'; // Center vertically in the bounding box
 
-                    let translateX = 0;
+                    let translateX = x;
                     if (text_horizontal_align === 'left') {
-                        translateX = x
+                        //translateX = x
                     } else if (text_horizontal_align === 'right') {
-                        translateX = x + width;
+                        translateX += width;
                     } else { // 'center'
-                        translateX = x + width / 2;
+                        translateX += width / 2;
                     }
 
-                    let translateY = 0;
+                    let translateY = y;
                     if (text_vertical_align === 'top') {
-                        translateY = y + effectiveFontSizePx / 2;
+                        translateY += effectiveFontSizePx / 2;
                     } else if (text_vertical_align === 'bottom') {
-                        translateY = y + height - effectiveFontSizePx / 2;
+                        translateY += height - effectiveFontSizePx / 2;
                     } else { // 'center'
-                        translateY = y + height / 2;
+                        translateY += height / 2;
                     }
 
                     window.ctx.fillText(content, translateX, translateY);
@@ -1006,52 +991,166 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Draw delete handle if just one element is selected
-            if(selectedElementsCount === 1 && element.isSelected) {
-                // Position of the handle (top right of the active element)
-                const deleteHandleX = window.activeElement.x + window.activeElement.width - effectiveDeleteHandleOffset;
-                const deleteHandleY = window.activeElement.y + effectiveDeleteHandleOffset;
+            // Only draw default border if not selected
+            if (window.globalShowElementOutlines) { 
+                window.ctx.strokeStyle = BORDER_COLOR;
+                window.ctx.lineWidth = BORDER_WIDTH;
+                window.ctx.strokeRect(x, y, width, height);
+            }
 
-                // draw the circle for the handle
+            window.ctx.restore(); // Restore context to original state before next element
+        };
+
+        // --- After all elements are drawn, draw the handles and selection overlay ---
+        window.drawHandles();
+
+        window.updateRemoveButtonState();
+        window.updateLayerButtonStates();
+        window.updateElementSettingsPanel();
+    };
+
+    //=================================================================================
+    // --- Handles ---
+    //=================================================================================
+    window.currentHandles = {
+        resize: [],         // Array of {type, cursor, handleX, handleY, handleWidth, handleHeight} (bounding box of handle itself)
+        delete: null,       // {type, cursor, handleCenterX, handleCenterY, radius} (center and radius for circle test, rotation for cursor icon)
+        rotate: null,       // {type, cursor, handleCenterX, handleCenterY, radius}
+        selectionBox: null  // {type, x, y, width, height, rotation} (bounding box of the selection itself)
+    };
+
+    window.drawHandles = function() {
+        // Clear previous handle data
+        window.currentHandles = {
+            resize: [],
+            delete: null,
+            rotate: null,
+            selectionBox: null
+        };
+
+        const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
+
+        const visualScale = getCanvasVisualScale();
+        const inverseScale = 1 / visualScale;
+
+        const effectiveResizeHandleSize = RESIZE_HANDLE_SIZE * inverseScale;
+        const effectiveRotationHandleSize = ROTATION_HANDLE_SIZE * inverseScale;
+        const effectiveDeleteHandleSize = DELETE_HANDLE_SIZE * inverseScale;
+
+        const effectiveRotationHandleOffset = ROTATION_HANDLE_OFFSET * inverseScale;
+        const effectiveDeleteHandleOffset = DELETE_HANDLE_OFFSET * inverseScale;
+
+        let targetForHandles = null; // Either activeElement or groupBoundingBox for resizing
+        let targetRotation = 0; // Rotation for handles if a single element is selected
+
+        if (selectedElementsCount === 1 && window.activeElement && window.activeElement.isSelected) {
+            targetForHandles = window.activeElement;
+            // The rotation for the handles depends on the type of the active element
+            if (window.activeElement.type === 'text') {
+                targetRotation = window.activeElement.rotation;
+            } else if (window.activeElement.type === 'image') {
+                // If images use `prepareRotatedImage` and the bounding box should still be axis-aligned,
+                // then targetRotation remains 0 for images. 
+                targetRotation = 0; 
+            }
+        } else if (selectedElementsCount > 1) {
+            targetForHandles = getSelectionBoundingBox(); // Group bounding box is always axis-aligned, so rotation is 0
+            targetRotation = 0; 
+        }
+
+        if (targetForHandles && targetForHandles.width > 0 && targetForHandles.height > 0) {
+            const { x, y, width, height } = targetForHandles;
+
+            // --- Save context for this selection/handle drawing phase ---
+            window.ctx.save(); 
+
+            // Apply transformations if a single, rotated text element is selected.
+            // Group bounding box (selectedElementsCount > 1) is typically not rotated.
+            // Image selection boxes are also handled as axis-aligned for now.
+            if (selectedElementsCount === 1 && targetForHandles.type === 'text' && targetRotation !== 0) {
+                const pivotX = x + width / 2;
+                const pivotY = y + height / 2;
+                window.ctx.translate(pivotX, pivotY);
+                window.ctx.rotate(-targetRotation * Math.PI / 180); // Adjust sign for Canvas vs. PHP imagettftext
+                window.ctx.translate(-pivotX, -pivotY);
+            }
+
+            // --- Draw selection border for the active element or group ---
+            window.ctx.strokeStyle = SELECTION_COLOR;
+            window.ctx.lineWidth = BORDER_WIDTH;
+            if (selectedElementsCount > 1) {
+                window.ctx.setLineDash([5, 5]); // Dashed line for group
+            }
+            window.ctx.strokeRect(x, y, width, height); // This rectangle will be rotated if context is rotated
+            window.ctx.setLineDash([]); // Reset to solid line
+
+            // Store selection box data for hit detection
+            window.currentHandles.selectionBox = { x, y, width, height, rotation: targetRotation };
+
+            // --- Draw Resizing Handles (at the corners of the rotated/unrotated bounding box) ---
+            const handleOffsets = [
+                { localX: 0     - effectiveResizeHandleSize / 2,    localY: 0       - effectiveResizeHandleSize / 2,    type: 'top-left',       cursor: 'nwse-resize' },
+                { localX: width - effectiveResizeHandleSize / 2,    localY: 0       - effectiveResizeHandleSize / 2,    type: 'top-right',      cursor: 'nesw-resize' },
+                { localX: 0     - effectiveResizeHandleSize / 2,    localY: height  - effectiveResizeHandleSize / 2,    type: 'bottom-left',    cursor: 'nesw-resize' },
+                { localX: width - effectiveResizeHandleSize / 2,    localY: height  - effectiveResizeHandleSize / 2,    type: 'bottom-right',   cursor: 'nwse-resize' }
+            ];
+            
+            handleOffsets.forEach(handleData  => {
+                window.ctx.fillStyle = RESIZE_HANDLE_COLOR;
+                window.ctx.strokeStyle = RESIZE_HANDLE_STROKE_COLOR;
+                window.ctx.lineWidth = RESIZE_HANDLE_BORDER_WIDTH;
+                window.ctx.fillRect(x + handleData.localX, y + handleData.localY, effectiveResizeHandleSize, effectiveResizeHandleSize);
+                window.ctx.strokeRect(x + handleData.localX, y + handleData.localY, effectiveResizeHandleSize, effectiveResizeHandleSize);
+                
+                
+                // Store handle data for mouse events - these are LOCAL to the targetForHandles
+                window.currentHandles.resize.push({
+                    type:           handleData.type,
+                    cursor:         handleData.cursor,
+                    handleLocalX:   handleData.localX,
+                    handleLocalY:   handleData.localY,
+                    handleWidth:    effectiveResizeHandleSize,
+                    handleHeight:   effectiveResizeHandleSize
+                });
+            });
+
+            // --- Draw Delete Handle (ONLY FOR SINGLE ACTIVE ELEMENT) ---
+            if (selectedElementsCount === 1) { // Implicitly window.activeElement.isSelected is true here
+                // Local coordinates for drawing (relative to targetForHandles's (x,y))
+                const deleteHandleLocalCenterX = width - effectiveDeleteHandleOffset; // Positioned outside top-right
+                const deleteHandleLocalCenterY = 0 + effectiveDeleteHandleOffset;
+                const deleteHandleRadius = effectiveDeleteHandleSize / 2;
+
                 window.ctx.beginPath();
-                window.ctx.arc(deleteHandleX, deleteHandleY, effectiveDeleteHandleSize / 2, 0, Math.PI * 2);
+                window.ctx.arc(x + deleteHandleLocalCenterX, y + deleteHandleLocalCenterY, deleteHandleRadius, 0, Math.PI * 2);
                 window.ctx.fillStyle = DELETE_HANDLE_COLOR;
                 window.ctx.fill();
                 window.ctx.strokeStyle = DELETE_HANDLE_STROKE_COLOR;
                 window.ctx.lineWidth = HANDLE_BORDER_WIDTH;
                 window.ctx.stroke();
-
-                // draw the X-Symbol in the handle
                 window.ctx.fillStyle = DELETE_HANDLE_STROKE_COLOR;
                 window.ctx.font = `${effectiveDeleteHandleSize * 0.7}px Arial`;
                 window.ctx.textAlign = 'center';
                 window.ctx.textBaseline = 'middle';
-                window.ctx.fillText('X', deleteHandleX, deleteHandleY);
-            }
+                window.ctx.fillText('X', x + deleteHandleLocalCenterX, y + deleteHandleLocalCenterY);
 
-            // Draw selection border and Handles for ALL selected elements
-            if (element.isSelected) { 
-                // Draw selection border
-                window.ctx.strokeStyle = SELECTION_COLOR;
-                window.ctx.lineWidth = BORDER_WIDTH;
-                window.ctx.strokeRect(x, y, width, height);
+                // Store delete handle data for mouse events - LOCAL to targetForHandles
+                window.currentHandles.delete = {
+                    type: 'delete',
+                    cursor: DELETE_CURSOR_URL, 
+                    handleLocalX: deleteHandleLocalCenterX,
+                    handleLocalY: deleteHandleLocalCenterY,
+                    radius: deleteHandleRadius
+                };
 
-             } else {
-                // Only draw default border if not selected
-                //TODO: DRAW HITBOXES FOR ELEMENTS via checkbox...
-                if (true) { 
-                    window.ctx.strokeStyle = BORDER_COLOR;
-                    window.ctx.lineWidth = BORDER_WIDTH;
-                    window.ctx.strokeRect(x, y, width, height);
-                }
-            }
+                // --- Draw Rotation Handle (ONLY FOR SINGLE ACTIVE ELEMENT) ---
+                // Local coordinates for drawing (relative to targetForHandles's (x,y))
+                const rotationHandleLocalCenterX = width / 2; // Above center
+                const rotationHandleLocalCenterY = 0 - effectiveRotationHandleOffset;
+                const rotationHandleRadius = effectiveRotationHandleSize / 2;
 
-            // Draw Rotation Handle
-            if (window.activeElement && window.activeElement.isSelected) { // Check if it's selected and active
-                const rotationHandleX = window.activeElement.x + window.activeElement.width / 2;
-                const rotationHandleY = window.activeElement.y - effectiveRotationHandleOffset;
                 window.ctx.beginPath();
-                window.ctx.arc(rotationHandleX, rotationHandleY, effectiveRotationHandleSize / 2, 0, Math.PI * 2);
+                window.ctx.arc(x + rotationHandleLocalCenterX, y + rotationHandleLocalCenterY, rotationHandleRadius, 0, Math.PI * 2);
                 window.ctx.fillStyle = ROTATION_HANDLE_COLOR;
                 window.ctx.fill();
                 window.ctx.strokeStyle = ROTATION_HANDLE_STROKE_COLOR;
@@ -1061,74 +1160,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.ctx.font = `${effectiveRotationHandleSize * 0.7}px Arial`;
                 window.ctx.textAlign = 'center';
                 window.ctx.textBaseline = 'middle';
-                window.ctx.fillText(ROTATION_HANDLE_ICON, rotationHandleX, rotationHandleY);
+                window.ctx.fillText(ROTATION_HANDLE_ICON, x + rotationHandleLocalCenterX, y + rotationHandleLocalCenterY);
+
+                // Store rotation handle data for mouse events - LOCAL to targetForHandles
+                window.currentHandles.rotate = {
+                    type: 'rotate',
+                    cursor: ROTATION_CURSOR_URL, 
+                    handleLocalX: rotationHandleLocalCenterX,
+                    handleLocalY: rotationHandleLocalCenterY,
+                    radius: rotationHandleRadius,
+                };
             }
-
-            window.ctx.restore(); // Restore context to original state before next element
-        };
-
-        // --- Draw Resizing Handles for active element OR group bounding box ---
-        // --- Draw Rotation Handle ONLY FOR THE ACTIVE ELEMENT ---
-        //const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
-
-        let targetForHandles = null; // Either activeElement or groupBoundingBox for resizing
-        let targetX = 0, targetY = 0, targetWidth = 0, targetHeight = 0;
-
-        if (selectedElementsCount === 1 && window.activeElement && window.activeElement.isSelected) {
-            targetForHandles = window.activeElement;
-            targetX = targetForHandles.x;
-            targetY = targetForHandles.y;
-            targetWidth = targetForHandles.width;
-            targetHeight = targetForHandles.height;
-        } else if (selectedElementsCount > 1) {
-            targetForHandles = getSelectionBoundingBox(); // This is for resizing the group
-            if (targetForHandles) {
-                targetX = targetForHandles.x;
-                targetY = targetForHandles.y;
-                targetWidth = targetForHandles.width;
-                targetHeight = targetForHandles.height;
-            }
+//TODO: selectedelements all blue frame
+            window.ctx.restore(); // Restore context for this selection/handle drawing phase
         }
-
-        // Draw Resizing Handles
-        if (targetForHandles && targetWidth > 0 && targetHeight > 0) { // Check for valid dimensions
-            // Optional: Draw a dashed border around the group bounding box if multiple elements are selected
-            if (selectedElementsCount > 1) {
-                window.ctx.strokeStyle = SELECTION_COLOR;
-                window.ctx.lineWidth = BORDER_WIDTH;
-                window.ctx.setLineDash([5, 5]); // Dashed line
-                window.ctx.strokeRect(targetX, targetY, targetWidth, targetHeight);
-                window.ctx.setLineDash([]); // Reset to solid line
-            }
-
-            const handles = [
-                { x: targetX,               y: targetY,                     cursor: 'nwse-resize', name: 'top-left' },
-                { x: targetX + targetWidth, y: targetY,                     cursor: 'nesw-resize', name: 'top-right' },
-                { x: targetX,               y: targetY + targetHeight,      cursor: 'nesw-resize', name: 'bottom-left' },
-                { x: targetX + targetWidth, y: targetY + targetHeight,      cursor: 'nwse-resize', name: 'bottom-right' }
-            ];
-            handles.forEach(handle => {
-                window.ctx.fillStyle = RESIZE_HANDLE_COLOR;
-                window.ctx.strokeStyle = RESIZE_HANDLE_STROKE_COLOR;
-                window.ctx.lineWidth = RESIZE_HANDLE_BORDER_WIDTH;
-                window.ctx.fillRect(handle.x - effectiveResizeHandleSize / 2, handle.y - effectiveResizeHandleSize / 2, effectiveResizeHandleSize, effectiveResizeHandleSize);
-                window.ctx.strokeRect(handle.x - effectiveResizeHandleSize / 2, handle.y - effectiveResizeHandleSize / 2, effectiveResizeHandleSize, effectiveResizeHandleSize);
-            });
-        }           
-            
-
-
-        
-        window.updateRemoveButtonState();
-        window.updateLayerButtonStates();
-        window.updateElementSettingsPanel();
     };
-
 
     //=================================================================================
     // --- Mouse Event Handlers ---
     //=================================================================================
 
+    // Helper function to get mouse position relative to canvas
     function getMousePos(event) {
         const rect = window.collageCanvas.getBoundingClientRect();
         const scaleX = window.collageCanvas.width / rect.width;
@@ -1139,10 +1191,53 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    function handleMouseDown(event) {
-        const mouse = getMousePos(event);
+    // --- Helper function for transforming mouse coordinates to element's local space ---
+    function getLocalMouseCoordinates(globalX, globalY, element) {
+        let effectiveRotation = element.rotation;
+        if (element.type === 'image') {effectiveRotation = 0;} // Images are treated as unrotated for handle hit detection
 
-        const prevSelectedState = window.createSnapshot(); // create Snapshot before Snapshot for possible selection changes
+        if (effectiveRotation === 0) {
+            return  { x: globalX - element.x, y: globalY - element.y };
+        }
+
+        // Calculate element's center (pivot for rotation)
+        const centerX = element.x + element.width / 2;
+        const centerY = element.y + element.height / 2;
+
+        // 1. Translate global mouse point so element's center becomes (0,0)
+        const translatedX = globalX - centerX;
+        const translatedY = globalY - centerY;
+
+        // 2. Inverse rotate the translated point
+        const angleRad = element.rotation * Math.PI / 180; // Negative angle for inverse rotation
+        const inverselyRotatedX = translatedX * Math.cos(angleRad) - translatedY * Math.sin(angleRad);
+        const inverselyRotatedY = translatedX * Math.sin(angleRad) + translatedY * Math.cos(angleRad);
+
+        // 3. Translate the point back so element's top-left becomes (0,0) for local checks
+        // This makes the transformed mouse coordinates relative to the element's top-left corner
+        const localX = inverselyRotatedX + element.width / 2;
+        const localY = inverselyRotatedY + element.height / 2;
+
+        return { x: localX, y: localY };
+    }
+
+    // --- Helper function for point-in-rotated-rectangle test ---
+    function isPointInRect(pointX, pointY, rectX, rectY, rectWidth, rectHeight) {
+        return pointX >= rectX && pointX <= rectX + rectWidth &&
+            pointY >= rectY && pointY <= rectY + rectHeight;
+    }
+
+    // --- Helper function for point-in-circle test ---
+    function isPointInCircle(pointX, pointY, centerX, centerY, radius) {
+        const dist = Math.sqrt(Math.pow(pointX - centerX, 2) + Math.pow(pointY - centerY, 2));
+        return dist <= radius;
+    }
+
+
+    //---------------------------------------------------------------------------------
+    function handleMouseDown(event) {
+        const globalMouse = getMousePos(event);
+
 
         // Reset interaction flags
         isResizing = false;
@@ -1151,116 +1246,98 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
 
-        let currentInteractionTarget = null; // The element or bounding box currently being interacted with via handles
-        let currentTargetX = 0, currentTargetY = 0, currentTargetWidth = 0, currentTargetHeight = 0;
+        // Check if there's an active element to interact with its handles
+        if (window.activeElement) {
+            // Transform global mouse coordinates into the local (unrotated) space of the active element
+            const transformedMouse = getLocalMouseCoordinates(globalMouse.x, globalMouse.y, window.activeElement);
 
-        // calculate the effective handle sizes for hit detection
-        const visualScale = getCanvasVisualScale();
-        const inverseScale = 1 / visualScale;
-        const effectiveResizeHandleSize = RESIZE_HANDLE_SIZE * inverseScale;
-        const effectiveRotationHandleSize = ROTATION_HANDLE_SIZE * inverseScale;
-        const effectiveDeleteHandleSize = DELETE_HANDLE_SIZE * inverseScale;
-        const effectiveRotationHandleOffset = ROTATION_HANDLE_OFFSET * inverseScale;
-        const effectiveDeleteHandleOffset = DELETE_HANDLE_OFFSET * inverseScale;
-
-        // Determine the target for handle interaction (single active element or group bounding box)
-        if (selectedElementsCount === 1 && window.activeElement && window.activeElement.isSelected) {
-            currentInteractionTarget = window.activeElement;
-            currentTargetX = currentInteractionTarget.x;
-            currentTargetY = currentInteractionTarget.y;
-            currentTargetWidth = currentInteractionTarget.width;
-            currentTargetHeight = currentInteractionTarget.height;
-        } else if (selectedElementsCount > 1) {
-            currentInteractionTarget = getSelectionBoundingBox(); // This is for resizing the group
-            if (currentInteractionTarget) {
-                currentTargetX = currentInteractionTarget.x;
-                currentTargetY = currentInteractionTarget.y;
-                currentTargetWidth = currentInteractionTarget.width;
-                currentTargetHeight = currentInteractionTarget.height;
+            // 1. Check for hits on handles first (they are always on top)
+            // Check delete handle
+            if (window.currentHandles.delete) {
+                if (isPointInCircle(transformedMouse.x, transformedMouse.y, 
+                                window.currentHandles.delete.handleLocalX, window.currentHandles.delete.handleLocalY,
+                                window.currentHandles.delete.radius)) {
+                
+                console.log('Delete handle hit!');
+                
+                event.preventDefault(); // prevent that the click executes other interactions
+                window.deleteSelectedElements(); // remove active element
+                return;
+                }
             }
-        }
 
-        // --- Check for Rotation Handle hit FIRST ---
-        // Rotation handle is ALWAYS on the activeElement, even if multiple are selected.
-        if (window.activeElement && window.activeElement.isSelected) {
-            const rotationHandleX = window.activeElement.x + window.activeElement.width / 2;
-            const rotationHandleY = window.activeElement.y - effectiveRotationHandleOffset;
-            const dist = Math.sqrt(
-                Math.pow(mouse.x - rotationHandleX, 2) +
-                Math.pow(mouse.y - rotationHandleY, 2)
-            );
+            // Check rotate handle
+            if (window.currentHandles.rotate) {
+                if (isPointInCircle(transformedMouse.x, transformedMouse.y, 
+                                window.currentHandles.rotate.handleLocalX, window.currentHandles.rotate.handleLocalY,
+                                window.currentHandles.rotate.radius)) {
+                    window.selectedHandle = { ...window.currentHandles.rotate, element: window.activeElement };
 
-            if (dist <= effectiveRotationHandleSize / 2) {
-                isRotating = true;
-                window.saveState(); // Save state at start of rotation
-                const elementCenterX = window.activeElement.x + window.activeElement.width / 2;
-                const elementCenterY = window.activeElement.y + window.activeElement.height / 2;
-                rotationStartAngle = Math.atan2(mouse.y - elementCenterY, mouse.x - elementCenterX);
-                initialElementRotation = window.activeElement.rotation; // Store active element's rotation as start reference
-                window.collageCanvas.style.cursor = ROTATION_CURSOR_URL;
-                return; // Rotation handle clicked, don't proceed further
+                    console.log('Rotate handle hit!');
+
+                    isRotating = true;
+                    window.saveState(); // Save state at start of rotation
+
+                    // The rotationStartAngle needs to be calculated in the global coordinate system initially
+                    // because the mouse movement is global.
+                    const elementCenterX = window.activeElement.x + window.activeElement.width / 2;
+                    const elementCenterY = window.activeElement.y + window.activeElement.height / 2;
+                    rotationStartAngle = Math.atan2(globalMouse.y - elementCenterY, globalMouse.x - elementCenterX);
+                    initialElementRotation = window.activeElement.rotation; // Store active element's rotation as start reference
+                    window.collageCanvas.style.cursor = window.selectedHandle.cursor;
+                    return;
+                }
             }
-        }
 
-        // --- Check for Resize Handle hit SECOND ---
-        // Handles are on activeElement (if single selected) or group bounding box (if multiple selected)
-        if (currentInteractionTarget && currentTargetWidth > 0 && currentTargetHeight > 0) { // Check for valid dimensions to prevent errors
-            const handles = [
-                { x: currentTargetX,                        y: currentTargetY,                          name: 'top-left' },
-                { x: currentTargetX + currentTargetWidth,   y: currentTargetY,                          name: 'top-right' },
-                { x: currentTargetX,                        y: currentTargetY + currentTargetHeight,    name: 'bottom-left' },
-                { x: currentTargetX + currentTargetWidth,   y: currentTargetY + currentTargetHeight,    name: 'bottom-right' }
-            ];
+            // Check resize handles
+            let resizeXY;
+            if (selectedElementsCount > 1) {
+                    const boundingBox = getSelectionBoundingBox();
+                    resizeXY = { x: globalMouse.x - boundingBox.x, y: globalMouse.y - boundingBox.y };
+            } else { 
+                resizeXY = transformedMouse;
+            }
 
-            for (const handle of handles) {
-                if (mouse.x >= handle.x - effectiveResizeHandleSize / 2 && mouse.x <= handle.x + effectiveResizeHandleSize / 2 &&
-                    mouse.y >= handle.y - effectiveResizeHandleSize / 2 && mouse.y <= handle.y + effectiveResizeHandleSize / 2) {
-                    
+            for (const handle of window.currentHandles.resize) {
+                if (isPointInRect(resizeXY.x, resizeXY.y, handle.handleLocalX, handle.handleLocalY, handle.handleWidth, handle.handleHeight)) {
+                    window.selectedHandle = { ...handle, element: window.activeElement };
+
+                    console.log('Resize handle hit:', handle.type);
+
                     isResizing = true;
                     window.saveState(); // Save state at start of resizing
-                    resizeHandle = handle.name;
-                    dragStartX = mouse.x;
-                    dragStartY = mouse.y;
+                    resizeHandle = handle.type;
+                    dragStartX = globalMouse.x;
+                    dragStartY = globalMouse.y;
                     // Store initial state for resizing relative to the group/element
-                    initialElementWidth = currentTargetWidth;
-                    initialElementHeight = currentTargetHeight;
-                    initialElementX = currentTargetX;
-                    initialElementY = currentTargetY;
-                    
-                    switch(resizeHandle) { 
-                        case 'top-left': case 'bottom-right': window.collageCanvas.style.cursor = 'nwse-resize'; break;
-                        case 'top-right': case 'bottom-left': window.collageCanvas.style.cursor = 'nesw-resize'; break;
+                    if (window.activeElement) {
+                        initialElementWidth = window.activeElement.width;
+                        initialElementHeight = window.activeElement.height;
+                        initialElementX = window.activeElement.x;
+                        initialElementY = window.activeElement.y;
+                    } else { // Fallback for group resize (will be set from getSelectionBoundingBox in handleMouseMove)
+                        const groupBoundingBox = getSelectionBoundingBox();
+                        if (groupBoundingBox) {
+                            initialElementWidth = groupBoundingBox.width;
+                            initialElementHeight = groupBoundingBox.height;
+                            initialElementX = groupBoundingBox.x;
+                            initialElementY = groupBoundingBox.y;
+                        }
                     }
-                    return; // Handle clicked, don't proceed further
+                    window.collageCanvas.style.cursor = window.selectedHandle.cursor;
+                    return; // Handle hit
                 }
             }
         }
 
-        // --- Check for Delete Handle hit (only if single element selected) ---
-        if (selectedElementsCount === 1 && window.activeElement && window.activeElement.isSelected) {
-            const deleteHandleX = window.activeElement.x + window.activeElement.width - effectiveDeleteHandleOffset;
-            const deleteHandleY = window.activeElement.y + effectiveDeleteHandleOffset;
-
-            const distToDeleteHandle = Math.sqrt(
-                Math.pow(mouse.x - deleteHandleX, 2) +
-                Math.pow(mouse.y - deleteHandleY, 2)
-            );
-
-            if (distToDeleteHandle <= effectiveDeleteHandleSize / 2) {
-                event.preventDefault(); // prevent that the click executes other interactions
-                window.deleteSelectedElements(); // remove active element
-                return; // Handle clicked, don't proceed further
-            }
-        }
-
-        // --- Handle Clicks on Elements for Selection/Dragging (if no handles hit) ---
+        // --- 2. If no handles hit, check for hits on elements themselves (for dragging/selection) ---
         let clickedOnElement = false;
         let elementClicked = null;
 
         // Find the topmost element clicked
         for (let i = window.collageElements.length - 1; i >= 0; i--) {
             const element = window.collageElements[i];
-            if (element.isHit(mouse.x, mouse.y)) {
+            if (element.isHit(globalMouse.x, globalMouse.y)) {
                 elementClicked = element;
                 clickedOnElement = true;
                 break;
@@ -1271,44 +1348,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (clickedOnElement) {
             
-            // If Ctrl/Cmd is pressed, toggle selection for the clicked element
-            if (event.ctrlKey || event.metaKey) {
-                elementClicked.isSelected = !elementClicked.isSelected;
-                if (elementClicked.isSelected) {
-                    window.activeElement = elementClicked; // Set active element to the one just selected
-                } else if (window.activeElement === elementClicked) {
-                    // If we deselected the active element, find another selected one to be active, or null
-                    window.activeElement = window.collageElements.find(el => el.isSelected) || null;
-                }
-            } else {
-                // Single selection: deselect all others, then select this one
-                if (window.activeElement !== elementClicked || !elementClicked.isSelected) { 
-                     window.collageElements.forEach(el => el.isSelected = false);
-                }
-                elementClicked.isSelected = true;
-                window.activeElement = elementClicked; // The clicked element becomes the active one
+        // If Ctrl/Cmd is pressed, toggle selection for the clicked element
+        if (event.ctrlKey || event.metaKey) {
+            elementClicked.isSelected = !elementClicked.isSelected;
+            if (elementClicked.isSelected) {
+                window.activeElement = elementClicked; // Set active element to the one just selected
+            } else if (window.activeElement === elementClicked) {
+                // If we deselected the active element, find another selected one to be active, or null
+                window.activeElement = window.collageElements.find(el => el.isSelected) || null;
             }
-            
-            if (wasElementSelectedBeforeClick) {
-                isDragging = true;
-                window.saveState(); // Save state at start of dragging
-                dragStartX = mouse.x;
-                dragStartY = mouse.y;
+        } else {
+            // Single selection: deselect all others, then select this one
+            if (window.activeElement !== elementClicked || !elementClicked.isSelected) { 
+                window.collageElements.forEach(el => el.isSelected = false);
+            }
+            elementClicked.isSelected = true;
+            window.activeElement = elementClicked; // The clicked element becomes the active one
+        }
+        
+        if (wasElementSelectedBeforeClick) {
+            isDragging = true;
+            window.saveState(); // Save state at start of dragging
+            dragStartX = globalMouse.x;
+            dragStartY = globalMouse.y;
 
-                // elementStartX/Y for dragging needs to be the initial position of the active element
-                // or the top-left of the group bounding box for consistent dragging behavior.
-                if (selectedElementsCount > 1) { // If multiple elements, drag the group
-                    const groupBoundingBox = getSelectionBoundingBox();
-                    if (groupBoundingBox) {
-                        elementStartX = groupBoundingBox.x;
-                        elementStartY = groupBoundingBox.y;
-                    }
-                } else if (window.activeElement) { // Single element drag
-                    elementStartX = window.activeElement.x;
-                    elementStartY = window.activeElement.y;
+            // elementStartX/Y for dragging needs to be the initial position of the active element
+            // or the top-left of the group bounding box for consistent dragging behavior.
+            if (selectedElementsCount > 1) { // If multiple elements, drag the group
+                const groupBoundingBox = getSelectionBoundingBox();
+                if (groupBoundingBox) {
+                    elementStartX = groupBoundingBox.x;
+                    elementStartY = groupBoundingBox.y;
                 }
+            } else if (window.activeElement) { // Single element drag
+                elementStartX = window.activeElement.x;
+                elementStartY = window.activeElement.y;
             }
-            window.collageCanvas.style.cursor = window.activeElement ? 'grab' : 'default';
+        }
+        window.collageCanvas.style.cursor = window.activeElement ? 'grabbing' : 'default';
         } else {
             // No element was clicked
             if (!event.ctrlKey && !event.metaKey) {
@@ -1320,101 +1397,96 @@ document.addEventListener('DOMContentLoaded', () => {
         window.drawCanvas();
     }
 
+    //---------------------------------------------------------------------------------
     function handleMouseMove(event) {
-        const mouse = getMousePos(event);
-
-        // calculate the effective handle sizes for hit detection
-        const visualScale = getCanvasVisualScale();
-        const inverseScale = 1 / visualScale;
-        const effectiveResizeHandleSize = RESIZE_HANDLE_SIZE * inverseScale;
-        const effectiveRotationHandleSize = ROTATION_HANDLE_SIZE * inverseScale;
-        const effectiveDeleteHandleSize = DELETE_HANDLE_SIZE * inverseScale; // Not used in mousemove but good to keep for consistency
-        const effectiveRotationHandleOffset = ROTATION_HANDLE_OFFSET * inverseScale;
-        const effectiveDeleteHandleOffset = DELETE_HANDLE_OFFSET * inverseScale; // Not used in mousemove but good to keep for consistency
+        const globalMouse = getMousePos(event); // Mouse coordinates relative to canvas
 
         // --- Cursor hover for handles (adjust for group vs. single) ---
         let cursorChanged = false;
-        if (!isDragging && !isResizing && !isRotating) { // Only change cursor if not interacting
-            const selectedElementsCount = window.collageElements.filter(el => el.isSelected).length;
-            let currentTargetForHover = null;
-            let currentTargetX = 0, currentTargetY = 0, currentTargetWidth = 0, currentTargetHeight = 0;
+        if (!isDragging && !isResizing && !isRotating) { // Only change cursor if no interaction is active
+            const selectedElements = window.collageElements.filter(el => el.isSelected);
+            const selectedElementsCount = selectedElements.length;
 
-            // Determine target for hover (single active element or group bounding box)
-            if (selectedElementsCount === 1 && window.activeElement && window.activeElement.isSelected) {
-                currentTargetForHover = window.activeElement;
-                currentTargetX = currentTargetForHover.x;
-                currentTargetY = currentTargetForHover.y;
-                currentTargetWidth = currentTargetForHover.width;
-                currentTargetHeight = currentTargetForHover.height;
+            // --- Determine the mouse coordinates for handle hit testing (similar to handleMouseDown) ---
+            let mouseForHandleHitX, mouseForHandleHitY; // Mouse coordinates in the local space of the handle's "container"
+            let handleContainerTarget = null; // Either activeElement or groupBoundingBox for reference
+
+            if (selectedElementsCount === 1 && window.activeElement) {
+                // Single element selection: Handles are relative to the activeElement.
+                // Transform global mouse into the activeElement's local, unrotated space.
+                const transformedMouse = getLocalMouseCoordinates(globalMouse.x, globalMouse.y, window.activeElement);
+                mouseForHandleHitX = transformedMouse.x;
+                mouseForHandleHitY = transformedMouse.y;
+                handleContainerTarget = window.activeElement;
             } else if (selectedElementsCount > 1) {
-                currentTargetForHover = getSelectionBoundingBox();
-                if (currentTargetForHover) {
-                    currentTargetX = currentTargetForHover.x;
-                    currentTargetY = currentTargetForHover.y;
-                    currentTargetWidth = currentTargetForHover.width;
-                    currentTargetHeight = currentTargetForHover.height;
+                // Group selection: Handles are relative to the groupBoundingBox.
+                // The groupBoundingBox is always axis-aligned.
+                // We need mouse coordinates relative to the top-left of the groupBoundingBox.
+                const groupBoundingBox = getSelectionBoundingBox();
+                if (groupBoundingBox) {
+                    mouseForHandleHitX = globalMouse.x - groupBoundingBox.x;
+                    mouseForHandleHitY = globalMouse.y - groupBoundingBox.y;
+                    handleContainerTarget = groupBoundingBox;
                 }
             }
 
-            // Check rotation handle hover (ALWAYS on activeElement)
-            if (window.activeElement && window.activeElement.isSelected) {
-                const rotationHandleX = window.activeElement.x + window.activeElement.width / 2;
-                const rotationHandleY = window.activeElement.y - effectiveRotationHandleOffset;
-                const dist = Math.sqrt(
-                    Math.pow(mouse.x - rotationHandleX, 2) +
-                    Math.pow(mouse.y - rotationHandleY, 2)
-                );
-                if (dist <= effectiveRotationHandleSize / 2) {
-                    window.collageCanvas.style.cursor = ROTATION_CURSOR_URL;
-                    cursorChanged = true;
-                }
-            }
-
-            // Check rotation handle hover (ALWAYS on activeElement)
-            if (window.activeElement && window.activeElement.isSelected) {
-                const deleteHandleX = window.activeElement.x + window.activeElement.width - effectiveDeleteHandleOffset;
-                const deleteHandleY = window.activeElement.y + effectiveDeleteHandleOffset;
-                const dist = Math.sqrt(
-                    Math.pow(mouse.x - deleteHandleX, 2) +
-                    Math.pow(mouse.y - deleteHandleY, 2)
-                );
-                if (dist <= effectiveDeleteHandleSize / 2) {
-                    window.collageCanvas.style.cursor = DELETE_CURSOR_URL;
-                    cursorChanged = true;
-                }
-            }
-
-            // Check resize handles hover (on currentTargetForHover if it exists and not already hovering another handle)
-            if (currentTargetForHover && !cursorChanged && currentTargetForHover.width > 0 && currentTargetForHover.height > 0) { 
-                const handles = [
-                    { x: currentTargetX,                        y: currentTargetY,                          cursor: 'nwse-resize', name: 'top-left' },
-                    { x: currentTargetX + currentTargetWidth,   y: currentTargetY,                          cursor: 'nesw-resize', name: 'top-right' },
-                    { x: currentTargetX,                        y: currentTargetY + currentTargetHeight,    cursor: 'nesw-resize', name: 'bottom-left' },
-                    { x: currentTargetX + currentTargetWidth,   y: currentTargetY + currentTargetHeight,    cursor: 'nwse-resize', name: 'bottom-right' }
-                ];
-                for (const handle of handles) {
-                    if (mouse.x >= handle.x - effectiveResizeHandleSize / 2 && mouse.x <= handle.x + effectiveResizeHandleSize / 2 &&
-                        mouse.y >= handle.y - effectiveResizeHandleSize / 2 && mouse.y <= handle.y + effectiveResizeHandleSize / 2) {
-                        window.collageCanvas.style.cursor = handle.cursor;
+            if (handleContainerTarget) {
+                // 1. Check delete handle (ONLY FOR SINGLE ACTIVE ELEMENT)
+                if (selectedElementsCount === 1 && window.currentHandles.delete) {
+                    if (isPointInCircle(mouseForHandleHitX, mouseForHandleHitY,
+                                    window.currentHandles.delete.handleLocalX, window.currentHandles.delete.handleLocalY,
+                                    window.currentHandles.delete.radius)) {
+                        window.collageCanvas.style.cursor = DELETE_CURSOR_URL;
                         cursorChanged = true;
+                    }
+                }
+
+                // 2. Check rotate handle (ONLY FOR SINGLE ACTIVE ELEMENT)
+                if (!cursorChanged && selectedElementsCount === 1 && window.currentHandles.rotate) { // Only check if no other cursor changed
+                    if (isPointInCircle(mouseForHandleHitX, mouseForHandleHitY,
+                                    window.currentHandles.rotate.handleLocalX, window.currentHandles.rotate.handleLocalY,
+                                    window.currentHandles.rotate.radius)) {
+                        window.collageCanvas.style.cursor = ROTATION_CURSOR_URL;
+                        cursorChanged = true;
+                    }
+                }
+
+                // 3. Check resize handles (for single or multiple selection)
+                if (!cursorChanged && window.currentHandles.resize.length > 0) { // Only check if no other cursor changed
+                    for (const handle of window.currentHandles.resize) {
+                        if (isPointInRect(mouseForHandleHitX, mouseForHandleHitY,
+                                        handle.handleLocalX, handle.handleLocalY, handle.handleWidth, handle.handleHeight)) {
+                            window.collageCanvas.style.cursor = handle.cursor;
+                            cursorChanged = true;
+                            break;
+                        }
+                    }
+                }
+            } // End if (handleContainerTarget)
+
+            // 4. Check if hovering over the selection box itself (for dragging)
+            if (!cursorChanged) {
+                let overSelectedElement = false;
+                for (let i = window.collageElements.length - 1; i >= 0; i--) { // Iterate over selected elements
+                    const element = window.collageElements[i];
+                    if (element.isHit(globalMouse.x, globalMouse.y)) { // isHit handles the internal transformation
+                        overSelectedElement = true;
                         break;
                     }
                 }
-            }
-        }
-
-        if (!cursorChanged && !isDragging && !isResizing && !isRotating) {
-            // Default cursor: If over a selected element (which is not active), show 'grab'. Otherwise 'default'.
-            let overSelectable = false;
-            for (let i = window.collageElements.length - 1; i >= 0; i--) {
-                const element = window.collageElements[i];
-                if (element.isHit(mouse.x, mouse.y)) {
-                    overSelectable = true;
-                    break;
+                if (overSelectedElement) {
+                    window.collageCanvas.style.cursor = 'grab';
+                    cursorChanged = true;
                 }
             }
-            window.collageCanvas.style.cursor = overSelectable ? 'grab' : 'default';
+
+        } // End if (!isDragging && !isResizing && !isRotating)
+
+        // If no specific cursor was set by handle or selection hover, revert to default.
+        if (!cursorChanged && !isDragging && !isResizing && !isRotating) {
+            window.collageCanvas.style.cursor = 'default';
         }
+
 
         // --- Rotation Logic (now applies to all selected elements, driven by activeElement's handle) ---
         if (isRotating && window.activeElement) {
@@ -1427,7 +1499,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const activeElementCenterX = window.activeElement.x + window.activeElement.width / 2;
             const activeElementCenterY = window.activeElement.y + window.activeElement.height / 2;
 
-            const currentAngle = Math.atan2(mouse.y - activeElementCenterY, mouse.x - activeElementCenterX);
+            const currentAngle = Math.atan2(globalMouse.y - activeElementCenterY, globalMouse.x - activeElementCenterX);
             let angleDiff = (rotationStartAngle - currentAngle) * 180 / Math.PI;
 
             if (event.shiftKey) {
@@ -1476,8 +1548,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Calculate current mouse movement since drag started
-            const deltaX = mouse.x - mouseStart.x;
-            const deltaY = mouse.y - mouseStart.y;
+            const deltaX = globalMouse.x - mouseStart.x;
+            const deltaY = globalMouse.y - mouseStart.y;
 
             // Adjust delta values based on the handle for correct direction
             let effectiveDeltaX = resizeHandle.includes('left') ? -deltaX : deltaX;
@@ -1575,8 +1647,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             // Update dragStartX/Y to current mouse position for continuous resizing
-            dragStartX = mouse.x;
-            dragStartY = mouse.y;
+            dragStartX = globalMouse.x;
+            dragStartY = globalMouse.y;
 
             window.drawCanvas();
             return;
@@ -1589,8 +1661,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 isDragging = false;
                 return;
             }
-            const dx = mouse.x - dragStartX;
-            const dy = mouse.y - dragStartY;
+            const dx = globalMouse.x - dragStartX;
+            const dy = globalMouse.y - dragStartY;
 
             selected.forEach(element => {
                 element.x += dx;
@@ -1598,14 +1670,15 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             // Update dragStartX/Y to current mouse position for continuous resizing
-            dragStartX = mouse.x;
-            dragStartY = mouse.y;
+            dragStartX = globalMouse.x;
+            dragStartY = globalMouse.y;
 
             window.drawCanvas();
             return;
         }
     }
 
+    //---------------------------------------------------------------------------------
     function handleMouseUp(event) {
         if (isDragging) {
             isDragging = false;
