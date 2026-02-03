@@ -14,9 +14,16 @@ document.addEventListener('DOMContentLoaded', () => {
     window.collageElements = [];
     window.activeElement = null; // Represents the *single* element currently being interacted with (dragged, resized, rotated)
 
-    window.loadedFrames = {}; // globale cache for frame images
-    window.loadedFontsMap = new Map(); // Global cache for fonts
-    window.imageCache = {}; // globale cache for loaded images
+    // Global settings for the collage
+    window.backgroundImage = null;          // Path to the global background image (e.g., 'path/to/image.jpg')
+    window.backgroundColor = '#ffffff';     // Global background color, default white
+    window.showGlobalFrameImage = false;    // Whether to show the global frame image on top
+    window.globalFrameImage = null;         // Path to the global frame image (e.g., 'path/to/frame.png')
+
+    // Global caches
+    window.loadedFrames = {};           // globale cache for frame images
+    window.loadedFontsMap = new Map();  // Global cache for fonts
+    window.imageCache = {};             // globale cache for loaded images
 
     // Global setting for showing element outlines
     window.globalShowElementOutlines = true; // standard enabled
@@ -182,6 +189,18 @@ document.addEventListener('DOMContentLoaded', () => {
     //=================================================================================
     // --- Utility Functions ---
     //=================================================================================
+    
+    /**
+     * debounce function to limit the rate of function calls
+     */
+    window.debounce = function(func, delay) {
+        let timeout;
+        return function(...args) {
+            const context = this;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), delay);
+        };
+    }
 
     function prepareRotatedImage(backgroundImg, degrees, targetWidth, targetHeight) {
         const tempCanvas = document.createElement('canvas');
@@ -474,6 +493,12 @@ document.addEventListener('DOMContentLoaded', () => {
         currentDesignName = document.getElementById('currentDesignName');
         currentDesignName.textContent = currentLayout.name || 'Unnamed Design';
 
+        // Update genral settings based on currentLayout
+        window.backgroundImage = currentLayout.background_image || null;
+        window.backgroundColor = currentLayout.background_color || '#ffffff';
+        window.showGlobalFrameImage = currentLayout.show_global_frame_image || false;
+        window.globalFrameImage = currentLayout.global_frame_image || null;
+
         currentLayout.elements.forEach((elementData) => {
             // Parse x, y, width, height, rotation - assuming they might still contain 'x'/'y' placeholders or be strings
             const x = eval(String(elementData.x).replace(/x/g, canvasWidth).replace(/y/g, canvasHeight));
@@ -714,7 +739,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * @returns {Array<object>} A deep copy of the relevant element states.
      */
     window.createSnapshot = function() { 
-        return window.collageElements.map(el => {
+        const elementSnapshots = window.collageElements.map(el => {
             const snapshotEl = { 
                 id: el.id,
                 x: el.x,
@@ -747,10 +772,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             return snapshotEl;
         });
+
+        // Also snapshot global settings
+        const globalSettings = {
+            backgroundImage: window.backgroundImage,            // path
+            backgroundColor: window.backgroundColor,            // solor as string
+            showGlobalFrameImage: window.showGlobalFrameImage,  // boolean
+            globalFrameImage: window.globalFrameImage           // path
+        };
+
+        // Der gesamte Snapshot enthält nun Elemente und globale Einstellungen
+        return {
+            elements: elementSnapshots,
+            globalSettings: globalSettings
+        };
     }
 
     /**
-     * Restores the state of collage elements from a given snapshot.
+     * Restores the state of collage elements and global settings from a given snapshot.
      * @param {Array<object>} snapshot The snapshot to restore.
      */
     window.restoreSnapshot = function(snapshot) { 
@@ -758,11 +797,20 @@ document.addEventListener('DOMContentLoaded', () => {
         window.collageElements.forEach(el => el.isSelected = false);
         window.activeElement = null;
 
+        // 1. Restore global settings first
+        const restoredGlobalSettings = snapshot.globalSettings;
+        if (restoredGlobalSettings) {
+            window.backgroundImage = restoredGlobalSettings.backgroundImage;
+            window.backgroundColor = restoredGlobalSettings.backgroundColor;
+            window.showGlobalFrameImage = restoredGlobalSettings.showGlobalFrameImage;
+            window.globalFrameImage = restoredGlobalSettings.globalFrameImage;
+        }
+
         // Create a new array for the elements, incorporating changes
         const newCollageElements = [];
 
         // 2. Update existing elements and add elements from snapshot that are new to current state
-        snapshot.forEach(snapEl => {
+        snapshot.elements.forEach(snapEl => {
             const currentEl = window.collageElements.find(el => el.id === snapEl.id);
             if (currentEl) {
                 // Element exists, update its properties
@@ -872,6 +920,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         window.drawCanvas(); // Initial draw of the restored state
         window.updateUndoRedoButtonStates(); // Update button states after restore
+        window.updateGeneralSettingsPanel();  // Update settings panel to reflect restored state
     };
 
     /**
@@ -906,6 +955,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.drawCanvas = async function() {
         window.ctx.clearRect(0, 0, window.collageCanvas.width, window.collageCanvas.height);
+
+        // --- Draw background image ---
+        if (window.backgroundImage && window.backgroundImage.trim() !== '') {
+            const loadedBgImage = await loadImageFromSrc(window.backgroundImage); // Await the actual Image object
+            if (loadedBgImage) { // Only draw if the image loaded successfully
+                window.ctx.drawImage(loadedBgImage, 0, 0, loadedBgImage.width, loadedBgImage.height);
+            } else {
+                console.warn(`Could not draw background image from: ${window.backgroundImage}`);
+            }
+        } else {
+            // No background image path, just use the background color
+            window.ctx.fillStyle = window.backgroundColor;
+            window.ctx.fillRect(0, 0, window.collageCanvas.width, window.collageCanvas.height);
+        }
 
         const frameImage = window.loadedFrames['global_frame'];
 
@@ -1062,11 +1125,22 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- After all elements are drawn, draw the handles and selection overlay ---
         window.drawHandles();
 
+        // --- draw global frame on top if set ---
+        if (showGlobalFrameImage && window.globalFrameImage.trim() !== '') {
+            const loadedFrImage = await loadImageFromSrc(window.globalFrameImage); // Await the actual Image object
+            if (loadedFrImage) { // Only draw if the image loaded successfully
+                window.ctx.drawImage(loadedFrImage, 0, 0, window.collageCanvas.width, window.collageCanvas.height);
+            } else {
+                console.warn(`Could not draw frame from: ${window.globalFrameImage}`);
+            }
+        }
+
+        // --- Finally, update button states ---
+        window.updateElementSettingsPanel();
         window.updateRemoveButtonState();
         window.updateLayerButtonStates();
         window.updateDistributionButtonStates();
         window.updateOutlineToggleButtonState();
-        window.updateElementSettingsPanel();
     };
 
     //=================================================================================

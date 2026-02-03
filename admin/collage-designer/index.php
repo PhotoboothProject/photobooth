@@ -104,7 +104,7 @@ include 'components/txt-settings-panel.php';       // Text fields management
 
                         <!-- RIGHT PANEL: PREVIEW -->
                         <div class="right-panel w-full flex flex-col gap-2 rounded-md">
-                            <span class="w-full flex flex-col items-center text-xl font-bold text-brand-1 mb-2">
+                            <span class="w-full flex flex-col items-center text-xl font-bold text-brand-1">
                                 <span id="currentDesignName" class="text-brand-2 ml-2"></span> 
                             </span>
                             <?php include 'components/preview-canvas.php'; // Contains #result_canvas?>
@@ -116,9 +116,6 @@ include 'components/txt-settings-panel.php';       // Text fields management
 
                 <!-- BOTTOM PANEL: General and placeholder settings (if not element-specific) -->
                 <div class="bottom-panel w-full flex flex-col gap-4 p-2 md:p-4 border border-gray-200 rounded-md">
-                    <span class="w-full flex flex-col text-xl font-bold text-brand-1 mb-2">
-                        <?= $languageService->translate('general_placeholder_settings_title') ?>
-                    </span>
 <?php
 include 'components/general-settings.php';     // General settings
 ?>
@@ -153,6 +150,7 @@ echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/c
 echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-elemntSetPnl.js') . '"></script>'; // Element Settings Panel JS
 echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-imgSetPnl.js') . '"></script>'; // Image Settings Panel JS
 echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-txtSetPnl.js') . '"></script>'; // Text Settings Panel JS
+echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-generalSet.js') . '"></script>'; // General Settings JS
 // Optional: Specific toasts/messages depending on PHP processing
 if (isset($_SESSION['designer_message'])) {
     echo '<script>setTimeout(function(){openToast("' . $_SESSION['designer_message']['text'] . '", "' . $_SESSION['designer_message']['type'] . '", 5000)},500);</script>';
