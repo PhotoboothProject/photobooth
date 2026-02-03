@@ -334,6 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     window.loadFont = async function(fontPath) {
         if (!fontPath || fontPath.trim() === '') {
+            console.warn('loadFont: Empty font path provided, using default Arial.');
             return 'Arial'; // Default fallback font if no path is provided
         }
 
@@ -346,13 +347,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return window.loadedFontsMap.get(fontPath);
         }
 
-        // Check if the font is already loaded by the browser (Font Loading API)
-        // The `document.fonts.check()` method is useful here.
-        // Note: It checks for `fontCssName`
-        if (document.fonts.check(`1em "${fontCssName}"`)) {
-            window.loadedFontsMap.set(fontPath, fontCssName);
-            return fontCssName;
-        }
 
         const fontUrl = `../../${fontPath}`; // Adjust if `fontPath` needs further transformation to be a valid public URL
 
