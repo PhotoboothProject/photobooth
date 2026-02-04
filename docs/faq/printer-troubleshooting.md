@@ -118,7 +118,7 @@ lp -o landscape -o fit-to-page -n %d %s
 
 **Notes**
 
-- `%d` = number of copies 
+- `%d` = number of copies
 - `%s` = path and filename
 
 ---
