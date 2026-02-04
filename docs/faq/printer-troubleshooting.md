@@ -99,7 +99,7 @@ lp -d Canon_SELPHY_CP1300 -o landscape -o fit-to-page %s
 In some cases it might be useful to combine both commands, trying to activate the printer if needed and start the print job right after that:
 
 ```
-cupsenable Canon_SELPHY_CP1300 lp -d Canon_SELPHY_CP1300 -o landscape -o fit-to-page %s
+cupsenable Canon_SELPHY_CP1300; lp -d Canon_SELPHY_CP1300 -o landscape -o fit-to-page %s
 ```
 
 ---
