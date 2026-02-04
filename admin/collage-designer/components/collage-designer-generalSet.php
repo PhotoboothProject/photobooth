@@ -22,7 +22,7 @@ use Photobooth\Utility\PathUtility;
                     'placeholder' => 'collage width',
                     'attributes' => ['data-trigger' => 'general']
                 ],
-                'collage:generator:final_width'
+                'collage-designer:final_width'
             )
 ?>
         </div>
@@ -36,7 +36,7 @@ use Photobooth\Utility\PathUtility;
                     'placeholder' => 'collage height',
                     'attributes' => ['data-trigger' => 'general']
                 ],
-                'collage:generator:final_height'
+                'collage-designer:final_height'
             )
 ?>
         </div>
@@ -61,7 +61,7 @@ use Photobooth\Utility\PathUtility;
                     'value' => 'false',
                     'attributes' => ['data-trigger' => 'general', 'id' => 'show_frame']
                 ],
-                'collage:generator:show_frame'
+                'collage-designer:show_frame'
             )
 ?>
         </div>
