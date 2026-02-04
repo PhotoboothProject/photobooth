@@ -145,12 +145,19 @@ if (isset($_SESSION['auth']) && $_SESSION['auth'] === true) {
 
 <?php
 include PathUtility::getAbsolutePath('admin/components/footer.scripts.php');
-echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer.js') . '"></script>'; // Your main JS
+
+// Include all relevant JavaScript files for the collage designer
+echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-utils.js') . '"></script>'; // Utility JS
+echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-history.js') . '"></script>'; // History management JS
+echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-mouseEvents.js') . '"></script>'; // Mouse events handling JS
+// Specific JS files for different panels and tools
+echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer.js') . '"></script>'; // Main JS
 echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-tools.js') . '"></script>'; // Tools JS
 echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-elemntSetPnl.js') . '"></script>'; // Element Settings Panel JS
 echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-imgSetPnl.js') . '"></script>'; // Image Settings Panel JS
 echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-txtSetPnl.js') . '"></script>'; // Text Settings Panel JS
 echo '<script src="' . $assetService->getUrl('admin/collage-designer/assets/js/collage-designer-generalSet.js') . '"></script>'; // General Settings JS
+
 // Optional: Specific toasts/messages depending on PHP processing
 if (isset($_SESSION['designer_message'])) {
     echo '<script>setTimeout(function(){openToast("' . $_SESSION['designer_message']['text'] . '", "' . $_SESSION['designer_message']['type'] . '", 5000)},500);</script>';
