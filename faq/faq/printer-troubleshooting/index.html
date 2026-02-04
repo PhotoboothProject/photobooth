@@ -252,6 +252,9 @@ Via command line you can enable the printer as follows (adjust the printer name 
 <p>Print with specific options (adjust printer name and options as needed, <code>%s</code> will be replaced by Photobooth, which is the fule to print):</p>
 <pre><code>lp -d Canon_SELPHY_CP1300 -o landscape -o fit-to-page %s
 </code></pre>
+<p>In some cases it might be useful to combine both commands, trying to activate the printer if needed and start the print job right after that:</p>
+<pre><code>cupsenable Canon_SELPHY_CP1300 lp -d Canon_SELPHY_CP1300 -o landscape -o fit-to-page %s
+</code></pre>
 <hr />
 <h2 id="using-systems-default-printer-via-photobooth">Using systems default printer via Photobooth</h2>
 <p>If the printer is set as default and CUPS default settings should be used, Photobooth print command can look simple like this:</p>
@@ -259,16 +262,16 @@ Via command line you can enable the printer as follows (adjust the printer name 
 </code></pre>
 <hr />
 <h2 id="multi-print">Multi-print</h2>
-<p>If multi-print is enabled, two arguments are required (copies + file). On Linux the Print command on Photobooth should look like this::</p>
+<p>If multi-print is enabled, two arguments are required (copies + file). On Linux the Print command on Photobooth should look like this:</p>
 <pre><code>lp -n %d %s
 </code></pre>
-<p>Or with own options defined:</p>
+<p>or with own options defined:</p>
 <pre><code>lp -o landscape -o fit-to-page -n %d %s
 </code></pre>
 <p><strong>Notes</strong></p>
 <ul>
-<li><code>%d</code> = number of copies</li>
-<li><code>%s</code> = path and filename</li>
+<li>first argument = number of copies</li>
+<li>second argument = path and filename</li>
 </ul>
 <hr />
 <h2 id="special-printer-specific-notes">Special printer specific notes</h2>
