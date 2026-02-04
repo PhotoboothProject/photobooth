@@ -39,7 +39,7 @@ sudo /etc/init.d/cups restart
 
 ---
 
-## Printing Fails# - Debugging
+## Printing fails - Debugging
 - Set the **log level to 2** in the admin panel.
 - After printing shoes an error message, open the **debugpanel** and check the **Photobooth log**. The log usually shows why the error occurs (most often a wrong print command).
 
@@ -98,7 +98,7 @@ lp -d Canon_SELPHY_CP1300 -o landscape -o fit-to-page %s
 
 ---
 
-## Using the default printer via Photobooth
+## Using systems default printer via Photobooth
 If the printer is set as default and CUPS default settings should be used, Photobooth print command can look simple like this:
 ```
 lp %s
