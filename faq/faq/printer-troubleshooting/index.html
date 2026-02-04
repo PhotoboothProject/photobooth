@@ -110,17 +110,23 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#special-printer-specific-notes">Special printer specific notes</a>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-administer-cups-remotely-using-the-web-interface">How to administer CUPS remotely using the web interface?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#printing-fails-debugging">Printing fails - Debugging</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#canon-selphy-cp1300cp1500">Canon Selphy CP1300/CP1500</a>
+    <li class="toctree-l3"><a class="reference internal" href="#make-sure-www-data-user-can-print">Make sure www-data user can print</a>
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#how-to-administer-cups-remotely-using-the-web-interface">How to administer CUPS remotely using the web interface?</a>
+    <li class="toctree-l2"><a class="reference internal" href="#enable-the-printer-via-cups">Enable the printer via CUPS</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#printing-fails">Printing Fails</a>
+    <li class="toctree-l2"><a class="reference internal" href="#using-systems-default-printer-via-photobooth">Using systems default printer via Photobooth</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#multi-print">Multi-print</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#special-printer-specific-notes">Special printer specific notes</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#make-sure-www-data-user-can-print">Make sure www-data user can print</a>
+    <li class="toctree-l3"><a class="reference internal" href="#canon-selphy-cp1300cp1500">Canon Selphy CP1300/CP1500</a>
     </li>
         </ul>
     </li>
@@ -203,12 +209,6 @@
 <p>A detailed guide for compiling the latest Gutenprint driver can be found here:
 <a href="https://www.peachyphotos.com/blog/stories/building-modern-gutenprint/">Building Modern Gutenprint</a></p>
 <hr />
-<h2 id="special-printer-specific-notes">Special printer specific notes</h2>
-<h3 id="canon-selphy-cp1300cp1500">Canon Selphy CP1300/CP1500</h3>
-<ul>
-<li>make sure using latest firmware on your Canon Selphy</li>
-</ul>
-<hr />
 <h2 id="how-to-administer-cups-remotely-using-the-web-interface">How to administer CUPS remotely using the web interface?</h2>
 <p>By default the CUPS webinterface can only be accessed via <a href="http://localhost:631">http://localhost:631</a> from your local machine.</p>
 <p>To remote access CUPS from other clients you need to run the following commands:</p>
@@ -216,7 +216,12 @@
 sudo /etc/init.d/cups restart
 </code></pre>
 <hr />
-<h2 id="printing-fails">Printing Fails</h2>
+<h2 id="printing-fails-debugging">Printing fails - Debugging</h2>
+<ul>
+<li>Set the <strong>log level to 2</strong> in the admin panel.</li>
+<li>After printing shoes an error message, open the <strong>debugpanel</strong> and check the <strong>Photobooth log</strong>. The log usually shows why the error occurs (most often a wrong print command).</li>
+</ul>
+<hr />
 <p>If printing fails, make sure a <strong>default printer</strong> is defined. You can check or set it using:</p>
 <pre><code>lpoptions
 </code></pre>
@@ -237,6 +242,39 @@ sudo /etc/init.d/cups restart
 <li>Ensure the printer is online and connected.</li>
 <li>For network printers, make sure the hostname or IP is correct.</li>
 <li>Replace <code>&lt;file_to_print&gt;</code> with <code>%s</code> if adding your print command to your Photobooth configuration.</li>
+</ul>
+<hr />
+<h2 id="enable-the-printer-via-cups">Enable the printer via CUPS</h2>
+<p>Enable the printer (optional, only needed if it was disabled, e.g. paper empty).
+Via command line you can enable the printer as follows (adjust the printer name as needed).</p>
+<pre><code>cupsenable Canon_SELPHY_CP1300
+</code></pre>
+<p>Print with specific options (adjust printer name and options as needed, <code>%s</code> will be replaced by Photobooth, which is the fule to print):</p>
+<pre><code>lp -d Canon_SELPHY_CP1300 -o landscape -o fit-to-page %s
+</code></pre>
+<hr />
+<h2 id="using-systems-default-printer-via-photobooth">Using systems default printer via Photobooth</h2>
+<p>If the printer is set as default and CUPS default settings should be used, Photobooth print command can look simple like this:</p>
+<pre><code>lp %s
+</code></pre>
+<hr />
+<h2 id="multi-print">Multi-print</h2>
+<p>If multi-print is enabled, two arguments are required (copies + file). On Linux the Print command on Photobooth should look like this::</p>
+<pre><code>lp -n %d %s
+</code></pre>
+<p>Or with own options defined:</p>
+<pre><code>lp -o landscape -o fit-to-page -n %d %s
+</code></pre>
+<p><strong>Notes</strong></p>
+<ul>
+<li><code>%d</code> = number of copies</li>
+<li><code>%s</code> = path and filename</li>
+</ul>
+<hr />
+<h2 id="special-printer-specific-notes">Special printer specific notes</h2>
+<h3 id="canon-selphy-cp1300cp1500">Canon Selphy CP1300/CP1500</h3>
+<ul>
+<li>make sure using latest firmware on your Canon Selphy</li>
 </ul>
               
             </div>
