@@ -26,14 +26,6 @@ A detailed guide for compiling the latest Gutenprint driver can be found here:
 
 ---
 
-## Special printer specific notes
-
-### Canon Selphy CP1300/CP1500
-
-- make sure using latest firmware on your Canon Selphy
-
----
-
 ## How to administer CUPS remotely using the web interface?
 
 By default the CUPS webinterface can only be accessed via [http://localhost:631](http://localhost:631) from your local machine.
@@ -47,7 +39,12 @@ sudo /etc/init.d/cups restart
 
 ---
 
-## Printing Fails
+## Printing fails - Debugging
+- Set the **log level to 2** in the admin panel.
+- After printing shoes an error message, open the **debugpanel** and check the **Photobooth log**. The log usually shows why the error occurs (most often a wrong print command).
+
+---
+
 
 If printing fails, make sure a **default printer** is defined. You can check or set it using:
 
@@ -83,3 +80,51 @@ After that, you need to reboot once to apply.
 * Ensure the printer is online and connected.
 * For network printers, make sure the hostname or IP is correct.
 * Replace `<file_to_print>` with `%s` if adding your print command to your Photobooth configuration.
+
+---
+
+## Enable the printer via CUPS
+
+Enable the printer (optional, only needed if it was disabled, e.g. paper empty).
+Via command line you can enable the printer as follows (adjust the printer name as needed).
+```
+cupsenable Canon_SELPHY_CP1300
+```
+
+Print with specific options (adjust printer name and options as needed, `%s` will be replaced by Photobooth, which is the fule to print):
+```
+lp -d Canon_SELPHY_CP1300 -o landscape -o fit-to-page %s
+```
+
+---
+
+## Using systems default printer via Photobooth
+If the printer is set as default and CUPS default settings should be used, Photobooth print command can look simple like this:
+```
+lp %s
+```
+
+---
+
+## Multi-print
+If multi-print is enabled, two arguments are required (copies + file). On Linux the Print command on Photobooth should look like this::
+```
+lp -n %d %s
+```
+Or with own options defined:
+```
+lp -o landscape -o fit-to-page -n %d %s
+```
+
+**Notes**
+
+- `%d` = number of copies
+- `%s` = path and filename
+
+---
+
+## Special printer specific notes
+
+### Canon Selphy CP1300/CP1500
+
+- make sure using latest firmware on your Canon Selphy
