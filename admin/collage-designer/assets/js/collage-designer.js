@@ -192,6 +192,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     /**
      * debounce function to limit the rate of function calls
+     * 
+     * @param {Function} func The function to debounce.
+     * @param {number} delay The debounce delay in milliseconds.
+     * @returns {Function} The debounced function.
      */
     window.debounce = function(func, delay) {
         let timeout;

@@ -1,5 +1,6 @@
 <?php
-// admin/collage-designer/components/text-fields-manager.php
+// admin/collage-designer/components/collage-designer-txtSetPnl.php
+// -> txt-settings-panel
 
 use Photobooth\Utility\AdminInput;
 use Photobooth\Utility\PathUtility;

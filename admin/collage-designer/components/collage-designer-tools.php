@@ -1,4 +1,4 @@
-<!-- components/general-tools-panel.php -->
+<!-- components/collage-designer-tools.php -->
 
 <!-- TODO: designs might need some more love and fine tune... -->
 <style>

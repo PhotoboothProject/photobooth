@@ -1,5 +1,6 @@
 <?php
-// admin/collage-designer/components/general-settings.php
+// admin/collage-designer/components/collage-designer-generalSet.php
+// -> general-settings-panel
 
 use Photobooth\Utility\AdminInput;
 use Photobooth\Utility\PathUtility;

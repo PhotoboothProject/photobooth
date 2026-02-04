@@ -1,5 +1,6 @@
 <?php
-// admin/collage-designer/components/img-settings-panel.php
+// admin/collage-designer/components/collage-designer-imgSetPnl.php
+// -> image-settings-panel
 
 use Photobooth\Utility\AdminInput;
 use Photobooth\Utility\PathUtility;

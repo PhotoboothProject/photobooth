@@ -37,17 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastActiveImageElementId = null;
 
     /**
-     * Calculates the greatest common divisor (GCD) of two numbers.
-     * Used for simplifying aspect ratios.
-     * @param {number} a
-     * @param {number} b
-     * @returns {number} The GCD.
-     */
-    function gcd(a, b) {
-        return b === 0 ? a : gcd(b, a % b);
-    }
-
-    /**
      * Updates the visibility of the "Apply Aspect Ratio" button.
      */
     function updateApplyButtonVisibility() {
@@ -256,51 +245,44 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Event listener for the Frame checkbox.
      */
-    function setupFrameCheckboxListener() {
-        if (showFrameCheckbox) {
-            showFrameCheckbox.addEventListener('change', () => {
-                if (!window.activeElement || window.activeElement.type !== 'image') return;
-                
-                window.saveState(); // Save state BEFORE applying changes
-                window.activeElement.show_frame = showFrameCheckbox.checked;
-                window.drawCanvas(); // Draw after applying value
-                window.updateElementSettingsPanel(); // Update general panel to reflect UI changes (if any)
-            });
-        }
+    if (showFrameCheckbox) {
+        showFrameCheckbox.addEventListener('change', () => {
+            if (!window.activeElement || window.activeElement.type !== 'image') return;
+            
+            window.saveState(); // Save state BEFORE applying changes
+            window.activeElement.show_frame = showFrameCheckbox.checked;
+            window.drawCanvas(); // Draw after applying value
+            window.updateElementSettingsPanel(); // Update general panel to reflect UI changes (if any)
+        });
     }
 
     /**
      * Sets up event listeners for the placeholder selector.
      */
-    function setupPlaceholderPathListener() {
-        if (placeholderPath) {
-            placeholderPath.addEventListener('change', (e) => {
-                const filePath = e.target.value; // The new file path is in the input's value
-                window.saveState(); // Save state BEFORE applying changes
-                window.activeElement.src = filePath; // Update the active element's SRC if needed
-                window.updateImageSettingsPanel(); // Update the panel to reflect removal
-                window.drawCanvas(); // Redraw canvas to reflect any changes
-            });
-        }
+    if (placeholderPath) {
+        placeholderPath.addEventListener('change', (e) => {
+            const filePath = e.target.value; // The new file path is in the input's value
+            window.saveState(); // Save state BEFORE applying changes
+            window.activeElement.src = filePath; // Update the active element's SRC if needed
+            window.updateImageSettingsPanel(); // Update the panel to reflect removal
+            window.drawCanvas(); // Redraw canvas to reflect any changes
+        });
     }
+
 
     /**
      * Sets up event listeners for the remove placeholder button.
      */
-    function setupRemovePlaceholderButtonListener() {
-        if (removePlaceholderImageBtn) {
-            removePlaceholderImageBtn.addEventListener('click', () => {
-                window.saveState(); // Save state BEFORE applying changes
-                window.activeElement.src = ''; // Clear the active element's source
-                window.updateImageSettingsPanel(); // Update the panel to reflect removal
-                window.drawCanvas(); // Redraw canvas to reflect any changes
-            });
-        }
+    if (removePlaceholderImageBtn) {
+        removePlaceholderImageBtn.addEventListener('click', () => {
+            window.saveState(); // Save state BEFORE applying changes
+            window.activeElement.src = ''; // Clear the active element's source
+            window.updateImageSettingsPanel(); // Update the panel to reflect removal
+            window.drawCanvas(); // Redraw canvas to reflect any changes
+        });
     }
+
 
     // Initialize event listeners
     setupAspectRatioEventListeners();
-    setupFrameCheckboxListener();
-    setupPlaceholderPathListener();
-    setupRemovePlaceholderButtonListener();
 });

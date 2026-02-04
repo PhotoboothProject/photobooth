@@ -87,9 +87,9 @@ include 'components/design-selector.php';
                         </div>
 <?php
 // Include components relevant to element-specific adjustments
-include 'components/element-settings-panel.php';    // Dynamic settings for active element
-include 'components/img-settings-panel.php';        // Image settings management
-include 'components/txt-settings-panel.php';       // Text fields management
+include 'components/collage-designer-elemntSetPnl.php';     // Dynamic settings for active element
+include 'components/collage-designer-imgSetPnl.php';        // Image settings management
+include 'components/collage-designer-txtSetPnl.php';        // Text fields management
 ?>
                     </div><!-- End left-panel -->
 
@@ -99,7 +99,7 @@ include 'components/txt-settings-panel.php';       // Text fields management
 
                         <!-- Tool Buttons -->
                         <div class="w-full py-2 md:py-3 border border-gray-200 rounded-md flex justify-center">
-                            <?php include 'components/general-tools-panel.php'; // General tools like alignment?>
+                            <?php include 'components/collage-designer-tools.php'; // General tools like alignment?>
                         </div>
 
                         <!-- RIGHT PANEL: PREVIEW -->
@@ -117,7 +117,7 @@ include 'components/txt-settings-panel.php';       // Text fields management
                 <!-- BOTTOM PANEL: General and placeholder settings (if not element-specific) -->
                 <div class="bottom-panel w-full flex flex-col gap-4 p-2 md:p-4 border border-gray-200 rounded-md">
 <?php
-include 'components/general-settings.php';     // General settings
+include 'components/collage-designer-generalSet.php';     // General settings
 ?>
                 </div> <!-- End bottom-panel -->
 

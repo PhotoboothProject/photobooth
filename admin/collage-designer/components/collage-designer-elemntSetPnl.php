@@ -1,15 +1,6 @@
 <?php
-// admin/collage-designer/components/element-settings-panel.php
-
-use Photobooth\Utility\AdminInput;
-
-// Placeholder for actual font options, adjust as needed based on your PHP logic
-$font_family_options = [
-    ['value' => 'Arial', 'label' => 'Arial'],
-    ['value' => 'Verdana', 'label' => 'Verdana'],
-    ['value' => 'Times New Roman', 'label' => 'Times New Roman'],
-    // ... more fonts
-];
+// admin/collage-designer/components/collage-designer-elemntSetPnl.php
+// -> element-settings-panel
 
 ?>
 
