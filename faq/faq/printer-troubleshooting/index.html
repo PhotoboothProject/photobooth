@@ -253,7 +253,7 @@ Via command line you can enable the printer as follows (adjust the printer name 
 <pre><code>lp -d Canon_SELPHY_CP1300 -o landscape -o fit-to-page %s
 </code></pre>
 <p>In some cases it might be useful to combine both commands, trying to activate the printer if needed and start the print job right after that:</p>
-<pre><code>cupsenable Canon_SELPHY_CP1300 lp -d Canon_SELPHY_CP1300 -o landscape -o fit-to-page %s
+<pre><code>cupsenable Canon_SELPHY_CP1300; lp -d Canon_SELPHY_CP1300 -o landscape -o fit-to-page %s
 </code></pre>
 <hr />
 <h2 id="using-systems-default-printer-via-photobooth">Using systems default printer via Photobooth</h2>
