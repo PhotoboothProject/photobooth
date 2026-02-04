@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Basic check to ensure main designer variables/functions are available
     if (typeof window.collageCanvas === 'undefined' || typeof window.drawCanvas === 'undefined' ||
         typeof window.collageElements === 'undefined' ||
-        typeof window.saveState === 'undefined' || typeof window.globalLockAspectRatio === 'undefined'
+        typeof window.saveState === 'undefined' || typeof window.globalLockAspectRatio === 'undefined' ||
+        typeof window.collageCanvasWrapper === 'undefined'
     ) {
         console.error('collage-designer-generalSet.js: Dependent main designer variables/functions not found. Ensure collage-designer.js is loaded first and exposes necessary variables globally.');
         return;
@@ -22,6 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const frameImageSelectorParent = frameImage.closest('.adminImageSelection');
     const frameImagePreviewElement = frameImageSelectorParent.querySelector('.adminImageSelection-preview');
     const frameImageTextElement = frameImageSelectorParent.querySelector('.adminImageSelection-text');
+
+    // Define minimum and maximum canvas dimensions
+    const MIN_CANVAS_DIMENSION = 100; // e.g., 100px minimum for width and height
+    const MAX_CANVAS_DIMENSION = 4000; // e.g., 4000px maximum for width and height
 
 
     // Debounced version of saveState to prevent excessive calls during rapid input changes
@@ -64,36 +69,67 @@ document.addEventListener('DOMContentLoaded', () => {
         // Canvas dimensions
         canvasWidthInput.value = window.collageCanvas.width;
         canvasHeightInput.value = window.collageCanvas.height;
+
+        // Update wrapper aspect ratio
+        if (window.collageCanvas.width > 0 && window.collageCanvas.height > 0) {
+            window.collageCanvasWrapper.style.aspectRatio = `${window.collageCanvas.width} / ${window.collageCanvas.height}`;
+        }
     }    
 
     // Event listener for width input
     canvasWidthInput.addEventListener('input', (e) => {
-        const newWidth = parseInt(e.target.value, 10);
-        if (!isNaN(newWidth) && newWidth > 0) {
-            const aspectRatio = window.collageCanvas.height / window.collageCanvas.width;
-            window.collageCanvas.width = newWidth;
-            if (window.globalLockAspectRatio) {
-                window.collageCanvas.height = Math.round(newWidth * aspectRatio);
-                canvasHeightInput.value = window.collageCanvas.height;
-            }
-            window.saveState();
-            window.drawCanvas();
+        let newWidth = parseInt(e.target.value, 10);
+        if (isNaN(newWidth) || newWidth <= 0) {
+            return; // Ignore invalid input
         }
+        // Apply min/max constraints
+        newWidth = Math.max(MIN_CANVAS_DIMENSION, Math.min(MAX_CANVAS_DIMENSION, newWidth));
+
+        if (window.globalLockAspectRatio) {
+            const currentAspectRatio = window.collageCanvas.width / window.collageCanvas.height;
+            const newHeight = Math.round(newWidth / currentAspectRatio); // Calculate new height based on new width and current aspect ratio
+            window.collageCanvas.width = newWidth;
+            window.collageCanvas.height = newHeight;
+            canvasHeightInput.value = newHeight; // Update companion input field
+        } else {
+            window.collageCanvas.width = newWidth;
+        }
+
+        // Update wrapper aspect ratio after dimension changes
+        if (window.collageCanvas.width > 0 && window.collageCanvas.height > 0) {
+            window.collageCanvasWrapper.style.aspectRatio = `${window.collageCanvas.width} / ${window.collageCanvas.height}`;
+        }
+        
+        debouncedSaveState(); // Use debouncedSaveState for numeric inputs
+        window.drawCanvas(); // Re-draw canvas with new dimensions
     });
 
     // Event listener for height input
     canvasHeightInput.addEventListener('input', (e) => {
-        const newHeight = parseInt(e.target.value, 10);
-        if (!isNaN(newHeight) && newHeight > 0) {
-            const aspectRatio = window.collageCanvas.width / window.collageCanvas.height;
-            window.collageCanvas.height = newHeight;
-            if (window.globalLockAspectRatio) {
-                window.collageCanvas.width = Math.round(newHeight * aspectRatio);
-                canvasWidthInput.value = window.collageCanvas.width;
-            }
-            window.saveState();
-            window.drawCanvas();
+        let newHeight = parseInt(e.target.value, 10);
+        if (isNaN(newHeight) || newHeight <= 0) {
+            return; // Ignore invalid input
         }
+        // Apply min/max constraints
+        newHeight = Math.max(MIN_CANVAS_DIMENSION, Math.min(MAX_CANVAS_DIMENSION, newHeight));
+
+        if (window.globalLockAspectRatio) {
+            const currentAspectRatio = window.collageCanvas.width / window.collageCanvas.height;
+            const newWidth = Math.round(newHeight * currentAspectRatio); // Calculate new width based on new height and current aspect ratio
+            window.collageCanvas.width = newWidth;
+            window.collageCanvas.height = newHeight;
+            canvasWidthInput.value = newWidth; // Update companion input field
+        } else {
+            window.collageCanvas.height = newHeight;
+        }
+
+        // Update wrapper aspect ratio after dimension changes
+        if (window.collageCanvas.width > 0 && window.collageCanvas.height > 0) {
+            window.collageCanvasWrapper.style.aspectRatio = `${window.collageCanvas.width} / ${window.collageCanvas.height}`;
+        }
+
+        debouncedSaveState(); // Use debouncedSaveState for numeric inputs
+        window.drawCanvas(); // Re-draw canvas with new dimensions
     });
 
     // Event listener for background color input

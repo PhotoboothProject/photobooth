@@ -769,6 +769,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Also snapshot global settings
         const globalSettings = {
+            canvasHeight: window.collageCanvas.height,          // number
+            canvasWidth: window.collageCanvas.width,            // number
             backgroundImage: window.backgroundImage,            // path
             backgroundColor: window.backgroundColor,            // solor as string
             showGlobalFrameImage: window.showGlobalFrameImage,  // boolean
@@ -794,6 +796,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Restore global settings first
         const restoredGlobalSettings = snapshot.globalSettings;
         if (restoredGlobalSettings) {
+            window.collageCanvas.height = restoredGlobalSettings.canvasHeight;
+            window.collageCanvas.width = restoredGlobalSettings.canvasWidth;
             window.backgroundImage = restoredGlobalSettings.backgroundImage;
             window.backgroundColor = restoredGlobalSettings.backgroundColor;
             window.showGlobalFrameImage = restoredGlobalSettings.showGlobalFrameImage;
