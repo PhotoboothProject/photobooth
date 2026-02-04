@@ -96,6 +96,12 @@ Print with specific options (adjust printer name and options as needed, `%s` wil
 lp -d Canon_SELPHY_CP1300 -o landscape -o fit-to-page %s
 ```
 
+In some cases it might be useful to combine both commands, trying to activate the printer if needed and start the print job right after that:
+
+```
+cupsenable Canon_SELPHY_CP1300 lp -d Canon_SELPHY_CP1300 -o landscape -o fit-to-page %s
+```
+
 ---
 
 ## Using systems default printer via Photobooth
@@ -107,19 +113,19 @@ lp %s
 ---
 
 ## Multi-print
-If multi-print is enabled, two arguments are required (copies + file). On Linux the Print command on Photobooth should look like this::
+If multi-print is enabled, two arguments are required (copies + file). On Linux the Print command on Photobooth should look like this:
 ```
 lp -n %d %s
 ```
-Or with own options defined:
+or with own options defined:
 ```
 lp -o landscape -o fit-to-page -n %d %s
 ```
 
 **Notes**
 
-- `%d` = number of copies
-- `%s` = path and filename
+- first argument = number of copies
+- second argument = path and filename
 
 ---
 
