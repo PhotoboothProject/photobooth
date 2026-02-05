@@ -68,7 +68,7 @@ use Photobooth\Utility\PathUtility;
     </div>
     <div class="grid gap-2 mb-2 grid-cols-[repeat(auto-fit,_minmax(150px,_1fr))]">
         <div class="col-span-2 flex flex-col">
-            <?= 
+            <?=
             AdminInput::renderImageSelect(
                 [
                     'name' => 'background_image',

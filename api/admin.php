@@ -20,7 +20,6 @@ use Photobooth\Utility\AdminKeypad;
 use Photobooth\Utility\PathUtility;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Photobooth\Utility\CollageLayoutScanner;
 
 header('Content-Type: application/json');
 $loggerService = LoggerService::getInstance();

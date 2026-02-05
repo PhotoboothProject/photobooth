@@ -59,7 +59,7 @@ use Photobooth\Utility\PathUtility;
     <div class="col-span-2 flex flex-col">
             <?=
                 AdminInput::renderFontSelect(
-                    [   
+                    [
                         'name' => 'textoncollage[font]',
                         'value' => '',
                         'paths' => [
@@ -69,19 +69,19 @@ use Photobooth\Utility\PathUtility;
                     ],
                     'collage:textoncollage_font'
                 )
-            ?>
+?>
     </div>
     <div class="col-span-2 flex flex-col">
             <?=
-                AdminInput::renderColor(
-                    [
-                        'name' => 'textoncollage[font_color]',
-                        'value' => '',
-                        'placeholder' => $defaultConfig['textoncollage']['font_color'],
-                    ],
-                    'collage:textoncollage_font_color'
-                )
-            ?>
+    AdminInput::renderColor(
+        [
+            'name' => 'textoncollage[font_color]',
+            'value' => '',
+            'placeholder' => $defaultConfig['textoncollage']['font_color'],
+        ],
+        'collage:textoncollage_font_color'
+    )
+?>
     </div>
     
 

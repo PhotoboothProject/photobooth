@@ -93,7 +93,7 @@ use Photobooth\Utility\PathUtility;
         <div class="col-span-2 flex flex-col">
             <?=
                 AdminInput::renderImageSelect(
-                [
+                    [
                     'name' => 'placeholder_image',
                     'value' => '',
                     'paths' => [
@@ -102,8 +102,8 @@ use Photobooth\Utility\PathUtility;
                     ],
                     'attributes' => ['data-trigger' => 'general', 'id' => 'placeholder_path']
                 ],
-                'choose_placeholder'
-            )
+                    'choose_placeholder'
+                )
 ?>
         </div>
     </div>
