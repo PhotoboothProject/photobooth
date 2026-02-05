@@ -90,9 +90,51 @@
                   </li>
                   <li class="toctree-l1 current"><a class="reference internal current" href="#">Kiosk mode</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#autostart-on-pi-os-bookworm-waylandlabwc-by-default">Autostart on Pi OS Bookworm (Wayland/labwc by default)</a>
+    <li class="toctree-l2"><a class="reference internal" href="#firefox">Firefox</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#basic-kiosk-mode">Basic Kiosk Mode</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#autostart-on-pi-os-bullseye-and-earlier">Autostart on Pi OS Bullseye and earlier</a>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#chrome-chromium">Chrome / Chromium</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#basic-kiosk-mode_1">Basic Kiosk Mode</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#recommended-kiosk-flags">Recommended Kiosk Flags</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#raspberry-pispecific-options">Raspberry Pi–Specific Options</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#wayland-recommended-on-newer-raspberry-pi-os">Wayland (Recommended on Newer Raspberry Pi OS)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#x11-legacy-fallback">X11 (Legacy / Fallback)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#full-example-raspberry-pi-wayland">Full Example (Raspberry Pi + Wayland)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#example-desktop-file">Example .desktop File</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#photoboothdesktop">photobooth.desktop</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#raspberry-pi-wayland-variant-exec-line-only">Raspberry Pi Wayland Variant (Exec Line Only)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#raspberry-pi-x11-variant-exec-line-only">Raspberry Pi X11 Variant (Exec Line Only)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#installation-locations">Installation Locations</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#system-wide-autostart-with-xdg">System-Wide Autostart with XDG</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#autostart-on-raspberry-pi-os-bookworm-wayland">Autostart on Raspberry Pi OS Bookworm (Wayland)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#labwc-default">labwc (default)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#wayfire">Wayfire</a>
+    </li>
+        </ul>
     </li>
     </ul>
                   </li>
@@ -168,28 +210,213 @@
               
                 <h1 id="enable-kiosk-mode">Enable kiosk mode</h1>
 <p>Use the Photobooth Setup Wizard first: <strong>7 Misc → 1 Autostart and shortcut</strong>. If you need manual steps, use the OS-specific guidance below.</p>
-<h2 id="autostart-on-pi-os-bookworm-waylandlabwc-by-default">Autostart on Pi OS Bookworm (Wayland/labwc by default)</h2>
-<p>Create <code>~/.config/labwc/autostart</code> (or add to the existing <code>[autostart]</code> section):</p>
-<pre><code>[autostart]
-chromium --kiosk --disable-features=Translate --noerrdialogs --disable-infobars --no-first-run --ozone-platform=wayland --touch-events=enabled --start-maximized http://localhost
+<hr />
+<h2 id="firefox">Firefox</h2>
+<h3 id="basic-kiosk-mode">Basic Kiosk Mode</h3>
+<pre><code>firefox --kiosk http://localhost
 </code></pre>
-<p>For Wayland/Wayfire, edit <code>~/.config/wayfire.ini</code>:</p>
-<pre><code>[autostart]
-chromium = chromium-browser --kiosk --disable-features=Translate --noerrdialogs --disable-infobars --no-first-run --ozone-platform=wayland --touch-events=enabled --start-maximized http://localhost
+<p><strong>Notes</strong></p>
+<ul>
+<li>Launches Firefox fullscreen</li>
+<li>Hides UI elements and prevents normal window controls</li>
+</ul>
+<hr />
+<h2 id="chrome-chromium">Chrome / Chromium</h2>
+<p>Use <code>chromium</code> or <code>google-chrome</code> depending on your distribution/installed package.</p>
+<h3 id="basic-kiosk-mode_1">Basic Kiosk Mode</h3>
+<pre><code>chromium --kiosk http://localhost
 </code></pre>
-<h2 id="autostart-on-pi-os-bullseye-and-earlier">Autostart on Pi OS Bullseye and earlier</h2>
-<p>Create <code>/etc/xdg/autostart/photobooth.desktop</code>:</p>
+<hr />
+<h3 id="recommended-kiosk-flags">Recommended Kiosk Flags</h3>
+<pre><code>chromium \
+  --kiosk http://localhost \
+  --noerrdialogs \
+  --disable-infobars \
+  --disable-features=Translate \
+  --no-first-run \
+  --check-for-update-interval=31536000 \
+  --touch-events=enabled \
+  --password-store=basic
+</code></pre>
+<p><strong>Flag Descriptions</strong></p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--kiosk</code></td>
+<td>Fullscreen kiosk mode</td>
+</tr>
+<tr>
+<td><code>--noerrdialogs</code></td>
+<td>Suppresses crash and error dialogs</td>
+</tr>
+<tr>
+<td><code>--disable-infobars</code></td>
+<td>Hides automation and warning banners</td>
+</tr>
+<tr>
+<td><code>--disable-features=Translate</code></td>
+<td>Disables translation prompts</td>
+</tr>
+<tr>
+<td><code>--no-first-run</code></td>
+<td>Skips first-run UI</td>
+</tr>
+<tr>
+<td><code>--check-for-update-interval=31536000</code></td>
+<td>Effectively disables update checks</td>
+</tr>
+<tr>
+<td><code>--touch-events=enabled</code></td>
+<td>Enables touchscreen input</td>
+</tr>
+<tr>
+<td><code>--password-store=basic</code></td>
+<td>Avoids dependency on desktop keyrings</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="raspberry-pispecific-options">Raspberry Pi–Specific Options</h2>
+<h3 id="wayland-recommended-on-newer-raspberry-pi-os">Wayland (Recommended on Newer Raspberry Pi OS)</h3>
+<pre><code>chromium \
+  --kiosk http://localhost \
+  --ozone-platform=wayland \
+  --start-maximized
+</code></pre>
+<p><strong>Notes</strong></p>
+<ul>
+<li><code>--ozone-platform=wayland</code> enables native Wayland support</li>
+<li><code>--start-maximized</code> ensures correct initial sizing</li>
+</ul>
+<hr />
+<h3 id="x11-legacy-fallback">X11 (Legacy / Fallback)</h3>
+<pre><code>chromium \
+  --kiosk http://localhost \
+  --use-gl=egl
+</code></pre>
+<p><strong>Notes</strong></p>
+<ul>
+<li><code>--use-gl=egl</code> improves GPU acceleration on Raspberry Pi under X11</li>
+</ul>
+<hr />
+<h2 id="full-example-raspberry-pi-wayland">Full Example (Raspberry Pi + Wayland)</h2>
+<pre><code>chromium \
+  --kiosk http://localhost \
+  --noerrdialogs \
+  --disable-infobars \
+  --disable-features=Translate \
+  --no-first-run \
+  --check-for-update-interval=31536000 \
+  --touch-events=enabled \
+  --password-store=basic \
+  --ozone-platform=wayland \
+  --start-maximized
+</code></pre>
+<hr />
+<h2 id="example-desktop-file">Example <code>.desktop</code> File</h2>
+<p>The following example assumes:</p>
+<ul>
+<li>Application name: <strong>Photobooth</strong></li>
+<li>The icon (<code>photobooth</code>) was installed by the SetupWizard</li>
+<li>Chromium is used as the kiosk browser</li>
+</ul>
+<h3 id="photoboothdesktop"><code>photobooth.desktop</code></h3>
 <pre><code>[Desktop Entry]
 Version=1.3
-Terminal=false
 Type=Application
 Name=Photobooth
-Exec=chromium-browser --noerrdialogs --disable-infobars --disable-features=Translate --no-first-run --check-for-update-interval=31536000 --kiosk http://localhost --touch-events=enabled --use-gl=egl
-Icon=/var/www/html/resources/img/favicon-96x96.png
-StartupNotify=false
+Comment=Photobooth Kiosk Application
 Terminal=false
+Exec=chromium --kiosk http://localhost \
+  --noerrdialogs \
+  --disable-infobars \
+  --disable-features=Translate \
+  --no-first-run \
+  --check-for-update-interval=31536000 \
+  --touch-events=enabled \
+  --password-store=basic
+Icon=photobooth
+StartupNotify=false
+Categories=Utility;
 </code></pre>
-<p>Adjust the kiosk URL and icon path if Photobooth is in a subdirectory (e.g. <code>http://localhost/photobooth</code> and <code>/var/www/html/photobooth/resources/img/favicon-96x96.png</code>). The <code>--use-gl=egl</code> flag is primarily for Raspberry Pi; remove it if it causes issues on other hardware.</p>
+<hr />
+<h3 id="raspberry-pi-wayland-variant-exec-line-only">Raspberry Pi Wayland Variant (<code>Exec</code> Line Only)</h3>
+<pre><code>Exec=chromium --kiosk http://localhost \
+  --noerrdialogs \
+  --disable-infobars \
+  --disable-features=Translate \
+  --no-first-run \
+  --check-for-update-interval=31536000 \
+  --touch-events=enabled \
+  --password-store=basic \
+  --ozone-platform=wayland \
+  --start-maximized
+</code></pre>
+<hr />
+<h3 id="raspberry-pi-x11-variant-exec-line-only">Raspberry Pi X11 Variant (<code>Exec</code> Line Only)</h3>
+<pre><code>Exec=chromium --kiosk http://localhost \
+  --noerrdialogs \
+  --disable-infobars \
+  --disable-features=Translate \
+  --no-first-run \
+  --check-for-update-interval=31536000 \
+  --touch-events=enabled \
+  --password-store=basic \
+  --use-gl=egl
+</code></pre>
+<hr />
+<h2 id="installation-locations">Installation Locations</h2>
+<p><strong>System-wide</strong></p>
+<pre><code>/usr/share/applications/photobooth.desktop
+</code></pre>
+<p><strong>Per-user</strong></p>
+<pre><code>~/.local/share/applications/photobooth.desktop
+</code></pre>
+<p>After installing or modifying the file:</p>
+<pre><code>update-desktop-database
+</code></pre>
+<h2 id="system-wide-autostart-with-xdg">System-Wide Autostart with XDG</h2>
+<p>Using <code>/etc/xdg/autostart/photobooth.desktop</code> ensures the application launches automatically for all users when a graphical session starts (LXDE, XFCE, GNOME, etc.).</p>
+<hr />
+<h2 id="autostart-on-raspberry-pi-os-bookworm-wayland">Autostart on Raspberry Pi OS Bookworm (Wayland)</h2>
+<p>Raspberry Pi OS Bookworm uses <strong>Wayland</strong> by default. The two supported compositors documented here are <strong>labwc</strong> (default) and <strong>Wayfire</strong>.</p>
+<hr />
+<h3 id="labwc-default">labwc (default)</h3>
+<p>Create <code>~/.config/labwc/autostart</code>
+(or add to the existing <code>[autostart]</code> section) as follows:</p>
+<pre><code class="language-ini">[autostart]
+chromium --kiosk http://localhost \
+  --noerrdialogs \
+  --disable-infobars \
+  --disable-features=Translate \
+  --no-first-run \
+  --check-for-update-interval=31536000 \
+  --touch-events=enabled \
+  --password-store=basic \
+  --ozone-platform=wayland \
+  --start-maximized
+</code></pre>
+<hr />
+<h3 id="wayfire">Wayfire</h3>
+<p>Edit <code>~/.config/wayfire.ini</code> and add or update the <code>[autostart]</code> section as follows:</p>
+<pre><code class="language-ini">[autostart]
+chromium = chromium --kiosk http://localhost \
+  --noerrdialogs \
+  --disable-infobars \
+  --disable-features=Translate \
+  --no-first-run \
+  --check-for-update-interval=31536000 \
+  --touch-events=enabled \
+  --password-store=basic \
+  --ozone-platform=wayland \
+  --start-maximized
+</code></pre>
               
             </div>
           </div><footer>
