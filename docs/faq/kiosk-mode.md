@@ -115,7 +115,7 @@ chromium \
 The following example assumes:
 
 * Application name: **Photobooth**
-* The icon (`photobooth`) was installed by the SetupWizard 
+* The icon (`photobooth`) was installed by the SetupWizard
 * Chromium is used as the kiosk browser
 
 ### `photobooth.desktop`
