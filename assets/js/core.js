@@ -499,112 +499,118 @@ const photoBooth = (function () {
 
             return;
         }
-        api.navbar.close();
-        api.reset();
-        api.closeGallery();
-        api.clearLoaderImage();
 
-        remoteBuzzerClient.inProgress(photoStyle);
-        api.takingPic = true;
-        photoboothTools.console.logDev('Taking picture in progress: ' + api.takingPic);
+        try {
+            api.navbar.close();
+            api.reset();
+            api.closeGallery();
+            api.clearLoaderImage();
 
-        if (api.isTimeOutPending()) {
-            api.resetTimeOut();
-        }
+            remoteBuzzerClient.inProgress(photoStyle);
+            api.takingPic = true;
+            photoboothTools.console.logDev('Taking picture in progress: ' + api.takingPic);
 
-        if (config.commands.pre_photo) {
-            api.shellCommand('pre-command');
-        }
-
-        if (currentCollageFile && api.nextCollageNumber) {
-            photoStyle = PhotoStyle.COLLAGE;
-        }
-
-        if (chromaFile) {
-            photoStyle = PhotoStyle.CHROMA;
-        }
-        api.photoStyle = photoStyle;
-        photoboothTools.console.log('PhotoStyle: ' + api.photoStyle);
-
-        let countdownTime;
-        switch (api.photoStyle) {
-            case PhotoStyle.COLLAGE:
-                countdownTime = config.collage.cntdwn_time;
-                break;
-            case PhotoStyle.VIDEO:
-                countdownTime = config.video.cntdwn_time;
-                break;
-            case PhotoStyle.CUSTOM:
-                countdownTime = config.custom.cntdwn_time;
-                break;
-            case PhotoStyle.PHOTO:
-            default:
-                countdownTime = config.picture.cntdwn_time;
-                break;
-        }
-
-        let maxGetMediaRetry = Math.max(countdownTime - 1, 0);
-        if (config.commands.preview_kill && maxGetMediaRetry > 0) {
-            maxGetMediaRetry = Math.max(countdownTime - parseInt(config.preview.stop_time, 10), 0);
-        }
-        photoboothPreview.startVideo(CameraDisplayMode.COUNTDOWN, retry, maxGetMediaRetry);
-
-        if (
-            config.preview.mode !== PreviewMode.NONE.valueOf() &&
-            (config.preview.style === PreviewStyle.CONTAIN.valueOf() ||
-                config.preview.style === PreviewStyle.SCALE_DOWN.valueOf()) &&
-            config.preview.showFrame
-        ) {
-            if (
-                (api.photoStyle === PhotoStyle.PHOTO || api.photoStyle === PhotoStyle.CUSTOM) &&
-                config.picture.take_frame
-            ) {
-                previewFramePicture.show();
-            } else if (
-                api.photoStyle === PhotoStyle.COLLAGE &&
-                config.collage.take_frame === CollageFrameMode.ALWAYS.valueOf()
-            ) {
-                previewFrameCollage.show();
+            if (api.isTimeOutPending()) {
+                api.resetTimeOut();
             }
-        }
 
-        videoBackground.hide();
-        startPage.removeClass('stage--active');
-        loader.addClass('stage--active');
-        api.screensaver.hide();
+            if (config.commands.pre_photo) {
+                api.shellCommand('pre-command');
+            }
 
-        if (config.get_request.countdown) {
-            let getMode;
+            if (currentCollageFile && api.nextCollageNumber) {
+                photoStyle = PhotoStyle.COLLAGE;
+            }
+
+            if (chromaFile) {
+                photoStyle = PhotoStyle.CHROMA;
+            }
+            api.photoStyle = photoStyle;
+            photoboothTools.console.log('PhotoStyle: ' + api.photoStyle);
+
+            let countdownTime;
             switch (api.photoStyle) {
                 case PhotoStyle.COLLAGE:
-                    getMode = config.get_request.collage;
+                    countdownTime = config.collage.cntdwn_time;
                     break;
                 case PhotoStyle.VIDEO:
-                    getMode = config.get_request.video;
+                    countdownTime = config.video.cntdwn_time;
                     break;
                 case PhotoStyle.CUSTOM:
-                    getMode = config.get_request.custom;
+                    countdownTime = config.custom.cntdwn_time;
                     break;
                 case PhotoStyle.PHOTO:
                 default:
-                    getMode = config.get_request.picture;
+                    countdownTime = config.picture.cntdwn_time;
                     break;
             }
-            const getUrl = config.get_request.server + '/' + getMode;
-            photoboothTools.getRequest(getUrl);
-        }
 
-        await api.countdown.start(countdownTime);
-        await api.cheese.start();
+            let maxGetMediaRetry = Math.max(countdownTime - 1, 0);
+            if (config.commands.preview_kill && maxGetMediaRetry > 0) {
+                maxGetMediaRetry = Math.max(countdownTime - parseInt(config.preview.stop_time, 10), 0);
+            }
+            photoboothPreview.startVideo(CameraDisplayMode.COUNTDOWN, retry, maxGetMediaRetry);
 
-        if (config.preview.camTakesPic && !photoboothPreview.stream && !config.dev.demo_images) {
-            api.errorPic({
-                error: 'No preview by device cam available!'
-            });
-        } else if (api.photoStyle === PhotoStyle.VIDEO) {
-            api.takeVideo(retry);
-        } else {
-            api.takePic(retry);
+            if (
+                config.preview.mode !== PreviewMode.NONE.valueOf() &&
+                (config.preview.style === PreviewStyle.CONTAIN.valueOf() ||
+                    config.preview.style === PreviewStyle.SCALE_DOWN.valueOf()) &&
+                config.preview.showFrame
+            ) {
+                if (
+                    (api.photoStyle === PhotoStyle.PHOTO || api.photoStyle === PhotoStyle.CUSTOM) &&
+                    config.picture.take_frame
+                ) {
+                    previewFramePicture.show();
+                } else if (
+                    api.photoStyle === PhotoStyle.COLLAGE &&
+                    config.collage.take_frame === CollageFrameMode.ALWAYS.valueOf()
+                ) {
+                    previewFrameCollage.show();
+                }
+            }
+
+            videoBackground.hide();
+            startPage.removeClass('stage--active');
+            loader.addClass('stage--active');
+            api.screensaver.hide();
+
+            if (config.get_request.countdown) {
+                let getMode;
+                switch (api.photoStyle) {
+                    case PhotoStyle.COLLAGE:
+                        getMode = config.get_request.collage;
+                        break;
+                    case PhotoStyle.VIDEO:
+                        getMode = config.get_request.video;
+                        break;
+                    case PhotoStyle.CUSTOM:
+                        getMode = config.get_request.custom;
+                        break;
+                    case PhotoStyle.PHOTO:
+                    default:
+                        getMode = config.get_request.picture;
+                        break;
+                }
+                const getUrl = config.get_request.server + '/' + getMode;
+                photoboothTools.getRequest(getUrl);
+            }
+
+            await api.countdown.start(countdownTime);
+            await api.cheese.start();
+
+            if (config.preview.camTakesPic && !photoboothPreview.stream && !config.dev.demo_images) {
+                api.errorPic({
+                    error: 'No preview by device cam available!'
+                });
+            } else if (api.photoStyle === PhotoStyle.VIDEO) {
+                api.takeVideo(retry);
+            } else {
+                api.takePic(retry);
+            }
+        } catch (error) {
+            photoboothTools.console.log('thrill: unexpected error:', error);
+            api.errorPic({ error: error.message || 'Unexpected error in thrill' });
         }
     };
 
@@ -617,29 +623,34 @@ const photoBooth = (function () {
     };
 
     api.takePic = function (retry) {
-        remoteBuzzerClient.inProgress('in-progress');
+        try {
+            remoteBuzzerClient.inProgress('in-progress');
 
-        api.stopPreviewAndCaptureFromVideo();
+            api.stopPreviewAndCaptureFromVideo();
 
-        const data = {
-            filter: imgFilter,
-            style: api.photoStyle,
-            canvasimg: videoSensor.get(0).toDataURL('image/jpeg')
-        };
+            const data = {
+                filter: imgFilter,
+                style: api.photoStyle,
+                canvasimg: videoSensor.get(0).toDataURL('image/jpeg')
+            };
 
-        if (api.photoStyle === PhotoStyle.COLLAGE) {
-            data.file = currentCollageFile;
-            data.collageNumber = api.nextCollageNumber;
-            data.collageLimit = api.collageLimit;
+            if (api.photoStyle === PhotoStyle.COLLAGE) {
+                data.file = currentCollageFile;
+                data.collageNumber = api.nextCollageNumber;
+                data.collageLimit = api.collageLimit;
+            }
+
+            if (api.photoStyle === PhotoStyle.CHROMA) {
+                data.file = chromaFile;
+            }
+
+            loader.css('--stage-background', 'var(--background-countdown-color)');
+
+            api.callTakePicApi(data, retry);
+        } catch (error) {
+            photoboothTools.console.log('takePic: unexpected error:', error);
+            api.errorPic({ error: error.message || 'Unexpected error in takePic' });
         }
-
-        if (api.photoStyle === PhotoStyle.CHROMA) {
-            data.file = chromaFile;
-        }
-
-        loader.css('--stage-background', 'var(--background-countdown-color)');
-
-        api.callTakePicApi(data, retry);
     };
 
     api.retryTakePic = function (retry) {
@@ -664,152 +675,163 @@ const photoBooth = (function () {
                 timeout: 25000
             })
             .done(async (result) => {
-                api.cheese.destroy();
-                if (config.ui.shutter_animation) {
-                    await api.shutter.start();
-                    await api.shutter.stop();
-                }
-                endTime = new Date().getTime();
-                totalTime = endTime - startTime;
-                photoboothTools.console.log('Took ' + data.style, result);
-                photoboothTools.console.logDev('Taking picture took ' + totalTime + 'ms');
-                imgFilter = config.filters.defaults;
-                $('#filternav .sidenav-list-item--active').removeClass('sidenav-list-item--active');
-                $('.sidenav-list-item[data-filter="' + imgFilter + '"]').addClass('sidenav-list-item--active');
-                previewFrameCollage.hide();
-                previewFramePicture.hide();
-                if (result.error) {
-                    photoboothTools.console.logDev('Error while taking picture.');
-                    if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
-                        api.retryTakePic(retry);
-                    } else {
-                        api.errorPic(result);
+                try {
+                    api.cheese.destroy();
+                    if (config.ui.shutter_animation) {
+                        await api.shutter.start();
+                        await api.shutter.stop();
                     }
-                } else if (result.success === PhotoStyle.COLLAGE) {
-                    currentCollageFile = result.file;
-                    api.nextCollageNumber = result.current + 1;
-
-                    loaderButtonBar.empty();
-                    loaderMessage.empty();
-                    videoSensor.hide();
-                    previewVideo.hide();
-
-                    let imageUrl = environment.publicFolders.tmp + '/' + result.collage_file;
-                    const preloadImage = new Image();
-                    const picdate = Date.now().toString();
-                    preloadImage.onload = () => {
-                        loaderImage.attr('data-img', picdate);
-                        loaderImage.css('background-image', `url(${imageUrl}?filter=${imgFilter}&v=${picdate})`);
-                    };
-                    preloadImage.src = imageUrl;
-
-                    loaderImage.show();
-
-                    photoboothTools.console.logDev(
-                        'Taken collage photo number: ' + (result.current + 1) + ' / ' + api.collageLimit
-                    );
-
-                    if (result.current + 1 < api.collageLimit) {
-                        photoboothTools.console.logDev('core: initialize Media.');
-                        photoboothPreview.initializeMedia();
-                        api.takingPic = false;
-                    }
-
-                    if (config.collage.continuous) {
-                        loaderMessage.append($('<p>').text(photoboothTools.getTranslation('wait_message')));
-                        setTimeout(() => {
-                            api.clearLoaderImage();
-                            imageUrl = '';
-                            if (result.current + 1 < api.collageLimit) {
-                                api.thrill(PhotoStyle.COLLAGE);
-                            } else {
-                                currentCollageFile = '';
-                                api.nextCollageNumber = 0;
-                                api.processPic(result);
-                            }
-                        }, continuousCollageTime);
-                    } else {
-                        // collage with interruption
-                        if (result.current + 1 < api.collageLimit) {
-                            const takePictureButton = $(
-                                '<button type="button" class="button collageNext rotaryfocus" id="btnCollageNext">'
-                            );
-                            takePictureButton.append(
-                                '<span class="button--icon"><i class="' + config.icons.take_picture + '"></i></span>'
-                            );
-                            takePictureButton.append(
-                                '<span class="button--label">' + photoboothTools.getTranslation('nextPhoto') + '</span>'
-                            );
-                            takePictureButton.appendTo(loaderButtonBar).on('click', (event) => {
-                                event.stopPropagation();
-                                event.preventDefault();
-                                imageUrl = '';
-                                api.thrill(PhotoStyle.COLLAGE);
-                            });
-                            remoteBuzzerClient.collageWaitForNext();
+                    endTime = new Date().getTime();
+                    totalTime = endTime - startTime;
+                    photoboothTools.console.log('Took ' + data.style, result);
+                    photoboothTools.console.logDev('Taking picture took ' + totalTime + 'ms');
+                    imgFilter = config.filters.defaults;
+                    $('#filternav .sidenav-list-item--active').removeClass('sidenav-list-item--active');
+                    $('.sidenav-list-item[data-filter="' + imgFilter + '"]').addClass('sidenav-list-item--active');
+                    previewFrameCollage.hide();
+                    previewFramePicture.hide();
+                    if (result.error) {
+                        photoboothTools.console.logDev('Error while taking picture.');
+                        if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
+                            api.retryTakePic(retry);
                         } else {
-                            const collageProcessButton = $(
-                                '<button type="button" class="button collageProcess rotaryfocus" id="btnCollageProcess">'
-                            );
-                            collageProcessButton.append(
-                                '<span class="button--icon"><i class="' + config.icons.save + '"></i></span>'
-                            );
-                            collageProcessButton.append(
-                                '<span class="button--label">' +
-                                    photoboothTools.getTranslation('processPhoto') +
-                                    '</span>'
-                            );
-                            collageProcessButton.appendTo(loaderButtonBar).on('click', (event) => {
-                                event.stopPropagation();
-                                event.preventDefault();
-                                imageUrl = '';
-                                currentCollageFile = '';
-                                api.nextCollageNumber = 0;
-                                api.processPic(result);
-                            });
-                            remoteBuzzerClient.collageWaitForProcessing();
+                            api.errorPic(result);
+                        }
+                    } else if (result.success === PhotoStyle.COLLAGE) {
+                        currentCollageFile = result.file;
+                        api.nextCollageNumber = result.current + 1;
+
+                        loaderButtonBar.empty();
+                        loaderMessage.empty();
+                        videoSensor.hide();
+                        previewVideo.hide();
+
+                        let imageUrl = environment.publicFolders.tmp + '/' + result.collage_file;
+                        const preloadImage = new Image();
+                        const picdate = Date.now().toString();
+                        preloadImage.onload = () => {
+                            loaderImage.attr('data-img', picdate);
+                            loaderImage.css('background-image', `url(${imageUrl}?filter=${imgFilter}&v=${picdate})`);
+                        };
+                        preloadImage.src = imageUrl;
+
+                        loaderImage.show();
+
+                        photoboothTools.console.logDev(
+                            'Taken collage photo number: ' + (result.current + 1) + ' / ' + api.collageLimit
+                        );
+
+                        if (result.current + 1 < api.collageLimit) {
+                            photoboothTools.console.logDev('core: initialize Media.');
+                            photoboothPreview.initializeMedia();
+                            api.takingPic = false;
                         }
 
-                        const retakeButton = $('<button type="button" class="button collageRetake rotaryfocus">');
-                        retakeButton.append(
-                            '<span class="button--icon"><i class="' + config.icons.refresh + '"></i></span>'
-                        );
-                        retakeButton.append(
-                            '<span class="button--label">' + photoboothTools.getTranslation('retakePhoto') + '</span>'
-                        );
-                        retakeButton.appendTo(loaderButtonBar).on('click', (event) => {
-                            event.stopPropagation();
-                            event.preventDefault();
-                            imageUrl = '';
-                            api.deleteImage(result.collage_file, () => {
-                                setTimeout(function () {
-                                    api.nextCollageNumber = result.current;
+                        if (config.collage.continuous) {
+                            loaderMessage.append($('<p>').text(photoboothTools.getTranslation('wait_message')));
+                            setTimeout(() => {
+                                api.clearLoaderImage();
+                                imageUrl = '';
+                                if (result.current + 1 < api.collageLimit) {
                                     api.thrill(PhotoStyle.COLLAGE);
-                                }, notificationTimeout);
+                                } else {
+                                    currentCollageFile = '';
+                                    api.nextCollageNumber = 0;
+                                    api.processPic(result);
+                                }
+                            }, continuousCollageTime);
+                        } else {
+                            // collage with interruption
+                            if (result.current + 1 < api.collageLimit) {
+                                const takePictureButton = $(
+                                    '<button type="button" class="button collageNext rotaryfocus" id="btnCollageNext">'
+                                );
+                                takePictureButton.append(
+                                    '<span class="button--icon"><i class="' +
+                                        config.icons.take_picture +
+                                        '"></i></span>'
+                                );
+                                takePictureButton.append(
+                                    '<span class="button--label">' +
+                                        photoboothTools.getTranslation('nextPhoto') +
+                                        '</span>'
+                                );
+                                takePictureButton.appendTo(loaderButtonBar).on('click', (event) => {
+                                    event.stopPropagation();
+                                    event.preventDefault();
+                                    imageUrl = '';
+                                    api.thrill(PhotoStyle.COLLAGE);
+                                });
+                                remoteBuzzerClient.collageWaitForNext();
+                            } else {
+                                const collageProcessButton = $(
+                                    '<button type="button" class="button collageProcess rotaryfocus" id="btnCollageProcess">'
+                                );
+                                collageProcessButton.append(
+                                    '<span class="button--icon"><i class="' + config.icons.save + '"></i></span>'
+                                );
+                                collageProcessButton.append(
+                                    '<span class="button--label">' +
+                                        photoboothTools.getTranslation('processPhoto') +
+                                        '</span>'
+                                );
+                                collageProcessButton.appendTo(loaderButtonBar).on('click', (event) => {
+                                    event.stopPropagation();
+                                    event.preventDefault();
+                                    imageUrl = '';
+                                    currentCollageFile = '';
+                                    api.nextCollageNumber = 0;
+                                    api.processPic(result);
+                                });
+                                remoteBuzzerClient.collageWaitForProcessing();
+                            }
+
+                            const retakeButton = $('<button type="button" class="button collageRetake rotaryfocus">');
+                            retakeButton.append(
+                                '<span class="button--icon"><i class="' + config.icons.refresh + '"></i></span>'
+                            );
+                            retakeButton.append(
+                                '<span class="button--label">' +
+                                    photoboothTools.getTranslation('retakePhoto') +
+                                    '</span>'
+                            );
+                            retakeButton.appendTo(loaderButtonBar).on('click', (event) => {
+                                event.stopPropagation();
+                                event.preventDefault();
+                                imageUrl = '';
+                                api.deleteImage(result.collage_file, () => {
+                                    setTimeout(function () {
+                                        api.nextCollageNumber = result.current;
+                                        api.thrill(PhotoStyle.COLLAGE);
+                                    }, notificationTimeout);
+                                });
                             });
-                        });
 
-                        const abortButton = $('<button type="button" class="button collageAbort rotaryfocus">');
-                        abortButton.append(
-                            '<span class="button--icon"><i class="' + config.icons.delete + '"></i></span>'
-                        );
-                        abortButton.append(
-                            '<span class="button--label">' + photoboothTools.getTranslation('abort') + '</span>'
-                        );
-                        abortButton.appendTo(loaderButtonBar).on('click', () => {
-                            location.assign('./');
-                        });
+                            const abortButton = $('<button type="button" class="button collageAbort rotaryfocus">');
+                            abortButton.append(
+                                '<span class="button--icon"><i class="' + config.icons.delete + '"></i></span>'
+                            );
+                            abortButton.append(
+                                '<span class="button--label">' + photoboothTools.getTranslation('abort') + '</span>'
+                            );
+                            abortButton.appendTo(loaderButtonBar).on('click', () => {
+                                location.assign('./');
+                            });
 
-                        rotaryController.focusSet(loader);
+                            rotaryController.focusSet(loader);
+                        }
+                    } else if (result.success === PhotoStyle.CHROMA) {
+                        chromaFile = result.file;
+                        api.processPic(result);
+                    } else {
+                        currentCollageFile = '';
+                        api.nextCollageNumber = 0;
+
+                        api.processPic(result);
                     }
-                } else if (result.success === PhotoStyle.CHROMA) {
-                    chromaFile = result.file;
-                    api.processPic(result);
-                } else {
-                    currentCollageFile = '';
-                    api.nextCollageNumber = 0;
-
-                    api.processPic(result);
+                } catch (error) {
+                    photoboothTools.console.log('callTakePicApi.done: unexpected error:', error);
+                    api.errorPic({ error: error.message || 'Unexpected error processing capture result' });
                 }
             })
             .fail(async (xhr, status, result) => {
@@ -848,24 +870,33 @@ const photoBooth = (function () {
         }
         startTime = new Date().getTime();
         jQuery
-            .post(environment.publicFolders.api + '/capture.php', data)
+            .post({
+                url: environment.publicFolders.api + '/capture.php',
+                data: data,
+                timeout: 25000
+            })
             .done(async (result) => {
-                api.cheese.destroy();
-                if (config.video.animation) {
-                    videoAnimation.hide();
-                }
-                endTime = new Date().getTime();
-                totalTime = endTime - startTime;
-                photoboothTools.console.log('Took ' + data.style, result);
-                photoboothTools.console.logDev('Taking video took ' + totalTime + 'ms');
-                imgFilter = config.filters.defaults;
-                $('#filternav .sidenav-list-item--active').removeClass('sidenav-list-item--active');
-                $('.sidenav-list-item[data-filter="' + imgFilter + '"]').addClass('sidenav-list-item--active');
+                try {
+                    api.cheese.destroy();
+                    if (config.video.animation) {
+                        videoAnimation.hide();
+                    }
+                    endTime = new Date().getTime();
+                    totalTime = endTime - startTime;
+                    photoboothTools.console.log('Took ' + data.style, result);
+                    photoboothTools.console.logDev('Taking video took ' + totalTime + 'ms');
+                    imgFilter = config.filters.defaults;
+                    $('#filternav .sidenav-list-item--active').removeClass('sidenav-list-item--active');
+                    $('.sidenav-list-item[data-filter="' + imgFilter + '"]').addClass('sidenav-list-item--active');
 
-                if (result.error) {
-                    api.errorPic(result);
-                } else {
-                    api.processVideo(result);
+                    if (result.error) {
+                        api.errorPic(result);
+                    } else {
+                        api.processVideo(result);
+                    }
+                } catch (error) {
+                    photoboothTools.console.log('callTakeVideoApi.done: unexpected error:', error);
+                    api.errorPic({ error: error.message || 'Unexpected error processing video result' });
                 }
             })
             .fail(function (xhr, status, result) {
@@ -886,33 +917,43 @@ const photoBooth = (function () {
 
     api.errorPic = function (data) {
         setTimeout(function () {
-            api.cheese.destroy();
-            api.shutter.destroy();
-            setFiltersEnabled(true);
+            try {
+                api.cheese.destroy();
+                api.shutter.destroy();
+                setFiltersEnabled(true);
 
-            loaderMessage.empty();
-            loaderButtonBar.empty();
-            previewVideo.hide();
-            videoSensor.hide();
-            previewFrameCollage.hide();
-            previewFramePicture.hide();
-            if (config.video.animation) {
-                videoAnimation.hide();
+                loaderMessage.empty();
+                loaderButtonBar.empty();
+                previewVideo.hide();
+                videoSensor.hide();
+                previewFrameCollage.hide();
+                previewFramePicture.hide();
+                if (config.video.animation) {
+                    videoAnimation.hide();
+                }
+                loaderMessage.addClass('stage-message--error');
+                loaderMessage.append($('<p>').text(photoboothTools.getTranslation('error')));
+                photoboothTools.console.log('An error occurred:', data.error);
+                if (config.dev.loglevel > 1) {
+                    loaderMessage.append($('<p>').text(data.error));
+                }
+                api.takingPic = false;
+                remoteBuzzerClient.inProgress(false);
+                photoboothTools.console.logDev('Taking picture in progress: ' + api.takingPic);
+            } catch (e) {
+                photoboothTools.console.log('errorPic: exception during cleanup:', e);
+                api.takingPic = false;
             }
-            loaderMessage.addClass('stage-message--error');
-            loaderMessage.append($('<p>').text(photoboothTools.getTranslation('error')));
-            photoboothTools.console.log('An error occurred:', data.error);
-            if (config.dev.loglevel > 1) {
-                loaderMessage.append($('<p>').text(data.error));
-            }
-            api.takingPic = false;
-            remoteBuzzerClient.inProgress(false);
-            photoboothTools.console.logDev('Taking picture in progress: ' + api.takingPic);
+
             if (config.dev.reload_on_error) {
-                loaderMessage.append($('<p>').text(photoboothTools.getTranslation('auto_reload')));
+                try {
+                    loaderMessage.append($('<p>').text(photoboothTools.getTranslation('auto_reload')));
+                } catch {
+                    // ignore UI update failure
+                }
                 setTimeout(function () {
                     photoboothTools.reloadPage();
-                }, notificationTimeout);
+                }, notificationTimeout || 5000);
             } else {
                 const reloadButton = $('<button type="button" class="button rotaryfocus">');
                 reloadButton.append('<span class="button--icon"><i class="' + config.icons.refresh + '"></i></span>');
@@ -965,26 +1006,31 @@ const photoBooth = (function () {
                 collageLimit: api.collageLimit
             },
             success: (data) => {
-                setFiltersEnabled(true);
-                photoboothTools.console.log(api.photoStyle + ' processed', data);
-                endTime = new Date().getTime();
-                totalTime = endTime - startTime;
-                photoboothTools.console.logDev(
-                    'Processing ' + api.photoStyle + ' took ' + totalTime + 'ms for filter `' + imgFilter + '`'
-                );
-                photoboothTools.console.logDev('Images:', data.images);
+                try {
+                    setFiltersEnabled(true);
+                    photoboothTools.console.log(api.photoStyle + ' processed', data);
+                    endTime = new Date().getTime();
+                    totalTime = endTime - startTime;
+                    photoboothTools.console.logDev(
+                        'Processing ' + api.photoStyle + ' took ' + totalTime + 'ms for filter `' + imgFilter + '`'
+                    );
+                    photoboothTools.console.logDev('Images:', data.images);
 
-                if (config.get_request.processed) {
-                    const getUrl = config.get_request.server + '/' + api.photoStyle;
-                    photoboothTools.getRequest(getUrl);
-                }
+                    if (config.get_request.processed) {
+                        const getUrl = config.get_request.server + '/' + api.photoStyle;
+                        photoboothTools.getRequest(getUrl);
+                    }
 
-                if (data.error) {
-                    api.errorPic(data);
-                } else if (api.photoStyle === PhotoStyle.CHROMA) {
-                    api.renderChroma(data.file);
-                } else {
-                    api.renderPic(data.file, data.images);
+                    if (data.error) {
+                        api.errorPic(data);
+                    } else if (api.photoStyle === PhotoStyle.CHROMA) {
+                        api.renderChroma(data.file);
+                    } else {
+                        api.renderPic(data.file, data.images);
+                    }
+                } catch (error) {
+                    photoboothTools.console.log('processPic.success: unexpected error:', error);
+                    api.errorPic({ error: error.message || 'Unexpected error processing picture' });
                 }
             },
             error: (jqXHR, textStatus) => {
@@ -1014,44 +1060,49 @@ const photoBooth = (function () {
                 file: result.file
             },
             success: (data) => {
-                photoboothTools.console.log('video processed', data);
-                endTime = new Date().getTime();
-                totalTime = endTime - startTime;
-                photoboothTools.console.logDev('Processing video took ' + totalTime + 'ms');
-                photoboothTools.console.logDev('Video:', data.file);
+                try {
+                    photoboothTools.console.log('video processed', data);
+                    endTime = new Date().getTime();
+                    totalTime = endTime - startTime;
+                    photoboothTools.console.logDev('Processing video took ' + totalTime + 'ms');
+                    photoboothTools.console.logDev('Video:', data.file);
 
-                if (config.get_request.processed) {
-                    const getUrl = config.get_request.server + '/video';
-                    photoboothTools.getRequest(getUrl);
-                }
+                    if (config.get_request.processed) {
+                        const getUrl = config.get_request.server + '/video';
+                        photoboothTools.getRequest(getUrl);
+                    }
 
-                if (data.error) {
-                    api.errorPic(data);
-                } else {
-                    // if collage exists: render the result for the collage image and overlay the video over the image
-                    const collage = data.file + '-collage.jpg';
-                    const filename = data.images.includes(collage) ? collage : data.file;
-                    api.renderPic(filename, data.images);
-                    const file = environment.publicFolders.images + '/' + data.file;
-                    if (!config.video.collage_only) {
-                        if (config.video.gif) {
-                            resultVideo.attr('src', file);
-                        } else {
-                            const source = document.createElement('source');
-                            source.setAttribute('src', file);
-                            source.setAttribute('type', 'video/mp4');
-                            resultVideo.append(source);
-                            resultVideo.get(0).play();
-                        }
-                        resultVideo.show();
-                        if (config.video.qr) {
-                            resultVideoQR.attr(
-                                'src',
-                                environment.publicFolders.api + '/qrcode.php?filename=' + data.file
-                            );
-                            resultVideoQR.show();
+                    if (data.error) {
+                        api.errorPic(data);
+                    } else {
+                        // if collage exists: render the result for the collage image and overlay the video over the image
+                        const collage = data.file + '-collage.jpg';
+                        const filename = data.images.includes(collage) ? collage : data.file;
+                        api.renderPic(filename, data.images);
+                        const file = environment.publicFolders.images + '/' + data.file;
+                        if (!config.video.collage_only) {
+                            if (config.video.gif) {
+                                resultVideo.attr('src', file);
+                            } else {
+                                const source = document.createElement('source');
+                                source.setAttribute('src', file);
+                                source.setAttribute('type', 'video/mp4');
+                                resultVideo.append(source);
+                                resultVideo.get(0).play();
+                            }
+                            resultVideo.show();
+                            if (config.video.qr) {
+                                resultVideoQR.attr(
+                                    'src',
+                                    environment.publicFolders.api + '/qrcode.php?filename=' + data.file
+                                );
+                                resultVideoQR.show();
+                            }
                         }
                     }
+                } catch (error) {
+                    photoboothTools.console.log('processVideo.success: unexpected error:', error);
+                    api.errorPic({ error: error.message || 'Unexpected error processing video' });
                 }
             },
             error: (jqXHR, textStatus) => {
