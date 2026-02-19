@@ -275,10 +275,12 @@ class Collage
                     }
 
                     // JSON layout can only disable or customize text if admin has enabled it
+                    // Zone-based text alignment is only applied when layout selection is allowed,
+                    // otherwise admin panel coordinates (locationx, locationy, rotation) are used
                     if ($adminTextOnCollageEnabled === 'enabled') {
                         if ($c->collageAllowSelection && isset($collageJson['text_disabled']) && $collageJson['text_disabled'] === true) {
                             $c->textOnCollageEnabled = 'disabled';
-                        } elseif (isset($collageJson['text_alignment']) && is_array($collageJson['text_alignment'])) {
+                        } elseif ($c->collageAllowSelection && isset($collageJson['text_alignment']) && is_array($collageJson['text_alignment'])) {
                             $ta = $collageJson['text_alignment'];
                             $c->textOnCollageEnabled = 'enabled';
 
@@ -295,9 +297,9 @@ class Collage
                                 $c->textZonePadding = isset($ta['padding']) ? (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['padding'])) : 0;
                                 $c->textZoneAlign = $ta['align'] ?? 'center';
                                 $c->textZoneValign = $ta['valign'] ?? 'middle';
-                                $c->textZoneRotation = isset($ta['rotation']) ? (int) $ta['rotation'] : 0;
+                                $c->textZoneRotation = $c->textOnCollageRotation;
 
-                                // In zone mode: ignore admin X/Y/Rotation values
+                                // In zone mode: ignore admin X/Y values, use admin rotation
                                 // Keep admin font, color, text lines, fontSize (as start), lineHeight (as factor)
                             } else {
                                 // Legacy mode: calculate X/Y position based on alignment
@@ -310,9 +312,7 @@ class Collage
                                     $c->textOnCollageFontSize = (int) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['fontSize']));
                                 }
 
-                                if (isset($ta['rotation'])) {
-                                    $c->textOnCollageRotation = (int) $ta['rotation'];
-                                }
+                                // Admin rotation is always used, JSON rotation is ignored
 
                                 if (isset($ta['lineHeight'])) {
                                     $c->textOnCollageLinespace = (int) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['lineHeight']));
