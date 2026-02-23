@@ -58,6 +58,24 @@ function loadCollageLayoutData(string $layoutId, string $orientation): ?array
     return null;
 }
 
+function ensurePrivateLayoutDirectories(): void
+{
+    $directories = [
+        'private/collage/layouts',
+        'private/collage/layouts/landscape',
+        'private/collage/layouts/portrait',
+    ];
+
+    foreach ($directories as $directory) {
+        $absolutePath = PathUtility::getAbsolutePath($directory);
+        if (is_dir($absolutePath)) {
+            continue;
+        }
+
+        @mkdir($absolutePath, 0775, true);
+    }
+}
+
 function buildCollageLayoutPreviewSvg(string $layoutId, ?array $layoutData): string
 {
     if (!is_array($layoutData) || empty($layoutData['layout']) || !is_array($layoutData['layout'])) {
@@ -184,6 +202,8 @@ function buildCollageLayoutPreviewSvg(string $layoutId, ?array $layoutData): str
 $layouts = [];
 $seen = [];
 
+ensurePrivateLayoutDirectories();
+
 $readLayoutsFromDir = static function (string $dirPath, bool $isPrivateSource) use (&$layouts, &$seen): void {
     if (!is_dir($dirPath)) {
         return;
@@ -250,6 +270,12 @@ $privateOrientationDirs = [
     $privateLayoutsDir . DIRECTORY_SEPARATOR . 'portrait',
 ];
 
+$legacyPrivateCollageDir = PathUtility::getAbsolutePath('private/collage');
+$legacyPrivateOrientationDirs = [
+    $legacyPrivateCollageDir . DIRECTORY_SEPARATOR . 'landscape',
+    $legacyPrivateCollageDir . DIRECTORY_SEPARATOR . 'portrait',
+];
+
 foreach ($templateOrientationDirs as $orientationDir) {
     $readLayoutsFromDir($orientationDir, false);
 }
@@ -259,6 +285,11 @@ foreach ($privateOrientationDirs as $orientationDir) {
     $readLayoutsFromDir($orientationDir, true);
 }
 $readLayoutsFromDir($privateLayoutsDir, true);
+
+foreach ($legacyPrivateOrientationDirs as $orientationDir) {
+    $readLayoutsFromDir($orientationDir, true);
+}
+$readLayoutsFromDir($legacyPrivateCollageDir, true);
 
 foreach ($layouts as &$layout) {
     $layoutId = (string) $layout['id'];
