@@ -258,6 +258,53 @@ $readLayoutsFromDir = static function (string $dirPath, bool $isPrivateSource) u
     }
 };
 
+$readLayoutFile = static function (string $filePath, bool $isPrivateSource) use (&$layouts, &$seen): void {
+    if (!is_file($filePath)) {
+        return;
+    }
+
+    if (strtolower((string) pathinfo($filePath, PATHINFO_EXTENSION)) !== 'json') {
+        return;
+    }
+
+    $layoutId = (string) pathinfo($filePath, PATHINFO_FILENAME);
+    if ($layoutId === '') {
+        return;
+    }
+
+    $label = $layoutId;
+    $isValidJson = true;
+    $contents = file_get_contents($filePath);
+    if ($contents !== false) {
+        $decoded = json_decode($contents, true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded)) {
+            $isValidJson = false;
+        } elseif (isset($decoded['name']) && is_string($decoded['name']) && $decoded['name'] !== '') {
+            $label = $decoded['name'];
+        }
+    } else {
+        $isValidJson = false;
+    }
+
+    if ($isPrivateSource && !$isValidJson) {
+        return;
+    }
+
+    if (isset($seen[$layoutId])) {
+        $layouts[$seen[$layoutId]] = [
+            'id' => $layoutId,
+            'label' => $label,
+        ];
+        return;
+    }
+
+    $layouts[] = [
+        'id' => $layoutId,
+        'label' => $label,
+    ];
+    $seen[$layoutId] = count($layouts) - 1;
+};
+
 $templateLayoutsDir = PathUtility::getAbsolutePath('template/collage');
 $templateOrientationDirs = [
     $templateLayoutsDir . DIRECTORY_SEPARATOR . 'landscape',
@@ -275,6 +322,7 @@ $legacyPrivateOrientationDirs = [
     $legacyPrivateCollageDir . DIRECTORY_SEPARATOR . 'landscape',
     $legacyPrivateCollageDir . DIRECTORY_SEPARATOR . 'portrait',
 ];
+$legacyPrivateRootCollageJson = PathUtility::getAbsolutePath('private/collage.json');
 
 foreach ($templateOrientationDirs as $orientationDir) {
     $readLayoutsFromDir($orientationDir, false);
@@ -290,6 +338,7 @@ foreach ($legacyPrivateOrientationDirs as $orientationDir) {
     $readLayoutsFromDir($orientationDir, true);
 }
 $readLayoutsFromDir($legacyPrivateCollageDir, true);
+$readLayoutFile($legacyPrivateRootCollageJson, true);
 
 foreach ($layouts as &$layout) {
     $layoutId = (string) $layout['id'];
