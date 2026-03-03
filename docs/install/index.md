@@ -8,5 +8,6 @@ Pick the guide that matches your environment:
 - Linux:
   - [Install on Debian](install-debian.md)
   - [Enable PHP in nginx](install-nginx.md)
+  - [Docker development workflow](docker-development.md)
 - Windows:
   - [Install on Windows](install-windows.md)

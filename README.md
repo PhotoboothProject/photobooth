@@ -99,6 +99,25 @@ before opening a new issue.
 
 For local testing and development, the docker setup can be used with `docker compose up --build`.
 
+### Local dev with Docker Compose (bind mount + hot reload)
+
+Use the development compose override to run Photobooth directly from your local source tree while containers handle PHP/Apache and asset watching.
+
+1. Start development stack:
+    - `docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build`
+2. Open:
+    - `http://localhost:8080`
+3. Edit files locally in this repository.
+    - PHP/template changes are available immediately via bind mount.
+    - JS/SCSS changes are rebuilt automatically by the `watcher` service (`npm run watch:gulp`).
+
+Notes:
+
+- `docker-compose.dev.yml` mounts the project into `/app`.
+- `node_modules` and `vendor` are stored in named Docker volumes so dependency installs stay inside containers.
+- File watching uses polling (`CHOKIDAR_USEPOLLING=1`) for reliable hot reload behavior on Docker bind mounts.
+- Stop the stack with `docker compose -f docker-compose.yml -f docker-compose.dev.yml down`.
+
 ### Local dev with DDEV (alternative to docker compose)
 
 Use DDEV if you want an all-in-one local stack without touching your host PHP/Node toolchain (Docker Desktop/WSL2/macOS/Linux supported).
