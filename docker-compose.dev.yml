@@ -21,6 +21,7 @@ services:
       git config --global --add safe.directory /app &&
       [ -x node_modules/.bin/gulp ] || npm install &&
       [ -f vendor/autoload.php ] || php bin/composer install &&
+      npm run build &&
       npm run watch:gulp
       "
     volumes:
