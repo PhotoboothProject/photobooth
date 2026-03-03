@@ -102,6 +102,7 @@ For local testing and development, the docker setup can be used with `docker com
 ### Local dev with Docker Compose (bind mount + hot reload)
 
 Use the development compose override to run Photobooth directly from your local source tree while containers handle PHP/Apache and asset watching.
+Alternatively call `scripts/dev-docker.sh` from the repo root to start the stack with one command.
 
 1. Start development stack:
     - `docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build`
