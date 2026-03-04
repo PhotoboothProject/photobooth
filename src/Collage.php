@@ -38,7 +38,12 @@ class Collage
         array $collageConfig,
         ?LoggerInterface $logger = null
     ): array {
-        $layout = (string) ($collageConfig['layout'] ?? '');
+        $layout = $collageConfig['layout'] ?? '';
+        if ($layout instanceof \BackedEnum) {
+            $layout = (string) $layout->value;
+        } else {
+            $layout = (string) $layout;
+        }
         $orientation = (string) ($collageConfig['orientation'] ?? 'landscape');
         $placeholderEnabled = (bool) ($collageConfig['placeholder'] ?? false);
         $placeholderPosition = (int) ($collageConfig['placeholderposition'] ?? 0);
