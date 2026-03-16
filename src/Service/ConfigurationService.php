@@ -128,6 +128,36 @@ class ConfigurationService
 
     protected function processMigration(array $config): array
     {
+        $legacyCollage = 'collage.json';
+        $legacyCollageDir = PathUtility::getAbsolutePath('private/');
+        $communityCollageDir      = PathUtility::getAbsolutePath('private/collage/community/');
+        $communityCollage = $communityCollageDir . DIRECTORY_SEPARATOR . $legacyCollage;
+        $relativCommunityCollageDir = PathUtility::getRelativePath($communityCollage);
+
+        if (is_file($legacyCollageDir . DIRECTORY_SEPARATOR . $legacyCollage)) {
+            if (!is_dir($communityCollageDir) && !mkdir($communityCollageDir, 0777, true) && !is_dir($communityCollageDir)) {
+                throw new \RuntimeException(sprintf('Directory "%s" could not be created.', $communityCollageDir));
+            }
+
+            if (!is_file($communityCollageDir . DIRECTORY_SEPARATOR . $legacyCollage)) {
+                rename($legacyCollageDir . DIRECTORY_SEPARATOR . $legacyCollage, $communityCollageDir . DIRECTORY_SEPARATOR . $legacyCollage);
+            }
+
+            if (isset($config['collage']['layout'])) {
+                $config['collage']['layout'] = $communityCollageDir . DIRECTORY_SEPARATOR . $legacyCollage;
+            }
+        }
+
+        //TODO: depend on how multiple custom layouts are handled and stored in the future, this migration may need to be adjusted
+        //        if (isset($config['collage']['layouts_enabled']) && is_array($config['collage']['layouts_enabled'])) {
+        //            $config['collage']['layouts_enabled'] = array_map(
+        //                static function ($value) use ($legacyCollage, $relativCommunityCollageDir) {
+        //                    return $value == $legacyCollage ? $relativCommunityCollageDir : $value;
+        //                },
+        //                $config['collage']['layouts_enabled']
+        //            );
+        //        }
+
         // Normalize legacy paths that may contain absolute URLs or subfolder prefixes (e.g. /photobooth/)
         $baseUrl  = PathUtility::getBaseUrl();
         $hostBase = '';

@@ -1,6 +1,5 @@
 <?php
 
-use Photobooth\Enum\CollageLayoutEnum;
 use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Enum\MailSecurityTypeEnum;
 use Photobooth\Enum\RemoteStorageTypeEnum;
@@ -10,6 +9,7 @@ use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Service\PrintManagerService;
 use Photobooth\Utility\PathUtility;
+use Photobooth\Utility\CollageLayoutScanner;
 
 /*
  ** This file defines the admin panel of photobooth. The admin panel definition is done in a JSON variable and structured as follows
@@ -985,9 +985,7 @@ return [
             'type' => 'select',
             'name' => 'collage[layout]',
             'data-theme-field' => 'true',
-            'placeholder' => $defaultConfig['collage']['layout'],
-            'options' => CollageLayoutEnum::cases(),
-            'value' => $config['collage']['layout'],
+            'options_html' => CollageLayoutScanner::getLayoutSelectOptionsHtml($config['collage']['layout'] ?? $defaultConfig['collage']['layout']),
         ],
         'collage_allow_selection' => [
             'view' => 'advanced',
@@ -1017,12 +1015,12 @@ return [
             ],
             'value' => $config['collage']['orientation'],
         ],
-        'layout_generator' => [
+        'collage_designer' => [
             'view' => 'expert',
             'type' => 'button',
-            'placeholder' => 'layout_generator',
-            'name' => 'LAYOUTGENERATOR',
-            'value' => 'layout-generator',
+            'placeholder' => 'collage-designer',
+            'name' => 'COLLAGEDESIGNER',
+            'value' => 'collage-designer',
         ],
         'collage_dashedline_color' => [
             'view' => 'advanced',

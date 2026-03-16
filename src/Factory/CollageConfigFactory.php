@@ -3,7 +3,6 @@
 namespace Photobooth\Factory;
 
 use Photobooth\Dto\CollageConfig;
-use Photobooth\Enum\CollageLayoutEnum;
 use Photobooth\Utility\PathUtility;
 
 class CollageConfigFactory
@@ -11,9 +10,7 @@ class CollageConfigFactory
     public static function fromConfig(array $config): CollageConfig
     {
         $collageConfig = new CollageConfig();
-        $collageConfig->collageLayout = $config['collage']['layout'] instanceof CollageLayoutEnum
-            ? $config['collage']['layout']->value
-            : (string) $config['collage']['layout'];
+        $collageConfig->collageLayout = (string) $config['collage']['layout'];
         $collageConfig->collageOrientation = $config['collage']['orientation'];
         $collageConfig->collageBackgroundColor = $config['collage']['background_color'];
         $collageConfig->collageFrame = $config['collage']['frame'];

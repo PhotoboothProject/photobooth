@@ -101,7 +101,7 @@ include PathUtility::getAbsolutePath('admin/helper/index.php');
             <?php
 echo getMenuBtn(PathUtility::getPublicPath('admin'), 'admin_panel', $config['icons']['admin']);
 echo getMenuBtn(PathUtility::getPublicPath('test'), 'testMenu', $config['icons']['admin']);
-echo getMenuBtn(PathUtility::getPublicPath('admin/generator'), 'layout_generator', $config['icons']['take_collage']);
+echo getMenuBtn(PathUtility::getPublicPath('admin/collage-designer'), 'collage-designer', $config['icons']['take_collage']);
 ?>
             </div>
         </div>

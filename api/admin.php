@@ -279,6 +279,7 @@ if ($action === 'reset') {
     }
 
     // Collage json config
+    // TODO: check still working after merge?
     $newConfig['collage']['limit'] = $newConfig['collage']['limit'] ?? $defaultConfig['collage']['limit'];
     if ($newConfig['collage']['enabled']) {
         $limitData = Collage::calculateLimit($newConfig['collage'], $logger);

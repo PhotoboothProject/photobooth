@@ -6,3 +6,4 @@ include PathUtility::getAbsolutePath('admin/helper/loader.php');
 include PathUtility::getAbsolutePath('admin/helper/hiddenElement.php');
 include PathUtility::getAbsolutePath('admin/helper/menuBtn.php');
 include PathUtility::getAbsolutePath('admin/helper/toast.php');
+include PathUtility::getAbsolutePath('admin/helper/backBtn.php');

@@ -393,7 +393,7 @@ class ThemeService
                 }
             }
 
-            $projectRelative = PathUtility::toProjectRelative($absolute);
+            $projectRelative = PathUtility::getRelativePath($absolute);
 
             // Skip generated assets living in resources/ per export policy
             if (str_starts_with($projectRelative, 'resources/')) {
