@@ -10,6 +10,7 @@ use Photobooth\Processor\PrintProcessor;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\PrintManagerService;
 use Photobooth\Service\RemoteStorageService;
+use Photobooth\Service\UploadQueueService;
 use Photobooth\Utility\PathUtility;
 
 header('Content-Type: application/json');
@@ -156,10 +157,11 @@ if (!file_exists($vars['printFile'])) {
                 $remoteStorageService = RemoteStorageService::getInstance();
                 $url = $remoteStorageService->getWebpageUri();
                 if ($config['qr']['append_filename']) {
-                    $url .= '/images/';
+                    $uploadQueue = UploadQueueService::getInstance();
+                    $remoteFilename = $uploadQueue->getRemoteFilename($vars['fileName']) ?? $vars['fileName'];
+                    $url .= '/?img=' . rawurlencode($remoteFilename);
                 }
-            }
-            if ($config['qr']['append_filename']) {
+            } elseif ($config['qr']['append_filename']) {
                 $url .= $vars['fileName'];
             }
             $imageHandler->qrUrl = PathUtility::getPublicPath($url, true);

@@ -13,6 +13,7 @@ use Photobooth\Processor\ImageProcessor;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\RemoteStorageService;
+use Photobooth\Service\UploadQueueService;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
 
@@ -336,13 +337,14 @@ try {
             }
         }
 
-        // Store images on remote storage
+        // Queue images for async remote storage upload
         if ($config['ftp']['enabled']) {
-            $remoteStorage->write($remoteStorage->getStorageFolder() . '/images/' . $vars['singleImageFile'], (string) file_get_contents($vars['resultFile']));
-            $remoteStorage->write($remoteStorage->getStorageFolder() . '/thumbs/' . $vars['singleImageFile'], (string) file_get_contents($vars['thumbFile']));
-            if ($config['ftp']['create_webpage']) {
-                $remoteStorage->createWebpage();
-            }
+            $uploadQueue = UploadQueueService::getInstance();
+            $uploadQueue->enqueue(
+                $vars['singleImageFile'],
+                $vars['singleImageFile'],
+                (bool) $config['ftp']['create_webpage']
+            );
         }
 
         // Change permissions

@@ -1,0 +1,18 @@
+[Unit]
+Description=Photobooth Async Upload Worker
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/html
+ExecStart=/usr/bin/php bin/photobooth photobooth:upload:worker
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=photobooth-upload
+
+[Install]
+WantedBy=multi-user.target

@@ -8,6 +8,8 @@ use Photobooth\Utility\PathUtility;
 
 require_once __DIR__ . '/lib/boot.php';
 
+$languageService = LanguageService::getInstance();
+
 $imageParam = $_GET['image'] ?? '';
 $image = basename((string) $imageParam);
 
@@ -31,9 +33,9 @@ $mime = match ($extension) {
     'gif' => 'image/gif',
     default => 'image/jpeg',
 };
+
 $imageUrl = PathUtility::getPublicPath(FolderEnum::IMAGES->value . '/' . rawurlencode($image));
 $downloadUrl = PathUtility::getPublicPath('api/download.php?image=' . rawurlencode($image));
-$languageService = LanguageService::getInstance();
 $pageTitle = ApplicationService::getInstance()->getTitle() . ' - ' . $languageService->translate('viewer_photo_title');
 $photoswipe = false;
 $remoteBuzzer = false;
