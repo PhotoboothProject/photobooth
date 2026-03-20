@@ -46,7 +46,9 @@ final class MailConfiguration
                     ->defaultValue(587)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
             ->end();

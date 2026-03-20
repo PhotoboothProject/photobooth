@@ -25,7 +25,9 @@ final class PhotoSwipeConfiguration
                     ->min(0)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): float { return floatval($value); })
+                        ->then(function (string $value): float {
+                            return floatval($value);
+                        })
                         ->end()
                     ->end()
                 ->scalarNode('imageClickAction')->defaultValue('toggle-controls')->end()

@@ -16,14 +16,18 @@ final class SlideshowConfiguration
                     ->defaultValue(60)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('pictureTime')
                     ->defaultValue(3000)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->booleanNode('randomPicture')->defaultValue(true)->end()

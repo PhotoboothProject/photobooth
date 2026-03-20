@@ -31,7 +31,9 @@ final class FtpConfiguration
                     ->defaultValue(21)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->scalarNode('username')->defaultValue('')->end()

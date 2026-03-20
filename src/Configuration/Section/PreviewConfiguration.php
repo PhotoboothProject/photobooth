@@ -27,7 +27,9 @@ final class PreviewConfiguration
                     ->max(10)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->enumNode('style')
@@ -49,14 +51,18 @@ final class PreviewConfiguration
                     ->max(30000)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('videoWidth')
                     ->defaultValue(1280)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('videoHeight')
@@ -81,7 +87,9 @@ final class PreviewConfiguration
             ->defaultValue(720)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->enumNode('camera_mode')
