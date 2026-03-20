@@ -19,7 +19,9 @@ final class VideoConfiguration
                     ->max(10)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->scalarNode('cheese')->defaultValue('Show your moves!')->end()

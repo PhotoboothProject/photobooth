@@ -24,7 +24,9 @@ final class PictureConfiguration
                     ->defaultValue(90)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->booleanNode('preview_before_processing')->defaultValue(false)->end()
@@ -34,7 +36,9 @@ final class PictureConfiguration
                     ->max(10)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('retry_timeout')
@@ -43,7 +47,9 @@ final class PictureConfiguration
                     ->max(10)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->booleanNode('enabled')->defaultValue(true)->end()
@@ -53,7 +59,9 @@ final class PictureConfiguration
                     ->max(10)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('cheese_time')
@@ -62,7 +70,9 @@ final class PictureConfiguration
                     ->max(10000)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->enumNode('flip')
@@ -75,7 +85,9 @@ final class PictureConfiguration
                     ->max(359)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->booleanNode('polaroid_effect')->defaultValue(false)->end()
@@ -85,7 +97,9 @@ final class PictureConfiguration
                     ->max(359)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->booleanNode('take_frame')->defaultValue(true)->end()
@@ -97,7 +111,9 @@ final class PictureConfiguration
                     ->max(100)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('frame_right_percentage')
@@ -106,7 +122,9 @@ final class PictureConfiguration
                     ->max(100)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('frame_top_percentage')
@@ -115,7 +133,9 @@ final class PictureConfiguration
                     ->max(100)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('frame_bottom_percentage')
@@ -124,7 +144,9 @@ final class PictureConfiguration
                     ->max(100)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->enumNode('naming')

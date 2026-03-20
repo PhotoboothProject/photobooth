@@ -33,7 +33,9 @@ final class UiConfiguration
                     ->defaultValue(5)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->booleanNode('show_fork')->defaultValue(true)->end()
@@ -58,7 +60,9 @@ final class UiConfiguration
                     ->max(200)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('scale_resultImage')
@@ -67,7 +71,9 @@ final class UiConfiguration
                     ->max(100)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->booleanNode('shutter_animation')->defaultValue(true)->end()

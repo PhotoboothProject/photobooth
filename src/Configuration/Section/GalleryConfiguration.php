@@ -38,7 +38,9 @@ final class GalleryConfiguration
                     ->max(10000)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->booleanNode('show_date')->defaultValue(true)->end()
@@ -48,7 +50,9 @@ final class GalleryConfiguration
                     ->defaultValue(10)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->booleanNode('allow_delete')->defaultValue(true)->end()
