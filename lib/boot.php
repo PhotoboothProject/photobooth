@@ -23,12 +23,49 @@ $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
 // Longer-lived sessions for kiosk use
 ini_set('session.gc_maxlifetime', 172800);   // 48h server-side lifetime
 ini_set('session.cookie_lifetime', 172800);  // 48h client cookie lifetime
+ini_set('session.gc_probability', '1');
+ini_set('session.gc_divisor', '100');
 
 session_set_cookie_params([
     'httponly' => true,
     'samesite' => 'Lax',
     'secure' => $isHttps,
 ]);
+
+// Keep sessions outside the public web root so session files are never web-accessible.
+$sessionCandidates = [
+    dirname(dirname(__DIR__)) . '/sessions',
+    sys_get_temp_dir() . '/photobooth-sessions',
+];
+
+$documentRoot = realpath((string)($_SERVER['DOCUMENT_ROOT'] ?? '')) ?: '';
+foreach ($sessionCandidates as $sessionPath) {
+    if (!is_dir($sessionPath)) {
+        @mkdir($sessionPath, 0700, true);
+    }
+
+    if (!is_dir($sessionPath) || !is_writable($sessionPath)) {
+        continue;
+    }
+
+    $resolvedPath = realpath($sessionPath) ?: $sessionPath;
+    if ($documentRoot !== '' && str_starts_with($resolvedPath, $documentRoot . DIRECTORY_SEPARATOR)) {
+        continue;
+    }
+
+    session_save_path($resolvedPath);
+    break;
+}
+
+// Cleanup legacy sessions that may still exist in a formerly public path.
+$legacyPublicSessionPath = dirname(__DIR__) . '/var/sessions';
+if (is_dir($legacyPublicSessionPath) && is_writable($legacyPublicSessionPath)) {
+    foreach (glob($legacyPublicSessionPath . DIRECTORY_SEPARATOR . 'sess_*') ?: [] as $legacySessionFile) {
+        @unlink($legacySessionFile);
+    }
+    @rmdir($legacyPublicSessionPath);
+}
+
 session_start();
 
 // Ensure a CSRF token exists for client-side requests

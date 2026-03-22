@@ -471,19 +471,23 @@ const photoBooth = (function () {
             mode: cmd,
             filename: file
         };
-        if (typeof csrf !== 'undefined') {
-            command[csrf.key] = csrf.token;
-        }
-
         photoboothTools.console.log('Run', cmd);
 
-        jQuery
-            .post(environment.publicFolders.api + '/shellCommand.php', command)
+        photoboothTools
+            .ajaxWithCsrf({
+                url: environment.publicFolders.api + '/shellCommand.php',
+                method: 'POST',
+                data: command
+            })
             .done(function (result) {
                 photoboothTools.console.log(cmd, 'result: ', result);
             })
-            .fail(function (xhr, status, result) {
-                photoboothTools.console.log(cmd, 'result: ', result);
+            .fail(function (xhr, status, errorThrown) {
+                if (photoboothTools.isCsrfErrorResponse(xhr)) {
+                    photoboothTools.handleCsrfMismatch(environment.publicFolders.api + '/shellCommand.php');
+                    return;
+                }
+                photoboothTools.console.log(cmd, 'result: ', errorThrown);
             });
     };
 
@@ -668,9 +672,10 @@ const photoBooth = (function () {
     api.callTakePicApi = async (data, retry = 0) => {
         startTime = new Date().getTime();
         photoboothTools.console.logDev('Capture image.');
-        jQuery
-            .post({
+        photoboothTools
+            .ajaxWithCsrf({
                 url: environment.publicFolders.api + '/capture.php',
+                method: 'POST',
                 data: data,
                 timeout: 25000
             })
@@ -836,6 +841,10 @@ const photoBooth = (function () {
             })
             .fail(async (xhr, status, result) => {
                 try {
+                    if (photoboothTools.isCsrfErrorResponse(xhr)) {
+                        photoboothTools.handleCsrfMismatch(environment.publicFolders.api + '/capture.php');
+                        return;
+                    }
                     endTime = new Date().getTime();
                     totalTime = endTime - startTime;
                     api.cheese.destroy();
@@ -869,9 +878,10 @@ const photoBooth = (function () {
             videoAnimation.show();
         }
         startTime = new Date().getTime();
-        jQuery
-            .post({
+        photoboothTools
+            .ajaxWithCsrf({
                 url: environment.publicFolders.api + '/capture.php',
+                method: 'POST',
                 data: data,
                 timeout: 25000
             })
@@ -901,6 +911,10 @@ const photoBooth = (function () {
             })
             .fail(function (xhr, status, result) {
                 try {
+                    if (photoboothTools.isCsrfErrorResponse(xhr)) {
+                        photoboothTools.handleCsrfMismatch(environment.publicFolders.api + '/capture.php');
+                        return;
+                    }
                     api.cheese.destroy();
                     if (result === null || result === undefined || typeof result === 'string') {
                         result = { error: result || 'Unexpected error: result is null or undefined' };
@@ -995,17 +1009,19 @@ const photoBooth = (function () {
             preloadImage.src = tempImageUrl;
         }
 
-        $.ajax({
-            method: 'POST',
-            url: environment.publicFolders.api + '/applyEffects.php',
-            data: {
-                file: result.file,
-                filter: imgFilter,
-                style: api.photoStyle,
-                collageLayout: api.collageLayout,
-                collageLimit: api.collageLimit
-            },
-            success: (data) => {
+        photoboothTools
+            .ajaxWithCsrf({
+                method: 'POST',
+                url: environment.publicFolders.api + '/applyEffects.php',
+                data: {
+                    file: result.file,
+                    filter: imgFilter,
+                    style: api.photoStyle,
+                    collageLayout: api.collageLayout,
+                    collageLimit: api.collageLimit
+                }
+            })
+            .done((data) => {
                 try {
                     setFiltersEnabled(true);
                     photoboothTools.console.log(api.photoStyle + ' processed', data);
@@ -1032,14 +1048,17 @@ const photoBooth = (function () {
                     photoboothTools.console.log('processPic.success: unexpected error:', error);
                     api.errorPic({ error: error.message || 'Unexpected error processing picture' });
                 }
-            },
-            error: (jqXHR, textStatus) => {
+            })
+            .fail((jqXHR, textStatus) => {
+                if (photoboothTools.isCsrfErrorResponse(jqXHR)) {
+                    photoboothTools.handleCsrfMismatch(environment.publicFolders.api + '/applyEffects.php');
+                    return;
+                }
                 setFiltersEnabled(true);
                 api.errorPic({
                     error: 'Request failed: ' + textStatus
                 });
-            }
-        });
+            });
     };
 
     api.processVideo = function (result) {
@@ -1053,13 +1072,15 @@ const photoBooth = (function () {
             '<i class="' + config.icons.spinner + '"></i><br>' + photoboothTools.getTranslation('busyVideo')
         );
 
-        $.ajax({
-            method: 'POST',
-            url: environment.publicFolders.api + '/applyVideoEffects.php',
-            data: {
-                file: result.file
-            },
-            success: (data) => {
+        photoboothTools
+            .ajaxWithCsrf({
+                method: 'POST',
+                url: environment.publicFolders.api + '/applyVideoEffects.php',
+                data: {
+                    file: result.file
+                }
+            })
+            .done((data) => {
                 try {
                     photoboothTools.console.log('video processed', data);
                     endTime = new Date().getTime();
@@ -1104,13 +1125,16 @@ const photoBooth = (function () {
                     photoboothTools.console.log('processVideo.success: unexpected error:', error);
                     api.errorPic({ error: error.message || 'Unexpected error processing video' });
                 }
-            },
-            error: (jqXHR, textStatus) => {
+            })
+            .fail((jqXHR, textStatus) => {
+                if (photoboothTools.isCsrfErrorResponse(jqXHR)) {
+                    photoboothTools.handleCsrfMismatch(environment.publicFolders.api + '/applyVideoEffects.php');
+                    return;
+                }
                 api.errorPic({
                     error: 'Request failed: ' + textStatus
                 });
-            }
-        });
+            });
     };
 
     api.renderChroma = function (filename) {
