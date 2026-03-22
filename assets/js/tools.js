@@ -165,8 +165,8 @@ const photoboothTools = (function () {
         }
 
         api.csrfReloadScheduled = true;
-        const message = 'Session expired. Reloading...';
-        api.console.log('CSRF mismatch detected.', context);
+        const message = api.getTranslation('csrf_session_reloading');
+        api.console.log('ERROR: CSRF token mismatch', context);
         api.overlay.showWarning(message);
         setTimeout(() => {
             api.reloadPage();

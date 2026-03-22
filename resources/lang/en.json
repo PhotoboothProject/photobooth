@@ -122,6 +122,7 @@
   "commands:take_picture_cmd": "Take picture command",
   "commands:take_video_cmd": "Command to take a video",
   "confirm": "confirm",
+  "csrf_session_reloading": "Session expired. Reloading...",
   "current_version": "Installed:",
   "currentPhpVersion": "Current PHP version:",
   "custom": "Custom",
