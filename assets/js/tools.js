@@ -8,9 +8,75 @@ const photoboothTools = (function () {
     api.translations = null;
     api.sounds = null;
     api.isPrinting = false;
+    api.csrfRefreshPromise = null;
+    api.csrfReloadScheduled = false;
+
+    api.hasCsrf = function () {
+        return typeof csrf !== 'undefined' && typeof csrf.key === 'string' && typeof csrf.token === 'string';
+    };
+
+    api.getCsrfErrorMessage = function () {
+        return 'Invalid CSRF token';
+    };
+
+    api.isCsrfErrorText = function (text) {
+        if (typeof text !== 'string' || text === '') {
+            return false;
+        }
+
+        return text.toLowerCase().includes(api.getCsrfErrorMessage().toLowerCase());
+    };
+
+    api.extractErrorMessage = function (payload) {
+        if (!payload) {
+            return '';
+        }
+
+        if (typeof payload === 'string') {
+            return payload;
+        }
+
+        if (typeof payload.error === 'string') {
+            return payload.error;
+        }
+
+        return '';
+    };
+
+    api.isCsrfErrorResponse = function (xhr) {
+        if (!xhr || xhr.status !== 403) {
+            return false;
+        }
+
+        const jsonMessage = api.extractErrorMessage(xhr.responseJSON);
+        const textMessage = typeof xhr.responseText === 'string' ? xhr.responseText : '';
+
+        return api.isCsrfErrorText(jsonMessage) || api.isCsrfErrorText(textMessage);
+    };
+
+    api.syncCsrfValue = function (csrfPayload) {
+        if (!api.hasCsrf()) {
+            return false;
+        }
+
+        if (!csrfPayload || typeof csrfPayload !== 'object') {
+            return false;
+        }
+
+        if (typeof csrfPayload.key === 'string' && csrfPayload.key !== '') {
+            csrf.key = csrfPayload.key;
+        }
+
+        if (typeof csrfPayload.token === 'string' && csrfPayload.token !== '') {
+            csrf.token = csrfPayload.token;
+            return true;
+        }
+
+        return false;
+    };
 
     const addCsrfToUrl = function (url) {
-        if (typeof csrf === 'undefined') {
+        if (!api.hasCsrf()) {
             return url;
         }
         const u = new URL(url, window.location.origin);
@@ -18,12 +84,140 @@ const photoboothTools = (function () {
         return u.toString();
     };
 
-    // Attach CSRF to all jQuery AJAX calls
-    if (typeof $ !== 'undefined' && typeof csrf !== 'undefined') {
-        $.ajaxSetup({
-            data: { [csrf.key]: csrf.token }
-        });
-    }
+    api.addCsrfToPayload = function (payload = {}) {
+        if (!api.hasCsrf()) {
+            return payload;
+        }
+
+        const csrfKey = csrf.key;
+        const csrfToken = csrf.token;
+
+        if (payload instanceof FormData) {
+            if (typeof payload.set === 'function') {
+                payload.set(csrfKey, csrfToken);
+            } else {
+                if (typeof payload.delete === 'function') {
+                    payload.delete(csrfKey);
+                }
+                payload.append(csrfKey, csrfToken);
+            }
+            return payload;
+        }
+
+        if (payload instanceof URLSearchParams) {
+            payload.set(csrfKey, csrfToken);
+            return payload;
+        }
+
+        if (typeof payload === 'string') {
+            const params = new URLSearchParams(payload);
+            params.set(csrfKey, csrfToken);
+            return params.toString();
+        }
+
+        if (payload === null || typeof payload === 'undefined') {
+            return { [csrfKey]: csrfToken };
+        }
+
+        if (typeof payload === 'object') {
+            return {
+                ...payload,
+                [csrfKey]: csrfToken
+            };
+        }
+
+        return payload;
+    };
+
+    api.refreshCsrfToken = async function () {
+        if (!api.hasCsrf()) {
+            return false;
+        }
+
+        if (api.csrfRefreshPromise) {
+            return api.csrfRefreshPromise;
+        }
+
+        api.csrfRefreshPromise = fetch(environment.publicFolders.api + '/csrf.php', {
+            method: 'GET',
+            cache: 'no-store',
+            credentials: 'same-origin'
+        })
+            .then(async (response) => {
+                if (!response.ok) {
+                    return false;
+                }
+
+                const csrfPayload = await response.json();
+                return api.syncCsrfValue(csrfPayload);
+            })
+            .catch(() => false)
+            .finally(() => {
+                api.csrfRefreshPromise = null;
+            });
+
+        return api.csrfRefreshPromise;
+    };
+
+    api.handleCsrfMismatch = function (context = '') {
+        if (api.csrfReloadScheduled) {
+            return;
+        }
+
+        api.csrfReloadScheduled = true;
+        const message = 'Session expired. Reloading...';
+        api.console.log('CSRF mismatch detected.', context);
+        api.overlay.showWarning(message);
+        setTimeout(() => {
+            api.reloadPage();
+        }, 750);
+    };
+
+    api.ajaxWithCsrf = function (ajaxOptions, retryOnCsrf = true) {
+        const requestOptions = {
+            ...ajaxOptions,
+            data: api.addCsrfToPayload(ajaxOptions.data)
+        };
+
+        const deferred = $.Deferred();
+
+        $.ajax(requestOptions)
+            .done((data, textStatus, jqXHR) => {
+                deferred.resolve(data, textStatus, jqXHR);
+            })
+            .fail((xhr, textStatus, errorThrown) => {
+                if (retryOnCsrf && api.isCsrfErrorResponse(xhr)) {
+                    api.refreshCsrfToken()
+                        .then((refreshed) => {
+                            if (!refreshed) {
+                                api.handleCsrfMismatch(requestOptions.url || 'unknown');
+                                deferred.reject(xhr, textStatus, errorThrown);
+                                return;
+                            }
+
+                            api.ajaxWithCsrf(ajaxOptions, false)
+                                .done((retryData, retryStatus, retryXhr) => {
+                                    deferred.resolve(retryData, retryStatus, retryXhr);
+                                })
+                                .fail((retryErrXhr, retryErrStatus, retryErrThrown) => {
+                                    if (api.isCsrfErrorResponse(retryErrXhr)) {
+                                        api.handleCsrfMismatch(requestOptions.url || 'unknown');
+                                    }
+                                    deferred.reject(retryErrXhr, retryErrStatus, retryErrThrown);
+                                });
+                        })
+                        .catch(() => {
+                            api.handleCsrfMismatch(requestOptions.url || 'unknown');
+                            deferred.reject(xhr, textStatus, errorThrown);
+                        });
+                    return;
+                }
+
+                deferred.reject(xhr, textStatus, errorThrown);
+            });
+
+        return deferred.promise();
+    };
 
     api.initialize = async function () {
         const resultTranslations = await fetch(addCsrfToUrl(environment.publicFolders.api + '/translations.php'), {
@@ -334,6 +528,10 @@ const photoboothTools = (function () {
             .then(function (response) {
                 if (response.status === 200) {
                     return response.text();
+                } else if (response.status === 403) {
+                    return response.text().then((bodyText) => {
+                        throw new Error(bodyText || 'Forbidden');
+                    });
                 } else if (response.status === 404) {
                     throw new Error('No records found');
                 } else {
@@ -344,6 +542,10 @@ const photoboothTools = (function () {
                 api.console.log(data);
             })
             .catch(function (error) {
+                if (api.isCsrfErrorText(error.message)) {
+                    api.handleCsrfMismatch(url);
+                    return;
+                }
                 api.console.log('Error occurred: ' + error.message);
             });
     };

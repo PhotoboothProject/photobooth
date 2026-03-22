@@ -1,4 +1,4 @@
-/* globals photoboothTools csrf */
+/* globals photoboothTools */
 /* eslint-env browser */
 $(function () {
     initDirtyTracking();
@@ -288,19 +288,24 @@ const shellCommand = function ($mode, $filename = '') {
         mode: $mode,
         filename: $filename
     };
-    if (typeof csrf !== 'undefined') {
-        command[csrf.key] = csrf.token;
-    }
 
     photoboothTools.console.log('Run' + $mode);
 
-    jQuery
-        .post('../api/shellCommand.php', command)
+    photoboothTools
+        .ajaxWithCsrf({
+            url: '../api/shellCommand.php',
+            method: 'POST',
+            data: command
+        })
         .done(function (result) {
             photoboothTools.console.log($mode, 'result: ', result);
         })
-        .fail(function (xhr, status, result) {
-            photoboothTools.console.log($mode, 'result: ', result);
+        .fail(function (xhr, status, errorThrown) {
+            if (photoboothTools.isCsrfErrorResponse(xhr)) {
+                photoboothTools.handleCsrfMismatch('../api/shellCommand.php');
+                return;
+            }
+            photoboothTools.console.log($mode, 'result: ', errorThrown);
         });
 };
 
