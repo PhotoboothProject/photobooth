@@ -8,10 +8,11 @@ let collageInProgress = false,
     copySuccess = false,
     rearmTimer = null;
 
-const SYNC_DESTINATION_DIR = 'photobooth-pic-sync';
+// Sync destination: photos are synced directly to the USB stick root (no subdirectory)
 const { execSync, spawnSync } = require('child_process');
 const { pid: PID, platform: PLATFORM } = process;
 const REARM_TIMEOUT_MS = 60000; // Fallback to re-arm trigger if no completion arrives
+const shellQuote = (s) => "'" + String(s).replace(/'/g, "'\\''") + "'";
 
 /* LOGGING FUNCTION */
 const log = function (...optionalParams) {
@@ -235,7 +236,7 @@ function photoboothAction(type) {
             break;
 
         case 'move2usb':
-            triggerArmed = false;
+            disarmTrigger();
             collageInProgress = false;
             log('Photobooth trigger MOVE2USB : [ photobooth-socket ]  => [ All Clients ]: command [ move2usb ]');
             move2usbAction();
@@ -588,23 +589,34 @@ function move2usbAction() {
 
     /* PARSE PHOTOBOOTH CONFIG */
     const parsedConfig = parseConfig();
-    log('USB target ', ...parsedConfig.drive);
+    if (!parsedConfig) {
+        log('ERROR: Could not parse config, aborting move2usb');
+        photoboothAction('completed');
+        return;
+    }
+    copySuccess = false;
+    log('USB target ', parsedConfig.drive);
 
     const getDriveInfo = ({ drive }) => {
         let json = null;
-        let device = false;
+        const requiredColumns = 'NAME,KNAME,PATH,LABEL,MOUNTPOINT,MOUNTPOINTS,SUBSYSTEMS,TYPE';
 
         drive = drive.toLowerCase();
 
         try {
-            //Assuming that the lsblk version supports JSON output!
-            const output = execSync('export LC_ALL=C; lsblk -ablJO 2>/dev/null; unset LC_ALL').toString();
+            // Try -ablJO first (all columns), fall back to explicit column list
+            let output;
+            try {
+                output = execSync('LC_ALL=C lsblk -ablJO 2>/dev/null').toString();
+            } catch {
+                log('lsblk -O not supported, falling back to explicit columns');
+                output = execSync(`LC_ALL=C lsblk -ablJ -o ${requiredColumns} 2>/dev/null`).toString();
+            }
             json = JSON.parse(output);
-
-            // eslint-disable-next-line no-unused-vars
         } catch (err) {
             log(
-                'ERROR: Could not parse the output of lsblk! Please make sure its installed and that it offers JSON output!'
+                'ERROR: Could not parse the output of lsblk! Please make sure its installed and that it offers JSON output!',
+                err.message
             );
 
             return null;
@@ -616,41 +628,275 @@ function move2usbAction() {
             return null;
         }
 
-        try {
-            device = json.blockdevices.find(
-                (blk) =>
-                    blk.subsystems.includes('usb') &&
-                    ((blk.name && drive === blk.name.toLowerCase()) ||
-                        (blk.kname && drive === blk.kname.toLowerCase()) ||
-                        (blk.path && drive === blk.path.toLowerCase()) ||
-                        (blk.label && drive === blk.label.toLowerCase()))
-            );
-            // eslint-disable-next-line no-unused-vars
-        } catch (err) {
-            device = false;
+        const device = json.blockdevices.find(
+            (blk) =>
+                blk.subsystems &&
+                blk.subsystems.includes('usb') &&
+                ((blk.name && drive === blk.name.toLowerCase()) ||
+                    (blk.kname && drive === blk.kname.toLowerCase()) ||
+                    (blk.path && drive === blk.path.toLowerCase()) ||
+                    (blk.label && drive === blk.label.toLowerCase()))
+        );
+
+        if (device) {
+            // Normalize mountpoints (array) to mountpoint (string) for compatibility
+            // Newer lsblk versions use "mountpoints" array instead of "mountpoint" string
+            if (!device.mountpoint && Array.isArray(device.mountpoints)) {
+                device.mountpoint = device.mountpoints.find((mp) => mp !== null) || null;
+            }
+
+            return device;
         }
 
-        return device;
+        // Fallback: lsblk may not report labels (e.g. in LXC containers or after USB reconnect).
+        // Use blkid which reads directly from the block device and always works.
+        log('lsblk did not find device "' + drive + '" by label, trying blkid fallback...');
+
+        return findDeviceByBlkid(drive, json.blockdevices);
     };
 
-    const mountDrive = (drive) => {
-        if (typeof drive.mountpoint === 'undefined' || !drive.mountpoint) {
-            try {
-                const mountRes = execSync(`export LC_ALL=C; udisksctl mount -b ${drive.path}; unset LC_ALL`).toString();
-                const mountPoint = mountRes
-                    .substr(mountRes.indexOf('at') + 3)
-                    .trim()
-                    .replace(/[\n.]/gu, '');
+    const findDeviceByBlkid = (drive, lsblkDevices) => {
+        let blkidOutput;
+        try {
+            blkidOutput = execSync('LC_ALL=C blkid 2>/dev/null').toString();
+        } catch (err) {
+            log('blkid fallback failed: ' + err.message);
+            log('ERROR: Device ' + drive + ' was not detected (blkid fallback also failed)');
+            return null;
+        }
 
-                drive.mountpoint = mountPoint;
+        const lines = blkidOutput.split('\n').filter((line) => line.trim());
+
+        for (const line of lines) {
+            const labelMatch = line.match(/\bLABEL="([^"]+)"/);
+            if (!labelMatch || labelMatch[1].toLowerCase() !== drive) {
+                continue;
+            }
+
+            const pathMatch = line.match(/^(\/dev\/[^:]+):/);
+            if (!pathMatch) {
+                continue;
+            }
+
+            const devicePath = pathMatch[1];
+            log('blkid found device with label "' + drive + '" at ' + devicePath);
+
+            // Cross-reference with lsblk to verify it is a USB device
+            const lsblkEntry = lsblkDevices.find((blk) => blk.path === devicePath);
+            if (lsblkEntry && lsblkEntry.subsystems && !lsblkEntry.subsystems.includes('usb')) {
+                log(
+                    'Device ' +
+                        devicePath +
+                        ' is not a USB device (subsystems: ' +
+                        lsblkEntry.subsystems +
+                        '), skipping'
+                );
+                continue;
+            }
+
+            // Determine current mountpoint
+            let mountpoint = null;
+            if (lsblkEntry && lsblkEntry.mountpoint) {
+                mountpoint = lsblkEntry.mountpoint;
+            } else if (lsblkEntry && Array.isArray(lsblkEntry.mountpoints)) {
+                mountpoint = lsblkEntry.mountpoints.find((mp) => mp !== null) || null;
+            } else {
+                try {
+                    mountpoint =
+                        execSync('findmnt -n -o TARGET ' + devicePath + ' 2>/dev/null')
+                            .toString()
+                            .trim() || null;
+                    // eslint-disable-next-line no-unused-vars
+                } catch (e) {
+                    // Device is not currently mounted
+                }
+            }
+
+            const name = path.basename(devicePath);
+
+            const device = {
+                name: name,
+                kname: name,
+                path: devicePath,
+                label: labelMatch[1],
+                mountpoint: mountpoint,
+                subsystems: lsblkEntry && lsblkEntry.subsystems ? lsblkEntry.subsystems : 'block:scsi:usb:pci'
+            };
+
+            log('blkid fallback found device: ' + JSON.stringify(device));
+
+            return device;
+        }
+
+        log('ERROR: Device ' + drive + ' was not detected');
+        return null;
+    };
+
+    const isWritable = (directory) => {
+        try {
+            fs.accessSync(directory, fs.constants.W_OK);
+            return true;
+            // eslint-disable-next-line no-unused-vars
+        } catch (err) {
+            return false;
+        }
+    };
+
+    /**
+     * Find the current mountpoint of a device using findmnt (most reliable).
+     * Returns the mountpoint string or null.
+     */
+    const findCurrentMountpoint = (drive) => {
+        // First check the mountpoint from lsblk data
+        if (drive.mountpoint) {
+            try {
+                execSync(`mountpoint -q '${drive.mountpoint.replace(/'/g, '\'\\\'\'')}'`, { stdio: 'ignore' });
+                return drive.mountpoint;
                 // eslint-disable-next-line no-unused-vars
-            } catch (error) {
-                log('ERROR: unable to mount drive', drive.path);
-                drive = null;
+            } catch (err) {
+                // lsblk mountpoint is stale
             }
         }
 
-        return drive;
+        // Use findmnt as the authoritative source
+        try {
+            const mp = execSync('findmnt -n -o TARGET ' + drive.path + ' 2>/dev/null')
+                .toString()
+                .trim();
+            return mp || null;
+            // eslint-disable-next-line no-unused-vars
+        } catch (err) {
+            return null;
+        }
+    };
+
+    /**
+     * Get mount options for FAT/exFAT filesystems that ensure all users can read/write.
+     * Returns null for non-FAT filesystems.
+     */
+    const getFATMountOptions = (devicePath) => {
+        try {
+            const fstype = execSync('lsblk -n -o FSTYPE ' + devicePath + ' 2>/dev/null')
+                .toString()
+                .trim();
+            if (fstype === 'vfat' || fstype === 'exfat') {
+                return 'umask=0000,uid=' + process.getuid() + ',gid=' + process.getgid();
+            }
+            // eslint-disable-next-line no-unused-vars
+        } catch (err) {
+            // ignore
+        }
+        return null;
+    };
+
+    const mountDrive = (drive) => {
+        if (!drive || !drive.path) {
+            log('ERROR: No drive or drive path provided for mounting');
+            return null;
+        }
+
+        // Check if already mounted (via lsblk data or findmnt)
+        const currentMountpoint = findCurrentMountpoint(drive);
+        if (currentMountpoint) {
+            drive.mountpoint = currentMountpoint;
+
+            if (isWritable(currentMountpoint)) {
+                log('Device ' + drive.path + ' is already mounted at ' + currentMountpoint + ' and writable');
+                return drive;
+            }
+
+            // Mounted but not writable (e.g. FAT32 mounted by another user with their uid/gid)
+            log('Device ' + drive.path + ' is mounted at ' + currentMountpoint + ' but not writable, unmounting...');
+            unmountDrive(drive);
+        }
+
+        // Try udisksctl first
+        try {
+            const mountCmd = `LC_ALL=C udisksctl mount -b ${drive.path}`;
+            log('Mounting device ' + drive.path + ' via udisksctl');
+            const mountRes = execSync(mountCmd, { timeout: 30000 }).toString();
+            log('udisksctl output: ' + mountRes.trim());
+            const mountMatch = mountRes.match(/Mounted\s+\S+\s+at\s+(.+)/);
+            if (mountMatch) {
+                const mountPoint = mountMatch[1].trim().replace(/[\n.]+$/gu, '');
+                if (mountPoint) {
+                    drive.mountpoint = mountPoint;
+                    log('Mounted via udisksctl at ' + drive.mountpoint);
+                    return drive;
+                }
+            }
+            log('udisksctl mount returned unexpected output: ' + mountRes.trim());
+        } catch (udisksErr) {
+            log('udisksctl mount failed: ' + udisksErr.message);
+        }
+
+        // udisksctl may have succeeded but output was not parseable.
+        // Check with findmnt if the device actually got mounted.
+        try {
+            const findmntRes = execSync('findmnt -n -o TARGET ' + drive.path + ' 2>/dev/null')
+                .toString()
+                .trim();
+            if (findmntRes) {
+                if (isWritable(findmntRes)) {
+                    drive.mountpoint = findmntRes;
+                    log('Device already mounted (detected via findmnt) at ' + drive.mountpoint);
+                    return drive;
+                }
+
+                // Mounted but not writable, unmount and continue to fallback
+                log('Device mounted at ' + findmntRes + ' but not writable, unmounting...');
+                drive.mountpoint = findmntRes;
+                unmountDrive(drive);
+            }
+            // eslint-disable-next-line no-unused-vars
+        } catch (findmntErr) {
+            // Device is not mounted
+        }
+
+        // Ensure the device is fully unmounted before attempting fallback mount
+        try {
+            const remainingMount = execSync('findmnt -n -o TARGET ' + drive.path + ' 2>/dev/null')
+                .toString()
+                .trim();
+            if (remainingMount) {
+                log('Device still mounted at ' + remainingMount + ' (automount?), forcing unmount...');
+                try {
+                    execSync('sudo umount ' + shellQuote(drive.path), { timeout: 30000 });
+                    log('Forced unmount successful');
+                } catch (forceErr) {
+                    log('Forced unmount failed: ' + forceErr.message);
+                }
+            }
+            // eslint-disable-next-line no-unused-vars
+        } catch (err) {
+            // not mounted, good
+        }
+
+        // Fallback: direct mount command with sudo
+        const label = drive.label || path.basename(drive.path);
+        const fallbackMountpoint = path.join('/media', label);
+
+        try {
+            if (!fs.existsSync(fallbackMountpoint)) {
+                execSync('sudo mkdir -p ' + shellQuote(fallbackMountpoint));
+            }
+
+            // Detect filesystem type to apply appropriate mount options
+            const mountOpts = getFATMountOptions(drive.path);
+            const mountCmd = mountOpts
+                ? `sudo mount -o ${mountOpts} ${shellQuote(drive.path)} ${shellQuote(fallbackMountpoint)}`
+                : `sudo mount ${shellQuote(drive.path)} ${shellQuote(fallbackMountpoint)}`;
+            log('Trying fallback: ' + mountCmd);
+            execSync(mountCmd, { timeout: 30000 });
+            drive.mountpoint = fallbackMountpoint;
+            log('Mounted via direct mount at ' + drive.mountpoint);
+            return drive;
+        } catch (mountErr) {
+            log('Direct mount also failed: ' + mountErr.message);
+        }
+
+        log('ERROR: Unable to mount device ' + drive.path);
+        return null;
     };
 
     const startSync = ({ dataAbsPath, drive }) => {
@@ -664,14 +910,12 @@ function move2usbAction() {
         log(`Source data folder [${dataAbsPath}]`);
         log(`Syncing to drive [${drive.path}] -> [${drive.mountpoint}]`);
 
-        execSync('touch ' + dataAbsPath + '/copy.chk');
+        fs.writeFileSync(path.join(dataAbsPath, 'copy.chk'), '', { flag: 'w' });
 
-        if (fs.existsSync(path.join(drive.mountpoint, SYNC_DESTINATION_DIR + '/data/copy.chk'))) {
+        const usbCheckfile = path.join(drive.mountpoint, 'copy.chk');
+        if (fs.existsSync(usbCheckfile)) {
             log(' ');
-            log(
-                '[WARNING] Last sync might not completed, Checkfile exists:',
-                path.join(drive.mountpoint, SYNC_DESTINATION_DIR + '/copy.chk')
-            );
+            log('[WARNING] Move2USB: stale copy.chk already on USB before rsync:', usbCheckfile);
             log(' ');
         }
 
@@ -692,8 +936,8 @@ function move2usbAction() {
                         '--include=\'*/\'',
                         '--exclude=\'*\'',
                         '--prune-empty-dirs',
-                        dataAbsPath,
-                        path.join(drive.mountpoint, SYNC_DESTINATION_DIR)
+                        dataAbsPath + '/',
+                        drive.mountpoint
                     ].join(' ');
                 default:
                     return null;
@@ -708,26 +952,30 @@ function move2usbAction() {
 
         log('Executing command: <', cmd, '>');
 
-        try {
-            spawnSync(cmd, {
-                shell: '/bin/bash',
-                stdio: 'ignore'
-            });
-        } catch (err) {
-            log('ERROR: Could not start rsync:', err.toString());
+        const rsyncResult = spawnSync(cmd, {
+            shell: '/bin/bash',
+            stdio: 'ignore'
+        });
+        if (rsyncResult.error) {
+            log('ERROR: Could not start rsync:', rsyncResult.error.toString());
+
+            return;
+        }
+        if (rsyncResult.status !== 0) {
+            log('ERROR: rsync exited with code ' + rsyncResult.status);
 
             return;
         }
 
         log('Sync completed');
 
-        if (fs.existsSync(path.join(drive.mountpoint, SYNC_DESTINATION_DIR + '/data/copy.chk'))) {
+        if (fs.existsSync(usbCheckfile)) {
             copySuccess = true;
         } else {
             log(' ');
             log(
-                '[ERROR] Sync error, sync might be not successfull. Checkfile does not exist:',
-                path.join(drive.mountpoint, SYNC_DESTINATION_DIR + '/data/copy.chk')
+                '[ERROR] Move2USB: sync verification failed (copy.chk missing on USB after rsync, expected at):',
+                usbCheckfile
             );
             log(' ');
             copySuccess = false;
@@ -735,24 +983,48 @@ function move2usbAction() {
             return;
         }
 
-        execSync('rm ' + path.join(drive.mountpoint, SYNC_DESTINATION_DIR + '/data/copy.chk'));
-        execSync('rm ' + dataAbsPath + '/copy.chk');
+        try {
+            fs.unlinkSync(usbCheckfile);
+        } catch (err) {
+            log('Warning: Could not remove checkfile from USB: ' + err.message);
+        }
+        try {
+            fs.unlinkSync(path.join(dataAbsPath, 'copy.chk'));
+        } catch (err) {
+            log('Warning: Could not remove local checkfile: ' + err.message);
+        }
     };
 
-    const unmountDrive = () => {
-        const driveInfo = getDriveInfo(parsedConfig);
-        const mountedDrive = mountDrive(driveInfo);
+    const unmountDrive = (drive) => {
+        if (!drive || !drive.path) {
+            log('Nothing to unmount');
+            return;
+        }
 
-        if (mountedDrive) {
-            try {
-                execSync(`export LC_ALL=C; udisksctl unmount -b ${mountedDrive.path}; unset LC_ALL`).toString();
-                log('Unmounted drive', mountedDrive.path);
-                // eslint-disable-next-line no-unused-vars
-            } catch (error) {
-                log('ERROR: unable to unmount drive', mountedDrive.path);
-            }
-        } else {
-            log('Nothing to umount');
+        // Use findmnt to check if actually mounted (don't rely on drive.mountpoint alone)
+        const currentMountpoint = findCurrentMountpoint(drive);
+        if (!currentMountpoint) {
+            log('Device ' + drive.path + ' is not mounted, skipping unmount');
+            return;
+        }
+
+        // Try udisksctl first
+        try {
+            execSync(`LC_ALL=C udisksctl unmount -b ${drive.path}`, { timeout: 30000 });
+            log('Unmounted drive ' + drive.path + ' via udisksctl');
+            drive.mountpoint = null;
+            return;
+        } catch (udisksErr) {
+            log('udisksctl unmount failed: ' + udisksErr.message);
+        }
+
+        // Fallback: sudo umount (needed when device was mounted by another user)
+        try {
+            execSync('sudo umount ' + shellQuote(drive.path), { timeout: 30000 });
+            log('Unmounted drive ' + drive.path + ' via sudo umount');
+            drive.mountpoint = null;
+        } catch (umountErr) {
+            log('sudo umount also failed: ' + umountErr.message);
         }
     };
 
@@ -794,8 +1066,18 @@ function move2usbAction() {
             }
         })();
 
+        if (!cmd) {
+            log('ERROR: No delete command for this platform');
+
+            return;
+        }
+
         log('Executing command: <', cmd, '>');
-        execSync(cmd);
+        try {
+            execSync(cmd);
+        } catch (err) {
+            log('ERROR: Failed to delete files: ' + err.message);
+        }
     };
 
     const deleteDatabase = ({ dataAbsPath, dbName }) => {
@@ -809,18 +1091,21 @@ function move2usbAction() {
 
             return;
         }
-        if (!fs.existsSync(path.join(dataAbsPath, dbName + '.txt'))) {
-            const cmd = path.join(dataAbsPath, dbName + '.txt');
-            log('Error: Database not found: ', cmd, ' - nothing to delete');
+        const dbPath = path.join(dataAbsPath, dbName + '.txt');
+        if (!fs.existsSync(dbPath)) {
+            log('Error: Database not found: ' + dbPath + ' - nothing to delete');
 
             return;
         }
 
         log('Deleting Database...');
 
-        const cmd = 'rm ' + path.join(dataAbsPath, dbName + '.txt');
-        log('Executing command: <', cmd, '>');
-        execSync(cmd);
+        try {
+            fs.unlinkSync(dbPath);
+            log('Deleted database: ' + dbPath);
+        } catch (err) {
+            log('ERROR: Could not delete database ' + dbPath + ': ' + err.message);
+        }
     };
 
     /* Execution starts here */
@@ -833,29 +1118,27 @@ function move2usbAction() {
     log('Checking for USB drive');
 
     const driveInfo = getDriveInfo(parsedConfig);
-    try {
-        log(`Processing drive ${driveInfo.label} -> ${driveInfo.path}`);
-        // eslint-disable-next-line no-unused-vars
-    } catch (error) {
+    if (!driveInfo) {
+        log('ERROR: USB drive not found, aborting move2usb');
+        photoboothAction('completed');
         return;
     }
+    log(`Processing drive ${driveInfo.label || driveInfo.name} -> ${driveInfo.path}`);
 
     const mountedDrive = mountDrive(driveInfo);
-    try {
-        log(`Mounted drive ${mountedDrive.name} -> ${mountedDrive.mountpoint}`);
-        // eslint-disable-next-line no-unused-vars
-    } catch (error) {
+    if (!mountedDrive || !mountedDrive.mountpoint) {
+        log('ERROR: Could not mount USB drive, aborting move2usb');
+        photoboothAction('completed');
         return;
     }
+    log(`Mounted drive ${mountedDrive.name || mountedDrive.label} -> ${mountedDrive.mountpoint}`);
 
-    if (mountedDrive) {
-        startSync({
-            dataAbsPath: parsedConfig.dataAbsPath,
-            drive: mountedDrive
-        });
-    }
+    startSync({
+        dataAbsPath: parsedConfig.dataAbsPath,
+        drive: mountedDrive
+    });
 
-    unmountDrive();
+    unmountDrive(mountedDrive);
 
     if (copySuccess && config.remotebuzzer.move2usb == 'move') {
         deleteFiles({ dataAbsPath: parsedConfig.dataAbsPath });

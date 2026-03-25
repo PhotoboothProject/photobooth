@@ -1111,6 +1111,12 @@ function general_permissions() {
     info "Permissions" "Disabling camera automount."
     chmod -x /usr/lib/gvfs/gvfs-gphoto2-volume-monitor >/dev/null 2>&1 || warn "Failed to disable camera automount"
 
+    # Allow www-data to mount/unmount USB drives (required for sync-to-drive and move2usb)
+    info "Permissions" "Setting up USB mount permissions for www-data."
+    create_polkit_usb_rule || warn "Failed to create polkit USB rule"
+    install_usb_sudoers || warn "Failed to install USB sudoers rule"
+    disable_automount || info "Permissions" "No desktop automount config found to adjust."
+
     return 0
 }
 
@@ -1263,6 +1269,29 @@ EOF
     fi
 }
 
+function install_usb_sudoers() {
+    local sudoers_file="/etc/sudoers.d/021_www-data-usb-sync"
+    # Portable paths: some distros use /bin vs /usr/bin for mount/umount/mkdir.
+    cat >"$sudoers_file" <<'EOF'
+# Photobooth USB Sync — passwordless mount/umount/mkdir for www-data (sync-to-drive.js, move2usb).
+# Use together with Polkit rules for udisksctl; this covers sudo fallbacks in the Node scripts.
+Cmnd_Alias PHOTOBOOTH_USB_SYNC = /bin/mount /dev/* /media/*, /usr/bin/mount /dev/* /media/*, /bin/mount -o * /dev/* /media/*, /usr/bin/mount -o * /dev/* /media/*, /bin/umount /dev/*, /usr/bin/umount /dev/*, /bin/mkdir -p /media/*, /usr/bin/mkdir -p /media/*
+www-data ALL=(root) NOPASSWD: PHOTOBOOTH_USB_SYNC
+EOF
+
+    chmod 440 "$sudoers_file"
+
+    if visudo -cf "$sudoers_file" >/dev/null 2>&1; then
+        info "Setup" "Installed USB sudoers rule for www-data at $sudoers_file"
+        rm -f /etc/sudoers.d/020_www-data-usb 2>/dev/null || true
+        return 0
+    else
+        error "Invalid sudoers file created at $sudoers_file. Please check manually."
+        rm -f "$sudoers_file"
+        return 1
+    fi
+}
+
 function create_polkit_usb_rule() {
     local PKLA_DIR="/etc/polkit-1/localauthority/50-local.d"
     local RULES_DIR="/etc/polkit-1/rules.d"
@@ -1281,7 +1310,7 @@ EOF
     elif [[ -d "$RULES_DIR" ]]; then
         cat >"$RULES_DIR/photobooth.rules" <<'EOF'
 polkit.addRule(function(action, subject) {
-    if (subject.isUser && subject.user == "www-data" &&
+    if (subject.user == "www-data" &&
         (action.id.indexOf("org.freedesktop.udisks2.filesystem-mount") == 0 ||
          action.id.indexOf("org.freedesktop.udisks2.filesystem-unmount") == 0)) {
         return polkit.Result.YES;
@@ -1298,10 +1327,16 @@ EOF
 function remove_polkit_usb_rule() {
     local PKLA_FILE="/etc/polkit-1/localauthority/50-local.d/photobooth.pkla"
     local RULES_FILE="/etc/polkit-1/rules.d/photobooth.rules"
+    local LEGACY_RULES_FILE="/etc/polkit-1/rules.d/50-photobooth-udisks.rules"
+    local SUDOERS_FILE_LEGACY="/etc/sudoers.d/020_www-data-usb"
+    local SUDOERS_FILE="/etc/sudoers.d/021_www-data-usb-sync"
     local REMOVED=false
 
     [[ -f "$PKLA_FILE" ]] && rm -f "$PKLA_FILE" && REMOVED=true
     [[ -f "$RULES_FILE" ]] && rm -f "$RULES_FILE" && REMOVED=true
+    [[ -f "$LEGACY_RULES_FILE" ]] && rm -f "$LEGACY_RULES_FILE" && REMOVED=true
+    [[ -f "$SUDOERS_FILE_LEGACY" ]] && rm -f "$SUDOERS_FILE_LEGACY" && REMOVED=true
+    [[ -f "$SUDOERS_FILE" ]] && rm -f "$SUDOERS_FILE" && REMOVED=true
 
     $REMOVED && return 0 || return 1
 }
@@ -1375,17 +1410,15 @@ function disable_automount() {
 
 function set_usb_sync() {
     if whiptail --title "USB Sync" \
-        --yesno "Setup USB Sync policy?\n\nThis is needed to use the USB Sync feature of Photobooth.\nUSB Sync can be activated via Adminpanel." \
+        --yesno "Setup USB Sync policy?\n\nInstalls Polkit rules for udisksctl and sudoers for mount/umount/mkdir as www-data.\nAlso tries to disable desktop auto-mount to avoid permission conflicts.\nUSB Sync is enabled in the Admin panel." \
         12 60; then
 
-        if create_polkit_usb_rule; then
-            if disable_automount; then
-                confirm "USB Sync" "USB Sync policy created and auto mount settings updated successfully."
-            else
-                confirm "USB Sync" "USB Sync policy created, but no configuration file was found to adjust auto mount."
-            fi
+        create_polkit_usb_rule || warn "Polkit USB rule could not be created; udisksctl may still need manual policy."
+        install_usb_sudoers || warn "USB sudoers rule could not be installed; sudo mount fallbacks may fail."
+        if disable_automount; then
+            confirm "USB Sync" "USB Sync policy and auto-mount adjustments applied."
         else
-            confirm "USB Sync" "Failed to create USB Sync policy!"
+            confirm "USB Sync" "USB Sync Polkit/sudoers applied; no pcmanfm volume config found to adjust auto-mount."
         fi
 
     else
