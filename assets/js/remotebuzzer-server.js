@@ -750,7 +750,7 @@ function move2usbAction() {
         // First check the mountpoint from lsblk data
         if (drive.mountpoint) {
             try {
-                execSync(`mountpoint -q '${drive.mountpoint.replace(/'/g, '\'\\\'\'')}'`, { stdio: 'ignore' });
+                execSync(`mountpoint -q '${drive.mountpoint.replace(/'/g, "'\\''")}'`, { stdio: 'ignore' });
                 return drive.mountpoint;
                 // eslint-disable-next-line no-unused-vars
             } catch (err) {
