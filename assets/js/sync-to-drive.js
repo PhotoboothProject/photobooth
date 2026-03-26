@@ -7,7 +7,7 @@ const { execSync, spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-const shellQuote = (s) => "'" + String(s).replace(/'/g, "'\\''") + "'";
+const shellQuote = (s) => '\'' + String(s).replace(/'/g, '\'\\\'\'') + '\'';
 
 const log = (...optionalParams) => {
     const currentDate = new Date();
@@ -126,10 +126,10 @@ class SyncToDrive {
             '-b',
             '--backup-dir=' + path.join(device.mountpoint, 'deleted'),
             '--ignore-existing',
-            "--exclude='deleted'",
-            "--include='*.'{jpg,chk,gif,mp4}",
-            "--include='*/'",
-            "--exclude='*'",
+            '--exclude=\'deleted\'',
+            '--include=\'*.\'{jpg,chk,gif,mp4}',
+            '--include=\'*/\'',
+            '--exclude=\'*\'',
             '--prune-empty-dirs',
             this.source + '/',
             destinationPath
@@ -440,7 +440,7 @@ class SyncToDrive {
         // First check the mountpoint from lsblk data
         if (device.mountpoint) {
             try {
-                execSync(`mountpoint -q '${device.mountpoint.replace(/'/g, "'\\''")}'`, { stdio: 'ignore' });
+                execSync(`mountpoint -q '${device.mountpoint.replace(/'/g, '\'\\\'\'')}'`, { stdio: 'ignore' });
 
                 return device.mountpoint;
                 // eslint-disable-next-line no-unused-vars

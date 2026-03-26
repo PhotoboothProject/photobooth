@@ -5,7 +5,7 @@ Photobooth offers two ways to get your photos and videos onto a USB stick:
 | Feature | Purpose | Trigger |
 |---------|---------|---------|
 | **USB Sync** | Automatic background sync at a regular interval | Runs continuously while Photobooth is open |
-| **Move2USB** | One-shot copy **or** move of all media | Manual — HTTP endpoint, socket.io command, or hardware button |
+| **Move2USB** | One-shot copy **or** move of all media | Manual — HTTP endpoint or socket.io command |
 
 Both features share the same USB device identifier (Adminpanel → **USB Sync → USB device identifier**) and the same Linux mount permissions.
 
@@ -26,7 +26,7 @@ The web-server user (`www-data`) needs permission to mount and unmount USB drive
 Photobooth ships two complementary mechanisms that are installed via the **Photobooth Setup Wizard**:
 
 1. **Polkit rule** — allows `www-data` to call `udisksctl mount` / `udisksctl unmount` without a password.
-2. **sudoers rule** (`/etc/sudoers.d/021_www-data-usb-sync`) — passwordless `sudo mount`, `sudo umount` and `sudo mkdir -p /media/*` as fallback when udisksctl is unavailable.
+2. **sudoers rule** (`/etc/sudoers.d/021_www-data-usb-sync`) — passwordless `sudo mount /dev/* /media/*`, `sudo umount /dev/*` and `sudo mkdir -p /media/*` as fallback when udisksctl is unavailable. Both `/bin` and `/usr/bin` paths are covered for portability.
 
 ### Installing via the Setup Wizard
 
@@ -45,8 +45,10 @@ The wizard will:
 
 - Install the Polkit rule for udisksctl.
 - Install the sudoers rule for mount/umount/mkdir.
-- Try to disable desktop auto-mount (pcmanfm volume handling) to avoid permission conflicts.
-- Remove any legacy `020_www-data-usb` sudoers file.
+- Disable desktop auto-mount (pcmanfm `mount_on_startup`, `mount_removable`, `autorun` in both the system default and user profile config) to avoid permission conflicts.
+- Remove any legacy `020_www-data-usb` sudoers file and `50-photobooth-udisks.rules` polkit file.
+
+**Note:** USB mount permissions are also installed automatically when running **2 Fix general permissions** or during a fresh Photobooth install. The dedicated "USB Sync policy" menu entry is only needed to re-apply or remove the rules individually.
 
 Run the same menu entry again after OS upgrades to re-apply the rules.
 
@@ -115,13 +117,12 @@ Move2USB lets you copy — or move — **all** current photos and videos to the 
 
 ### Triggering Move2USB
 
-- **HTTP endpoint:** `http://<IP>:<Port>/commands/start-move2usb`
-- **Socket.io:** emit `photobooth-socket` → `move2usb`
-- **Hardware button:** assign a key code to the Move2USB action (same input-device mechanism as picture/collage/print).
+- **HTTP endpoint:** `http://<IP>:<Port>/commands/start-move2usb` — requires Hardware Buttons enabled and Move2USB mode not `disabled`.
+- **Socket.io:** emit `photobooth-socket` → `start-move2usb`
 
 ### Copy verification
 
-Move2USB creates a `copy.chk` marker file in the Photobooth data folder before rsync and expects it to appear on the USB stick after sync. If the marker is missing on the USB stick after rsync, the sync is treated as **failed** and no files are deleted (even in `move` mode).
+Move2USB creates a `copy.chk` marker file in the Photobooth data folder before rsync and expects it to appear on the USB stick after sync. If the marker is missing on the USB stick after rsync, the sync is treated as **failed** and no files are deleted (even in `move` mode). After successful verification, both the local and USB-side `copy.chk` files are cleaned up automatically.
 
 ### What gets deleted in "move" mode
 
@@ -140,11 +141,16 @@ Photobooth uses a layered approach to mount USB drives:
 2. **findmnt check** — if udisksctl output was ambiguous, verify via `findmnt`.
 3. **sudo mount** — fallback using the sudoers rule; mounts to `/media/<label>`.
 
-For **FAT32** (`vfat`) and **exFAT** volumes the mount options `umask=0000,uid=<www-data>,gid=<www-data>` are set automatically so the web-server process can write to the stick.
+For **FAT32** (`vfat`) and **exFAT** volumes the mount options `umask=0000,uid=<uid>,gid=<gid>` (using the numeric uid/gid of the running process, typically `33` for `www-data`) are set automatically so the web-server process can write to the stick.
 
 If a drive is already mounted but **not writable** (e.g. auto-mounted by the desktop with different uid/gid), Photobooth unmounts and re-mounts it with the correct options.
 
 Unmounting follows the same order: udisksctl first, `sudo umount` as fallback.
+
+**When does each feature unmount?**
+
+- **USB Sync** keeps the stick mounted between sync intervals and only unmounts on process termination (SIGTERM/SIGHUP/SIGINT).
+- **Move2USB** unmounts the stick after every sync operation (before deleting local files in `move` mode).
 
 ---
 
