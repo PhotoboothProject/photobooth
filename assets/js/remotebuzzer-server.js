@@ -12,7 +12,7 @@ let collageInProgress = false,
 const { execSync, spawnSync } = require('child_process');
 const { pid: PID, platform: PLATFORM } = process;
 const REARM_TIMEOUT_MS = 60000; // Fallback to re-arm trigger if no completion arrives
-const shellQuote = (s) => "'" + String(s).replace(/'/g, "'\\''") + "'";
+const shellQuote = (s) => '\'' + String(s).replace(/'/g, '\'\\\'\'') + '\'';
 
 /* LOGGING FUNCTION */
 const log = function (...optionalParams) {
@@ -750,7 +750,7 @@ function move2usbAction() {
         // First check the mountpoint from lsblk data
         if (drive.mountpoint) {
             try {
-                execSync(`mountpoint -q '${drive.mountpoint.replace(/'/g, "'\\''")}'`, { stdio: 'ignore' });
+                execSync(`mountpoint -q '${drive.mountpoint.replace(/'/g, '\'\\\'\'')}'`, { stdio: 'ignore' });
                 return drive.mountpoint;
                 // eslint-disable-next-line no-unused-vars
             } catch (err) {
