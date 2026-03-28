@@ -54,6 +54,7 @@
   "commands:exiftool_cmd": "Příkaz EXIFtool",
   "commands:print_cmd": "Tiskový příkaz",
   "commands:take_video_cmd": "Příkaz k pořízení videa",
+  "csrf_session_reloading": "Relace vypršela. Obnovuji...",
   "current_version": "Instalováno:",
   "database_rebuild": "Obnovit",
   "debugpanel": "Panel pro ladění",
