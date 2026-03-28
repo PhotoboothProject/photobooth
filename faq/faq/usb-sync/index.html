@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Photobooth Team" /><link rel="canonical" href="https://photoboothproject.github.io/faq/usb-sync/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>USB Sync & Move2USB - Photobooth Project</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/css/extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "USB Sync \u0026 Move2USB";
+        var mkdocs_page_input_path = "faq/usb-sync.md";
+        var mkdocs_page_url = "/faq/usb-sync/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Photobooth Project
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../news/">News & Releases</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Install & Setup</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/prerequisites/">Prerequisites</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/supported_platformscand_cameras/">Supported Platforms and Cameras</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/setup_wizard/">Photobooth Setup Wizard</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/install-debian/">Install on Debian</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/install-nginx/">Enable PHP in nginx</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/install-windows/">Install on Windows</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Upgrade & Maintenance</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../update/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../update/update-linux/">Update on Linux</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../changelog/">Changelog</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../security/">Security Policy</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Troubleshooting & Tutorials</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../preview/">Preview and live background</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../pi-camera/">Pi Camera setup</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../custom-collage/">Custom collage design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kiosk-mode/">Kiosk mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../hide-cursor/">Hide cursor & screen blanking</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../screensaver/">Screensaver</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tutorials/">Tutorials</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../remote-button/">Remote Buttons</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">USB Sync & Move2USB</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#permissions-setup">Permissions setup</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#installing-via-the-setup-wizard">Installing via the Setup Wizard</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#removing-permissions">Removing permissions</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#usb-sync-automatic">USB Sync (automatic)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#how-it-works">How it works</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#device-detection">Device detection</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#file-types-synced">File types synced</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#move2usb-manual-copy-move">Move2USB (manual copy / move)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#modes">Modes</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#enabling-move2usb">Enabling Move2USB</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#triggering-move2usb">Triggering Move2USB</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#copy-verification">Copy verification</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#what-gets-deleted-in-move-mode">What gets deleted in "move" mode</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mount-strategy-both-features">Mount strategy (both features)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#preparing-a-usb-stick">Preparing a USB stick</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#usb-stick-not-detected">USB stick not detected</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#permission-errors-mount-failures">Permission errors / mount failures</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sync-not-running-nothing-copied">Sync not running / nothing copied</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#move2usb-fails-or-does-not-delete-files">Move2USB fails or does not delete files</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#fat32-exfat-write-issues">FAT32 / exFAT write issues</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../printer-troubleshooting/">Printer Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../gphoto2-troubleshooting/">gphoto2 Troubleshooting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../go2rtc-troubleshooting/">GO2RTC Troubleshooting</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Customize & Extend</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/sounds/">Sounds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/themes/">Themes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../customizing/styles/">CSS styles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../scripts/">Scripts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Community</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="https://t.me/PhotoboothGroup">Chat on Telegram</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct/">Contributor Covenant Code of Conduct</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://crowdin.com/project/photobooth">Translate Photobooth</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../contributing/">Contribute to Photobooth</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../contributing-docs/">Contribute to the docs</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../donation/">Donation</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Photobooth Project</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Troubleshooting & Tutorials</li>
+      <li class="breadcrumb-item active">USB Sync & Move2USB</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/PhotoboothProject/photobooth/blob/dev/docs/faq/usb-sync.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="usb-sync-move2usb">USB Sync &amp; Move2USB</h1>
+<p>Photobooth offers two ways to get your photos and videos onto a USB stick:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Purpose</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>USB Sync</strong></td>
+<td>Automatic background sync at a regular interval</td>
+<td>Runs continuously while Photobooth is open</td>
+</tr>
+<tr>
+<td><strong>Move2USB</strong></td>
+<td>One-shot copy <strong>or</strong> move of all media</td>
+<td>Manual — HTTP endpoint or socket.io command</td>
+</tr>
+</tbody>
+</table>
+<p>Both features share the same USB device identifier (Adminpanel → <strong>USB Sync → USB device identifier</strong>) and the same Linux mount permissions.</p>
+<hr />
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><strong>Linux only</strong> — Windows is not supported.</li>
+<li><strong>rsync</strong> must be installed (<code>sudo apt install rsync</code>).</li>
+<li>A <strong>USB stick</strong> formatted as <strong>FAT32</strong> or <strong>exFAT</strong> (recommended for cross-platform compatibility). The volume label should match the identifier configured in the admin panel (default: <code>photobooth</code>).</li>
+<li>Mount permissions for the <code>www-data</code> user (see <a href="#permissions-setup">Permissions setup</a> below).</li>
+</ul>
+<hr />
+<h2 id="permissions-setup">Permissions setup</h2>
+<p>The web-server user (<code>www-data</code>) needs permission to mount and unmount USB drives.
+Photobooth ships two complementary mechanisms that are installed via the <strong>Photobooth Setup Wizard</strong>:</p>
+<ol>
+<li><strong>Polkit rule</strong> — allows <code>www-data</code> to call <code>udisksctl mount</code> / <code>udisksctl unmount</code> without a password.</li>
+<li><strong>sudoers rule</strong> (<code>/etc/sudoers.d/021_www-data-usb-sync</code>) — passwordless <code>sudo mount /dev/* /media/*</code>, <code>sudo umount /dev/*</code> and <code>sudo mkdir -p /media/*</code> as fallback when udisksctl is unavailable. Both <code>/bin</code> and <code>/usr/bin</code> paths are covered for portability.</li>
+</ol>
+<h3 id="installing-via-the-setup-wizard">Installing via the Setup Wizard</h3>
+<p>Download and run the Setup Wizard:</p>
+<pre><code>wget -O install-photobooth.sh https://raw.githubusercontent.com/PhotoboothProject/photobooth/dev/install-photobooth.sh
+sudo bash install-photobooth.sh
+</code></pre>
+<p>Then choose:</p>
+<ul>
+<li><strong>6 Permissions → 4 USB Sync policy</strong></li>
+</ul>
+<p>The wizard will:</p>
+<ul>
+<li>Install the Polkit rule for udisksctl.</li>
+<li>Install the sudoers rule for mount/umount/mkdir.</li>
+<li>Disable desktop auto-mount (pcmanfm <code>mount_on_startup</code>, <code>mount_removable</code>, <code>autorun</code> in both the system default and user profile config) to avoid permission conflicts.</li>
+<li>Remove any legacy <code>020_www-data-usb</code> sudoers file and <code>50-photobooth-udisks.rules</code> polkit file.</li>
+</ul>
+<p><strong>Note:</strong> USB mount permissions are also installed automatically when running <strong>2 Fix general permissions</strong> or during a fresh Photobooth install. The dedicated "USB Sync policy" menu entry is only needed to re-apply or remove the rules individually.</p>
+<p>Run the same menu entry again after OS upgrades to re-apply the rules.</p>
+<h3 id="removing-permissions">Removing permissions</h3>
+<p>Run <strong>6 Permissions → 4 USB Sync policy</strong> again and answer <strong>No</strong> when asked to set up the policy. The wizard removes Polkit rules, sudoers rules, and the legacy files.</p>
+<hr />
+<h2 id="usb-sync-automatic">USB Sync (automatic)</h2>
+<p>USB Sync runs as a background Node.js process (<code>sync-to-drive.js</code>) that is started automatically when Photobooth is opened in the browser (provided the feature is enabled).</p>
+<h3 id="how-it-works">How it works</h3>
+<ol>
+<li>The process looks for a USB device matching the configured identifier (label, device path, or device name).</li>
+<li>It mounts the device if it is not already mounted:</li>
+<li>First via <code>udisksctl mount</code>.</li>
+<li>Fallback: <code>sudo mount</code> to <code>/media/&lt;label&gt;</code> with automatic FAT32/exFAT uid/gid options.</li>
+<li>It runs <code>rsync</code> to incrementally copy new <code>jpg</code>, <code>gif</code>, <code>mp4</code> files from the Photobooth data directory to the USB stick.</li>
+<li>Deleted images are backed up into a <code>deleted/</code> folder on the USB stick (rsync <code>--backup-dir</code>).</li>
+<li>After sync completes, the process sleeps for the configured interval and starts over.</li>
+</ol>
+<h3 id="device-detection">Device detection</h3>
+<p>The device is matched (case-insensitive) by:</p>
+<ul>
+<li><strong>Volume label</strong> (recommended) — e.g. <code>photobooth</code></li>
+<li><strong>Block device path</strong> — e.g. <code>/dev/sda1</code></li>
+<li><strong>Device short name</strong> — e.g. <code>sda1</code></li>
+</ul>
+<p>If <code>lsblk</code> does not report the label (e.g. in LXC containers or after a USB reconnect), Photobooth falls back to <code>blkid</code> which reads the label directly from the block device.</p>
+<h3 id="configuration">Configuration</h3>
+<p>Open the Admin Panel → <strong>USB Sync</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Enable</strong></td>
+<td>Turn automatic USB Sync on or off.</td>
+</tr>
+<tr>
+<td><strong>Automated syncing interval</strong></td>
+<td>Seconds between sync attempts (default: 300).</td>
+</tr>
+<tr>
+<td><strong>USB device identifier</strong></td>
+<td>The value used to find the USB stick — typically the volume label (default: <code>photobooth</code>).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="file-types-synced">File types synced</h3>
+<p><code>jpg</code>, <code>gif</code>, <code>mp4</code> (and the internal <code>chk</code> verification files).</p>
+<hr />
+<h2 id="move2usb-manual-copy-move">Move2USB (manual copy / move)</h2>
+<p>Move2USB lets you copy — or move — <strong>all</strong> current photos and videos to the USB stick with a single action.</p>
+<h3 id="modes">Modes</h3>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>copy</strong></td>
+<td>Copies all media to the USB stick. Originals remain on the Photobooth.</td>
+</tr>
+<tr>
+<td><strong>move</strong></td>
+<td>Copies all media to the USB stick <strong>and</strong> deletes the originals plus the Photobooth image database after a successful, verified sync.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="enabling-move2usb">Enabling Move2USB</h3>
+<ol>
+<li>Adminpanel → <strong>Hardware Button → Enable Hardware Buttons</strong> must be active.</li>
+<li>Adminpanel → <strong>Hardware Button → Move2USB mode</strong> — choose <code>copy</code> or <code>move</code> (set to <code>disabled</code> to hide the feature).</li>
+<li>The <strong>USB device identifier</strong> under USB Sync must point to a valid USB stick.</li>
+</ol>
+<h3 id="triggering-move2usb">Triggering Move2USB</h3>
+<ul>
+<li><strong>HTTP endpoint:</strong> <code>http://&lt;IP&gt;:&lt;Port&gt;/commands/start-move2usb</code> — requires Hardware Buttons enabled and Move2USB mode not <code>disabled</code>.</li>
+<li><strong>Socket.io:</strong> emit <code>photobooth-socket</code> → <code>start-move2usb</code></li>
+</ul>
+<h3 id="copy-verification">Copy verification</h3>
+<p>Move2USB creates a <code>copy.chk</code> marker file in the Photobooth data folder before rsync and expects it to appear on the USB stick after sync. If the marker is missing on the USB stick after rsync, the sync is treated as <strong>failed</strong> and no files are deleted (even in <code>move</code> mode). After successful verification, both the local and USB-side <code>copy.chk</code> files are cleaned up automatically.</p>
+<h3 id="what-gets-deleted-in-move-mode">What gets deleted in "move" mode</h3>
+<p>Only after a verified successful sync:</p>
+<ol>
+<li>All <code>jpg</code>, <code>gif</code>, <code>mp4</code> files in the Photobooth data directory.</li>
+<li>The Photobooth image database file (<code>&lt;dbname&gt;.txt</code>).</li>
+</ol>
+<hr />
+<h2 id="mount-strategy-both-features">Mount strategy (both features)</h2>
+<p>Photobooth uses a layered approach to mount USB drives:</p>
+<ol>
+<li><strong>udisksctl</strong> — preferred, works with the Polkit rule.</li>
+<li><strong>findmnt check</strong> — if udisksctl output was ambiguous, verify via <code>findmnt</code>.</li>
+<li><strong>sudo mount</strong> — fallback using the sudoers rule; mounts to <code>/media/&lt;label&gt;</code>.</li>
+</ol>
+<p>For <strong>FAT32</strong> (<code>vfat</code>) and <strong>exFAT</strong> volumes the mount options <code>umask=0000,uid=&lt;uid&gt;,gid=&lt;gid&gt;</code> (using the numeric uid/gid of the running process, typically <code>33</code> for <code>www-data</code>) are set automatically so the web-server process can write to the stick.</p>
+<p>If a drive is already mounted but <strong>not writable</strong> (e.g. auto-mounted by the desktop with different uid/gid), Photobooth unmounts and re-mounts it with the correct options.</p>
+<p>Unmounting follows the same order: udisksctl first, <code>sudo umount</code> as fallback.</p>
+<p><strong>When does each feature unmount?</strong></p>
+<ul>
+<li><strong>USB Sync</strong> keeps the stick mounted between sync intervals and only unmounts on process termination (SIGTERM/SIGHUP/SIGINT).</li>
+<li><strong>Move2USB</strong> unmounts the stick after every sync operation (before deleting local files in <code>move</code> mode).</li>
+</ul>
+<hr />
+<h2 id="preparing-a-usb-stick">Preparing a USB stick</h2>
+<ol>
+<li>Format the stick as <strong>FAT32</strong> (for sticks ≤ 32 GB) or <strong>exFAT</strong> (for larger sticks).</li>
+<li>Set the volume label to <code>photobooth</code> (or whatever you configure as the USB device identifier).</li>
+<li>Linux: <code>sudo fatlabel /dev/sdX1 photobooth</code> (FAT32) or <code>sudo exfatlabel /dev/sdX1 photobooth</code> (exFAT).</li>
+<li>Windows: right-click the drive → Rename.</li>
+<li>macOS: Disk Utility → rename the volume.</li>
+<li>Plug the stick into the Photobooth host.</li>
+</ol>
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="usb-stick-not-detected">USB stick not detected</h3>
+<ul>
+<li>Verify the label: <code>lsblk -o NAME,LABEL,FSTYPE,MOUNTPOINT</code> — the label must match the configured identifier (case-insensitive).</li>
+<li>If <code>lsblk</code> shows no label, try <code>blkid</code> — Photobooth uses this as a fallback.</li>
+<li>Confirm the device is a <strong>USB</strong> device (<code>lsblk -o NAME,SUBSYSTEMS</code> should contain <code>usb</code>).</li>
+</ul>
+<h3 id="permission-errors-mount-failures">Permission errors / mount failures</h3>
+<ul>
+<li>Re-run the Setup Wizard → <strong>Permissions → USB Sync policy</strong>.</li>
+<li>Check that Polkit and sudoers are in place:</li>
+<li><code>ls -l /etc/polkit-1/localauthority/50-local.d/photobooth.pkla</code> or <code>/etc/polkit-1/rules.d/photobooth.rules</code></li>
+<li><code>ls -l /etc/sudoers.d/021_www-data-usb-sync</code></li>
+<li>Disable desktop auto-mount (e.g. pcmanfm volume handling) — it can race with Photobooth and mount with the wrong uid.</li>
+</ul>
+<h3 id="sync-not-running-nothing-copied">Sync not running / nothing copied</h3>
+<ul>
+<li>Is USB Sync enabled in the Admin Panel?</li>
+<li>Check the server logs at the Debug panel: <a href="http://localhost/admin/debugpanel">http://localhost/admin/debugpanel</a>.</li>
+<li>Look for <code>[synctodrive]</code> log lines — they show device detection, mount status, and rsync output.</li>
+</ul>
+<h3 id="move2usb-fails-or-does-not-delete-files">Move2USB fails or does not delete files</h3>
+<ul>
+<li>Check Debug panel for <code>[remotebuzzer]</code> log lines mentioning <code>move2usb</code>.</li>
+<li>If the log says "sync verification failed (copy.chk missing)", the rsync did not complete successfully — check USB stick space and permissions.</li>
+<li>Files are only deleted in <code>move</code> mode <strong>and</strong> only after verified sync.</li>
+</ul>
+<h3 id="fat32-exfat-write-issues">FAT32 / exFAT write issues</h3>
+<ul>
+<li>Ensure the stick is not write-protected (physical switch on some USB sticks).</li>
+<li>Re-format the stick and re-label it.</li>
+<li>If mounted by another process, Photobooth will unmount and re-mount with proper options — check the log for "not writable, unmounting" messages.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../remote-button/" class="btn btn-neutral float-left" title="Remote Buttons"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../printer-troubleshooting/" class="btn btn-neutral float-right" title="Printer Troubleshooting">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/PhotoboothProject/photobooth" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../remote-button/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../printer-troubleshooting/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

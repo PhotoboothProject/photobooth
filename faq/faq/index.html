@@ -130,7 +130,7 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#how-to-adjust-the-phpini-file">How to adjust the php.ini file?</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#automatic-picture-syncing-to-usb-stick">Automatic picture syncing to USB stick</a>
+    <li class="toctree-l2"><a class="reference internal" href="#usb-sync-move2usb-syncing-pictures-to-a-usb-stick">USB Sync &amp; Move2USB — syncing pictures to a USB stick</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#raspberry-touchpanel-dsi-simultaneously-with-hdmi">Raspberry Touchpanel DSI simultaneously with HDMI</a>
     </li>
@@ -213,6 +213,8 @@
                   <li class="toctree-l1"><a class="reference internal" href="tutorials/">Tutorials</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="remote-button/">Remote Buttons</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="usb-sync/">USB Sync & Move2USB</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="printer-troubleshooting/">Printer Troubleshooting</a>
                   </li>
@@ -450,19 +452,10 @@ your video in "Background video path".</p>
 <p>Open <a href="http://localhost/phpinfo.php">http://localhost/phpinfo.php</a> (or <a href="http://localhost/photobooth/phpinfo.php">http://localhost/photobooth/phpinfo.php</a>) in your browser.</p>
 <p>Take a look for "Loaded Configuration File" to get the path of your php.ini, you need <em>sudo</em> rights to edit the file.</p>
 <hr />
-<h2 id="automatic-picture-syncing-to-usb-stick">Automatic picture syncing to USB stick</h2>
-<p>This feature will automatically and in regular intervals copy (sync) new pictures to a plugged-in USB stick</p>
-<p>Use the <a href="https://photoboothproject.github.io/install/setup_wizard">Photobooth Setup Wizard</a> to get the operating system setup in place.</p>
-<ul>
-<li>
-<ol>
-<li>Permissions -&gt; USB Sync policy</li>
-</ol>
-</li>
-</ul>
-<p>The target USB device is selected through the admin panel.</p>
-<p>A USB drive / stick can be identified either by the USB stick label (e.g. <code>photobooth</code>), the operating system specific USB device name (e.g. <code>/dev/sda1</code>) or the USB device system subsystem name (e.g. <code>sda</code>). The preferred method would be the USB stick label (for use of a single USB stick) or the very specific USB device name, for different USB stick use. The default config will look for a drive with the label photobooth. The script only supports one single USB stick connected at a time</p>
-<p>Pictures will be synced to the USB stick matched by the pattern, as long as it is mounted (aka USB stick is plugged in)</p>
+<h2 id="usb-sync-move2usb-syncing-pictures-to-a-usb-stick">USB Sync &amp; Move2USB — syncing pictures to a USB stick</h2>
+<p>Photobooth can <strong>automatically sync</strong> new pictures and videos to a USB stick at regular intervals (<strong>USB Sync</strong>), or you can trigger a <strong>one-time copy or move</strong> of all media via HTTP/socket.io/hardware button (<strong>Move2USB</strong>).</p>
+<p>Both features require mount permissions for <code>www-data</code> (Polkit + sudoers). Use the <a href="https://photoboothproject.github.io/install/setup_wizard">Photobooth Setup Wizard</a> → <strong>Permissions → USB Sync policy</strong> to set them up.</p>
+<p>See the full guide: <strong><a href="usb-sync/">USB Sync &amp; Move2USB</a></strong> — setup, configuration, mount strategy, and troubleshooting.</p>
 <p>Debugging: Check the server logs for errors at the Debug panel: <a href="http://localhost/admin/debugpanel">http://localhost/admin/debugpanel</a> (
 or <a href="http://localhost/photobooth/admin/debugpanel">http://localhost/photobooth/admin/debugpanel</a>).</p>
 <hr />
