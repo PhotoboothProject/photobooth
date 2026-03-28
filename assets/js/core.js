@@ -1303,7 +1303,7 @@ const photoBooth = (function () {
             const copies = config.print.max_multi === 1 ? 1 : await photoboothTools.askCopies();
 
             if (copies && !isNaN(copies)) {
-                photoboothTools.printImage(filename, copies, () => {
+                photoboothTools.printPayment(filename, copies, () => {
                     remoteBuzzerClient.inProgress(false);
                     buttonPrint.trigger('blur');
                 });

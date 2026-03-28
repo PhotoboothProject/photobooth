@@ -406,8 +406,7 @@ function install_sumup_webhook_dependencies() {
     if ! sudo apt-get update -qq; then
         error "Failed to update package lists."
     fi
-
-    if ! install_packages "${SUMUP_WEBHOOK_PACKAGES=[@]}"; then
+    if ! sudo apt-get install -y python3-flask python3-requests; then
         error "Failed to install SumUp webhook dependencies via apt."
         return 1
     fi
@@ -425,8 +424,7 @@ function install_sumup_gunicorn() {
     if ! sudo apt-get update -qq; then
         error "Failed to update package lists."
     fi
-
-    if ! install_packages "${SUMUP_GUNICORN_PACKAGES[@]}"; then
+    if ! sudo apt-get install -y gunicorn; then
         error "Failed to install Gunicorn."
         return 1
     fi
@@ -463,7 +461,7 @@ function install_ngrok() {
         return 1
     fi
 
-    if ! install_package "ngrok"; then
+    if ! sudo apt-get -qq install -y ngrok >/dev/null 2>&1; then
         error "Failed to install ngrok."
         return 1
     fi
@@ -539,9 +537,6 @@ EOF
 }
 
 function create_ngrok_service() {
-    local ngrok_url
-    local env_file="/etc/default/photobooth-sumup-ngrok"
-
     if [ "$SKIP_NGROK" = true ]; then
         info "ngrok Service" "Skipping ngrok service setup."
         return 0
@@ -551,6 +546,9 @@ function create_ngrok_service() {
         warn "ngrok Service" "ngrok is not installed. Skipping ngrok service setup."
         return 1
     fi
+
+    local ngrok_url="$1"
+    local env_file="/etc/default/photobooth-sumup-ngrok"
 
     if [[ -z "$ngrok_url" && "$SILENT" = false ]]; then
         ngrok_url=$(whiptail --title "ngrok URL" \
@@ -3873,7 +3871,7 @@ function configure_shortcuts() {
             MENU_OPTIONS+=(
                 "2" "Disable Browser Autostart"
             )
-        elif [ -d "/etc/xdg/autostart" ] && [ "$WEBBROWSER" != "unknown" ] && [ "$PHOTOBOOTH_FOUND" = true ]; then
+        elif ! is_wayland_env && [ "$WEBBROWSER" != "unknown" ] && [ "$PHOTOBOOTH_FOUND" = true ]; then
             MENU_OPTIONS+=(
                 "2" "Enable Autostart in Kiosk Mode ($WEBBROWSER)"
             )
@@ -3905,7 +3903,7 @@ function configure_shortcuts() {
                     else
                         confirm "Autostart Disabled" "Failed to disable browser autostart in kiosk mode!"
                     fi
-                elif [ -d "/etc/xdg/autostart" ]; then
+                elif ! is_wayland_env; then
                     if browser_autostart; then
                         confirm "Autostart Enabled" "Browser autostart in kiosk mode has been enabled."
                     else

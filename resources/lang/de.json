@@ -1188,5 +1188,18 @@
   "video:video_qr": "QR für Video",
   "viewer_photo_title": "Dein Foto",
   "viewer_video_fallback": "Dein Browser kann dieses Video nicht abspielen.",
-  "wait_message": "Bitte warten..."
+  "wait_message": "Bitte warten...",
+  "payments": "Zahlsysteme",
+  "payments:payments_enabled": "Zahlungssystem aktivieren",
+  "payments:payments_provider": "Anbieter",
+  "payments:payments_price": "Preis (Cent)",
+  "payments:payments_message": "Hinweistext",
+  "payments:payments_background": "Hintergrundbild",
+  "payments:payments_timeout": "Timeout (Sekunden)",
+  "payments:payments_sumup_merchant": "SumUp Merchant Code",
+  "payments:payments_sumup_reader": "Reader ID",
+  "payments:payments_sumup_affiliate": "Affiliate Key",
+  "payments:payments_sumup_token_file": "Token-Datei",
+  "payments:payments_display_mode": "Zahlungsmodus",
+  "payments:payments_webhook_url": "ngrok URL"
 }

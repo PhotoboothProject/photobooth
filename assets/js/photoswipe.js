@@ -32,32 +32,25 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             bgClickAction: actionBgClick,
             tapAction: actionTap,
             doubleTapAction: actionDoubleTap,
-
             wheelToZoom: true,
-
-            //padding: {top: 20, bottom: 40, left: 100, right: 100},
             escKey: true,
             arrowKeys: true,
-
             returnFocus: true,
             initialZoomLevel: 'fit',
             maxZoomLevel: 1,
-
-            // dynamic import is not supported in UMD version
             pswpModule: PhotoSwipe
         });
 
-        // Slideshow not running from the start
         setSlideshowState(ssButtonClass, false);
 
-        gallery.on('change', function () {
+        gallery.on('change', () => {
             photoboothTools.modal.close();
             if (ssRunning) {
                 gotoNextSlide();
             }
         });
 
-        gallery.on('close', function () {
+        gallery.on('close', () => {
             photoboothTools.modal.close();
             if (ssRunning) {
                 setSlideshowState(ssButtonClass, false);
@@ -70,16 +63,14 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             }
         });
 
-        gallery.on('uiRegister', function () {
-            // counter - 5, zoom button - 10, info - 15, close - 20.
+        gallery.on('uiRegister', () => {
             const orderNumber = [7, 8, 9, 11, 12, 13, 14];
 
             if (config.print.from_gallery && config.print.limit > 0) {
                 gallery.pswp.ui.registerElement({
                     name: 'print-counter',
                     order: 4,
-                    // eslint-disable-next-line no-unused-vars
-                    onInit: (el, pswp) => {
+                    onInit: (el) => {
                         $.ajax({
                             method: 'GET',
                             url: 'api/printDB.php',
@@ -94,8 +85,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                                     $('.pswp__button--print').addClass('error');
                                 }
                             },
-                            // eslint-disable-next-line no-unused-vars
-                            error: (jqXHR, textStatus) => {
+                            error: () => {
                                 $('.pswp__print-counter').addClass('warning');
                                 el.innerText = photoboothTools.getTranslation('printed') + ' unknown';
                                 $('.pswp__button--print').addClass('warning');
@@ -112,8 +102,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     isButton: false,
                     appendTo: 'root',
                     html: 'Caption text',
-                    // eslint-disable-next-line no-unused-vars
-                    onInit: (el, pswp) => {
+                    onInit: (el) => {
                         gallery.pswp.on('change', () => {
                             const currSlideElement = gallery.pswp.currSlide.data.element;
                             let captionHTML = '';
@@ -132,10 +121,10 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     ariaLabel: 'mail',
                     order: orderNumber.shift(),
                     isButton: true,
-                    html: '<i class="' + config.icons.mail + '"></i>',
-
+                    html: `<i class="${config.icons.mail}"></i>`,
                     onClick: (event, el, pswp) => {
-                        photoBooth.showMailForm(pswp.currSlide.data.src.split('\\').pop().split('/').pop());
+                        const img = pswp.currSlide.data.src.split(/[\\/]/).pop();
+                        photoBooth.showMailForm(img);
                     }
                 });
             }
@@ -146,26 +135,25 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     ariaLabel: 'print',
                     order: orderNumber.shift(),
                     isButton: true,
-                    html: '<i class="' + config.icons.print + '"></i>',
-
+                    html: `<i class="${config.icons.print}"></i>`,
                     onClick: async (event, el, pswp) => {
                         event.preventDefault();
                         event.stopPropagation();
 
                         if (photoboothTools.isPrinting) {
                             photoboothTools.console.log('Printing already in progress!');
-                        } else {
-                            const img = pswp.currSlide.data.src.split('\\').pop().split('/').pop();
+                            return;
+                        }
 
-                            const copies = config.print.max_multi === 1 ? 1 : await photoboothTools.askCopies();
+                        const img = pswp.currSlide.data.src.split(/[\\/]/).pop();
+                        const copies = config.print.max_multi === 1 ? 1 : await photoboothTools.askCopies();
 
-                            if (copies && !isNaN(copies)) {
-                                photoboothTools.printImage(img, copies, () => {
-                                    if (typeof remoteBuzzerClient !== 'undefined') {
-                                        remoteBuzzerClient.inProgress(false);
-                                    }
-                                });
-                            }
+                        if (copies && !isNaN(copies)) {
+                            photoboothTools.printPayment(img, copies, () => {
+                                if (typeof remoteBuzzerClient !== 'undefined') {
+                                    remoteBuzzerClient.inProgress(false);
+                                }
+                            });
                         }
                     }
                 });
@@ -177,44 +165,35 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     ariaLabel: 'qrcode',
                     order: orderNumber.shift(),
                     isButton: true,
-                    html: '<i class="' + config.icons.qr + '"></i>',
-
+                    html: `<i class="${config.icons.qr}"></i>`,
                     onInit: (el, pswp) => {
-                        if (config.qr.pswp != 'hidden') {
+                        if (config.qr.pswp !== 'hidden') {
                             pswp.on('change', () => {
-                                if (document.getElementById('pswpQR')) {
-                                    document.getElementById('pswpQR').remove();
-                                }
-                                const qrWrapper = document.createElement('div');
-                                qrWrapper.id = 'pswpQR';
-                                qrWrapper.setAttribute('class', 'pswp-qrcode ' + config.qr.pswp);
+                                $('#pswpQR').remove();
+                                const imgName = pswp.currSlide.data.src.split(/[\\/]/).pop();
+                                const qrWrapper = $('<div id="pswpQR"></div>')
+                                    .addClass(`pswp-qrcode ${config.qr.pswp}`);
+                                
+                                const qrImage = $('<img>')
+                                    .addClass('pswp-qrcode__image')
+                                    .attr('src', `${environment.publicFolders.api}/qrcode.php?filename=${imgName}`)
+                                    .attr('alt', 'QR-Code')
+                                    .on('load', () => $('.pswp').append(qrWrapper));
 
-                                const qrImage = document.createElement('img');
-                                qrImage.addEventListener('load', () => {
-                                    $('.pswp').append(qrWrapper);
-                                });
-                                qrImage.src =
-                                    environment.publicFolders.api +
-                                    '/qrcode.php?filename=' +
-                                    pswp.currSlide.data.src.split('\\').pop().split('/').pop();
-                                qrImage.alt = 'QR-Code';
-                                qrImage.classList.add('pswp-qrcode__image');
                                 qrWrapper.append(qrImage);
 
-                                const qrShortText = config.qr.short_text;
-                                if (qrShortText && qrShortText.length > 0) {
-                                    const qrCaption = document.createElement('p');
-                                    qrCaption.classList.add('pswp-qrcode__caption');
-                                    qrCaption.textContent = qrShortText;
-                                    qrWrapper.append(qrCaption);
+                                if (config.qr.short_text) {
+                                    $('<p></p>')
+                                        .addClass('pswp-qrcode__caption')
+                                        .text(config.qr.short_text)
+                                        .appendTo(qrWrapper);
                                 }
                             });
                         }
                     },
-
                     onClick: (event, el, pswp) => {
-                        const image = pswp.currSlide.data.src.split('\\').pop().split('/').pop();
-                        photoBooth.showQrCode(image);
+                        const img = pswp.currSlide.data.src.split(/[\\/]/).pop();
+                        photoBooth.showQrCode(img);
                     }
                 });
             }
@@ -225,14 +204,11 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     tagName: 'a',
                     order: orderNumber.shift(),
                     isButton: true,
-                    html: '<i class=" center ' + config.icons.download + '"></i>',
-
+                    html: `<i class="center ${config.icons.download}"></i>`,
                     onInit: (el, pswp) => {
                         pswp.on('change', () => {
-                            el.href =
-                                environment.publicFolders.api +
-                                '/download.php?image=' +
-                                pswp.currSlide.data.src.split('\\').pop().split('/').pop();
+                            const img = pswp.currSlide.data.src.split(/[\\/]/).pop();
+                            el.href = `${environment.publicFolders.api}/download.php?image=${img}`;
                         });
                     }
                 });
@@ -244,14 +220,11 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     tagName: 'a',
                     order: orderNumber.shift(),
                     isButton: true,
-                    html: '<i class=" center ' + config.icons.chroma + '"></i>',
-
+                    html: `<i class="center ${config.icons.chroma}"></i>`,
                     onInit: (el, pswp) => {
                         pswp.on('change', () => {
-                            el.href =
-                                environment.publicFolders.chroma +
-                                '/chromakeying.php?filename=' +
-                                pswp.currSlide.data.src.split('\\').pop().split('/').pop();
+                            const img = pswp.currSlide.data.src.split(/[\\/]/).pop();
+                            el.href = `${environment.publicFolders.chroma}/chromakeying.php?filename=${img}`;
                         });
                     }
                 });
@@ -263,11 +236,9 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     ariaLabel: 'Slideshow',
                     order: orderNumber.shift(),
                     isButton: true,
-                    html: '<i class="' + config.icons.slideshow_play + '"></i>',
-                    // eslint-disable-next-line no-unused-vars
-                    onClick: (event, el, pswp) => {
-                        // toggle slideshow on/off
-                        $('.pswp__button--playpause i:first').toggleClass(config.icons.slideshow_toggle);
+                    html: `<i class="${config.icons.slideshow_play}"></i>`,
+                    onClick: () => {
+                        $(`${ssButtonClass} i:first`).toggleClass(config.icons.slideshow_toggle);
                         setSlideshowState(ssButtonClass, !ssRunning);
                     }
                 });
@@ -279,15 +250,14 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                     ariaLabel: 'delete',
                     order: orderNumber.shift(),
                     isButton: true,
-                    html: '<i class="' + config.icons.delete + '"></i>',
-
+                    html: `<i class="${config.icons.delete}"></i>`,
                     onClick: async (event, el, pswp) => {
                         event.preventDefault();
                         event.stopPropagation();
-
-                        const img = pswp.currSlide.data.src.split('\\').pop().split('/').pop();
+                        const img = pswp.currSlide.data.src.split(/[\\/]/).pop();
                         const msg = photoboothTools.getTranslation('really_delete_image');
-                        const really = config.delete.no_request ? true : await photoboothTools.confirm(img + ' ' + msg);
+                        const really = config.delete.no_request ? true : await photoboothTools.confirm(`${img} ${msg}`);
+                        
                         if (really) {
                             photoBooth.deleteImage(img, () => {
                                 setTimeout(() => photoboothTools.reloadPage(), config.ui.notification_timeout * 1000);
@@ -304,22 +274,20 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                 $('.pswp__button--delete').removeClass('rotaryfocus');
             }
             if ($('.pswp').hasClass('pswp--touch')) {
-                $('.pswp__button--arrow--prev').removeClass('rotaryfocus');
-                $('.pswp__button--arrow--next').removeClass('rotaryfocus');
+                $('.pswp__button--arrow--prev, .pswp__button--arrow--next').removeClass('rotaryfocus');
             }
-            $('.pswp__button--close').empty();
-            $('.pswp__button--close').html('<i class="' + config.icons.close + '"></i>');
+            $('.pswp__button--close').html(`<i class="${config.icons.close}"></i>`);
             if (config.pswp.zoomEl) {
-                $('.pswp__button--zoom').empty();
-                $('.pswp__button--zoom').html('<i class="' + config.icons.zoom + '"></i>');
+                $('.pswp__button--zoom').html(`<i class="${config.icons.zoom}"></i>`);
             }
-            if (config.qr.enabled && config.qr.pswp != 'hidden') {
+            if (config.qr.enabled && config.qr.pswp !== 'hidden') {
                 $('.pswp__button--qrcode').hide();
             }
             if (typeof rotaryController !== 'undefined') {
                 rotaryController.focusSet('.pswp');
             }
         });
+
         gallery.init();
         if ($(gallerySelector).children('a').length > 0) {
             gallery.loadAndOpen(galIndex, {
@@ -327,19 +295,15 @@ function initPhotoSwipeFromDOM(gallerySelector) {
             });
         }
 
-        /* slideshow management */
         function gotoNextSlide() {
             clearTimeout(ssTimeOut);
-            if (ssRunning && Boolean(gallery)) {
-                ssTimeOut = setTimeout(function () {
-                    gallery.pswp.next();
-                }, ssDelay);
+            if (ssRunning && gallery) {
+                ssTimeOut = setTimeout(() => gallery.pswp.next(), ssDelay);
             }
         }
 
         function setSlideshowState(el, running) {
-            const title = running ? 'Pause Slideshow' : 'Play Slideshow';
-            $(el).prop('title', title);
+            $(el).prop('title', running ? 'Pause Slideshow' : 'Play Slideshow');
             ssRunning = running;
             gotoNextSlide();
         }
@@ -347,20 +311,20 @@ function initPhotoSwipeFromDOM(gallerySelector) {
         return gallery;
     };
 
-    $(gallerySelector).on('click', function (e) {
+    $(gallerySelector).on('click', (e) => {
         e.preventDefault();
-        if ($(gallerySelector).children('a').length > 0) {
-            const element = $(e.target).closest('a');
-            const index = $(gallerySelector).find('>a').index(element);
+        const $links = $(gallerySelector).find('>a');
+        if ($links.length > 0) {
+            const index = $links.index($(e.target).closest('a'));
             globalGalleryHandle = openPhotoSwipe(gallerySelector, index);
         }
     });
 
-    $(document).on('keyup', function (ev) {
+    $(document).on('keyup', (ev) => {
         if (config.print.from_gallery && config.print.key && parseInt(config.print.key, 10) === ev.keyCode) {
             if (photoboothTools.isPrinting) {
                 photoboothTools.console.log('Printing already in progress!');
-            } else if ($('#gallery').hasClass('gallery--open') && typeof gallery !== 'undefined') {
+            } else if ($('#gallery').hasClass('gallery--open')) {
                 $('.pswp__button--print').trigger('click');
             }
         }

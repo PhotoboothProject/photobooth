@@ -14,68 +14,68 @@ use Photobooth\Utility\PathUtility;
  ** This file defines the admin panel of photobooth. The admin panel definition is done in a JSON variable and structured as follows
  **
  ** Admin panel
- **     |- Section 1
- **     |  |- Parameter 1
- **     |  |- Parameter 2
- **     |  |- Setting A
- **     |  |- Setting B
- **     |
- **     |- Section 2
- **     |  |- Setting C
- **     |  |- Setting D
- **     |  |- Setting E
- **     |
- **     |- Section 3
- **     |  |- Parameter 1
- **     |  |- ...
- **     |
- **     |...
+ ** |- Section 1
+ ** |  |- Parameter 1
+ ** |  |- Parameter 2
+ ** |  |- Setting A
+ ** |  |- Setting B
+ ** |
+ ** |- Section 2
+ ** |  |- Setting C
+ ** |  |- Setting D
+ ** |  |- Setting E
+ ** |
+ ** |- Section 3
+ ** |  |- Parameter 1
+ ** |  |- ...
+ ** |
+ ** |...
  **
  ** * Section descriptor
- **   - Always key / array pair
- **      * 'key': always starts with a character, consists of characters, numbers and underscore only
- **   - Admin panel sort order is defined by the order in this config file
- **   - The i18n tag for translation is identified by the actual section key
- **   - Parameter: Key / Value pairs are parameters which apply to how the section is displayed in the admin panel
- **             * 'view' (optional): Accepted values are 'basic', 'advanced' or 'expert'. Defines in which admin panel view mode
- **                          the section is shown or not. Missing parameter defaults to 'expert'.
- **     * 'platform' (optional): Accepted values are 'all', 'linux', 'windows'. Defines whether the section is visible
- **                              by platform. Missing parameter defaults to 'all'
- **   - Settings: Key / Array pairs define a setting (see next)
+ ** - Always key / array pair
+ ** * 'key': always starts with a character, consists of characters, numbers and underscore only
+ ** - Admin panel sort order is defined by the order in this config file
+ ** - The i18n tag for translation is identified by the actual section key
+ ** - Parameter: Key / Value pairs are parameters which apply to how the section is displayed in the admin panel
+ ** * 'view' (optional): Accepted values are 'basic', 'advanced' or 'expert'. Defines in which admin panel view mode
+ ** the section is shown or not. Missing parameter defaults to 'expert'.
+ ** * 'platform' (optional): Accepted values are 'all', 'linux', 'windows'. Defines whether the section is visible
+ ** by platform. Missing parameter defaults to 'all'
+ ** - Settings: Key / Array pairs define a setting (see next)
  **
  ** * Settings descriptor
- **   - Is a key / array pair where the key string is distinct across the entire admin panel. Even with different sections, no
- **     duplicate setting keys are allowed across the file.
- **      * 'key': always starts with a character, consists of characters, numbers and underscore only
- **   - Admin panel sort order is defined by the order in this config file
- **   - The i18n tag for translation is identified by concatenation of  section key, ':', setting key. Tags for manual entries
- **     start with "manual:"
- **     Examples:
- **             "general:ui_language"
- **             "user_interface:button_show_fs"
- **             "manual:print:print_from_result"
+ ** - Is a key / array pair where the key string is distinct across the entire admin panel. Even with different sections, no
+ ** duplicate setting keys are allowed across the file.
+ ** * 'key': always starts with a character, consists of characters, numbers and underscore only
+ ** - Admin panel sort order is defined by the order in this config file
+ ** - The i18n tag for translation is identified by concatenation of  section key, ':', setting key. Tags for manual entries
+ ** start with "manual:"
+ ** Examples:
+ ** "general:ui_language"
+ ** "user_interface:button_show_fs"
+ ** "manual:print:print_from_result"
  **
- **   - Parameter: Can be key/value or key/array pairs. Sort order does not matter.
- **     * 'view' (optional): Accepted values are 'basic', 'advanced' or 'expert'. Defines in which admin panel view mode
- **                          the section is shown or not. Missing parameter defaults to 'expert'.
- **     * 'name': Matches the name of the config variable or array. For type 'button' this has no effect.
- **     * 'data-theme-field'
- **     * 'type': Values are 'input', 'number', 'range', 'color', 'hidden', 'checkbox', 'multi-select', 'select', 'button'. Defines the actual
- **               input type in the admin panel for this setting.
- **     * 'value': Value is a reference to the actual PB config (i.e. 'value' => $config['dev']['reload_on_error']) and pre-
- **                populates the current config value into the admin panel
- **                Exceptionally, for type 'button' this is the HTML element ID applied to the actual button itself.
- **     * 'placeholder': For types 'input', 'range', 'color' to prepopulate / preset the admin panel setting entry
- **                      field / range selector. Often references the default config for this setting
- **                      (i.e 'placeholder' => $defaultConfig['picture']['time_to_live'])
- **                      For type 'button' this is the i18ntag string for the actual button text.
- **     * 'option': Only for types 'select','multi-select'. Lists the options available in this setting (i.e.
- **                     'options' => [
- **                               '360px' => 'XS',
- **                               '540px' => 'S',
- **                               ]
- **     * 'range_min', 'range_max', 'range_step': Only for type 'range'. Define the slider range and step when moved
- **     * 'unit': Only for type 'range'. Defines the unit of the slider and is used to identify the i18n tag for translation of the unit
+ ** - Parameter: Can be key/value or key/array pairs. Sort order does not matter.
+ ** * 'view' (optional): Accepted values are 'basic', 'advanced' or 'expert'. Defines in which admin panel view mode
+ ** the section is shown or not. Missing parameter defaults to 'expert'.
+ ** * 'name': Matches the name of the config variable or array. For type 'button' this has no effect.
+ ** * 'data-theme-field'
+ ** * 'type': Values are 'input', 'number', 'range', 'color', 'hidden', 'checkbox', 'multi-select', 'select', 'button'. Defines the actual
+ ** input type in the admin panel for this setting.
+ ** * 'value': Value is a reference to the actual PB config (i.e. 'value' => $config['dev']['reload_on_error']) and pre-
+ ** populates the current config value into the admin panel
+ ** Exceptionally, for type 'button' this is the HTML element ID applied to the actual button itself.
+ ** * 'placeholder': For types 'input', 'range', 'color' to prepopulate / preset the admin panel setting entry
+ ** field / range selector. Often references the default config for this setting
+ ** (i.e 'placeholder' => $defaultConfig['picture']['time_to_live'])
+ ** For type 'button' this is the i18ntag string for the actual button text.
+ ** * 'option': Only for types 'select','multi-select'. Lists the options available in this setting (i.e.
+ ** 'options' => [
+ ** '360px' => 'XS',
+ ** '540px' => 'S',
+ ** ])
+ ** * 'range_min', 'range_max', 'range_step': Only for type 'range'. Define the slider range and step when moved
+ ** * 'unit': Only for type 'range'. Defines the unit of the slider and is used to identify the i18n tag for translation of the unit
  */
 
 $configurationService = ConfigurationService::getInstance();
@@ -2251,6 +2251,101 @@ return [
             'value' => 'soundtest-btn',
         ],
     ],
+    'payments' => [
+        'view' => 'basic',
+        'payments_enabled' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'payments[enabled]',
+            'value' => $config['payments']['enabled'] ?? false,
+        ],
+        'payments_provider' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'payments[provider]',
+            'options' => [
+                'none' => 'None',
+                'sumup' => 'SumUp',
+            ],
+            'value' => $config['payments']['provider'] ?? 'none',
+        ],
+        'payments_display_mode' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'payments[display_mode]',
+            'options' => [
+                'solo' => 'Nur Terminal',
+                'qr' => 'Nur QR-Code',
+                'both' => 'Terminal + QR-Code',
+            ],
+            'value' => $config['payments']['display_mode'] ?? 'solo',
+        ],
+        'payments_webhook_url' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'name' => 'payments[webhook_url]',
+            'placeholder' => 'https://myurl.ngrok-free.app',
+            'value' => $config['payments']['webhook_url'] ?? '',
+        ],
+        'payments_price' => [
+            'view' => 'basic',
+            'type' => 'number',
+            'name' => 'payments[price_cents]',
+            'placeholder' => '100',
+            'value' => $config['payments']['price_cents'] ?? 100,
+        ],
+        'payments_message' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'name' => 'payments[message]',
+            'placeholder' => 'Bitte zahlen Sie %price% €',
+            'value' => $config['payments']['message'] ?? '',
+        ],
+        'payments_background' => [
+            'view' => 'basic',
+            'type' => 'image',
+            'name' => 'payments[background]',
+            'value' => htmlentities($config['payments']['background'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('private/images/background'),
+            ]
+        ],
+        'payments_timeout' => [
+            'view' => 'basic',
+            'type' => 'number',
+            'name' => 'payments[timeout]',
+            'placeholder' => '60',
+            'value' => $config['payments']['timeout'] ?? 60,
+        ],
+        'payments_sumup_merchant' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'name' => 'payments[sumup][merchant_code]',
+            'placeholder' => 'ABCDEF12',
+            'value' => $config['payments']['sumup']['merchant_code'] ?? '',
+        ],
+        'payments_sumup_reader' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'name' => 'payments[sumup][reader_id]',
+            'placeholder' => 'rdr_123ABCDEFGHI987',
+            'value' => $config['payments']['sumup']['reader_id'] ?? '',
+        ],
+        'payments_sumup_affiliate' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'name' => 'payments[sumup][affiliate_key]',
+            'placeholder' => 'sup_afk_123ABCDEFGHI987',
+            'value' => $config['payments']['sumup']['affiliate_key'] ?? '',
+        ],
+        'payments_sumup_token_file' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'name' => 'payments[sumup][token_file]',
+            'placeholder' => '/var/www/html/config/sumup_token.txt',
+            'value' => $config['payments']['sumup']['token_file'] ?? '',
+        ],
+    ],
     'qr' => [
         'view' => 'basic',
         'qr_enabled' => [
@@ -2791,7 +2886,7 @@ return [
         ],
         'login_pin' => [
             'view' => 'basic',
-            'type'       => 'input',
+            'type'        => 'input',
             'placeholder' => '5555',
             'name' => 'login[pin]',
             'value'      => '',
@@ -2808,7 +2903,7 @@ return [
         ],
         'login_rental_pin' => [
             'view' => 'basic',
-            'type'       => 'input',
+            'type'        => 'input',
             'placeholder' => '0815',
             'name' => 'login[rental_pin]',
             'value'      => '',
