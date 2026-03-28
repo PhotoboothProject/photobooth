@@ -120,6 +120,7 @@
   "commands:take_picture_cmd": "Fénykép készítéséhez használt parancs",
   "commands:take_video_cmd": "Videókészítés parancs",
   "confirm": "Megerősítés",
+  "csrf_session_reloading": "Lejárt munkamenet. Újratöltés...",
   "current_version": "Telepítve:",
   "currentPhpVersion": "Jelenlegi PHP verzió:",
   "custom": "Egyéni",
