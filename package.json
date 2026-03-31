@@ -56,7 +56,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.2.0",
     "@tailwindcss/postcss": "^4.1.18",
-    "autoprefixer": "^10.4.24",
+    "autoprefixer": "^10.4.27",
     "github-markdown-css": "^5.9.0",
     "gulp": "^5.0.1",
     "gulp-concat": "^2.6.1",
