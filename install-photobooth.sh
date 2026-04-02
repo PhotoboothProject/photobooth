@@ -3512,7 +3512,7 @@ function configure_shortcuts() {
             MENU_OPTIONS+=(
                 "2" "Disable Browser Autostart"
             )
-        elif ! is_wayland_env && [ "$WEBBROWSER" != "unknown" ] && [ "$PHOTOBOOTH_FOUND" = true ]; then
+        elif [ -d "/etc/xdg/autostart" ] && [ "$WEBBROWSER" != "unknown" ] && [ "$PHOTOBOOTH_FOUND" = true ]; then
             MENU_OPTIONS+=(
                 "2" "Enable Autostart in Kiosk Mode ($WEBBROWSER)"
             )
@@ -3544,7 +3544,7 @@ function configure_shortcuts() {
                     else
                         confirm "Autostart Disabled" "Failed to disable browser autostart in kiosk mode!"
                     fi
-                elif ! is_wayland_env; then
+                elif [ -d "/etc/xdg/autostart" ]; then
                     if browser_autostart; then
                         confirm "Autostart Enabled" "Browser autostart in kiosk mode has been enabled."
                     else
