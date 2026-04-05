@@ -171,9 +171,10 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                             pswp.on('change', () => {
                                 $('#pswpQR').remove();
                                 const imgName = pswp.currSlide.data.src.split(/[\\/]/).pop();
-                                const qrWrapper = $('<div id="pswpQR"></div>')
-                                    .addClass(`pswp-qrcode ${config.qr.pswp}`);
-                                
+                                const qrWrapper = $('<div id="pswpQR"></div>').addClass(
+                                    `pswp-qrcode ${config.qr.pswp}`
+                                );
+
                                 const qrImage = $('<img>')
                                     .addClass('pswp-qrcode__image')
                                     .attr('src', `${environment.publicFolders.api}/qrcode.php?filename=${imgName}`)
@@ -257,7 +258,7 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                         const img = pswp.currSlide.data.src.split(/[\\/]/).pop();
                         const msg = photoboothTools.getTranslation('really_delete_image');
                         const really = config.delete.no_request ? true : await photoboothTools.confirm(`${img} ${msg}`);
-                        
+
                         if (really) {
                             photoBooth.deleteImage(img, () => {
                                 setTimeout(() => photoboothTools.reloadPage(), config.ui.notification_timeout * 1000);

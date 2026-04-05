@@ -38,7 +38,10 @@ def parse_args():
     global MERCHANT_CODE, AMOUNT_CENTS, RETURN_URL
 
     if len(sys.argv) < 4:
-        print("Usage: create_checkout.py MERCHANT_CODE AMOUNT_CENTS RETURN_URL", file=sys.stderr)
+        print(
+            "Usage: create_checkout.py MERCHANT_CODE AMOUNT_CENTS RETURN_URL",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     MERCHANT_CODE = sys.argv[1].strip()
@@ -79,10 +82,8 @@ def main():
         "currency": "EUR",
         "merchant_code": MERCHANT_CODE,
         "description": "Fotobox Ausdruck",
-        "hosted_checkout": {
-            "enabled": True
-        },
-        "return_url": RETURN_URL
+        "hosted_checkout": {"enabled": True},
+        "return_url": RETURN_URL,
     }
 
     response = requests.post(url, json=payload, headers=auth_headers(), timeout=30)

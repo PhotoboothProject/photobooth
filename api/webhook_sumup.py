@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 JOB_FILE = "/var/www/html/private/photobooth_current_print.json"
 # NEU: Pfad zum neuen Wrapper
-PRINT_SCRIPT = "/var/www/html/api/sumup_print_wrapper.php" 
+PRINT_SCRIPT = "/var/www/html/api/sumup_print_wrapper.php"
 
 
 @app.route("/sumup/webhook", methods=["POST"])
@@ -45,19 +45,11 @@ def sumup_webhook():
 
             print(f"Starte Druck via Wrapper: {filename} ({copies}x)")
 
-            cmd = [
-                "php",
-                PRINT_SCRIPT,
-                str(filename),
-                str(copies)
-            ]
+            cmd = ["php", PRINT_SCRIPT, str(filename), str(copies)]
 
             # KORREKTUR: Hinzufügen von cwd="/var/www/html/api" für relative Pfade
             result = subprocess.run(
-                cmd, 
-                capture_output=True, 
-                text=True, 
-                cwd="/var/www/html/api"
+                cmd, capture_output=True, text=True, cwd="/var/www/html/api"
             )
 
             print("PRINT OUTPUT STDOUT:")

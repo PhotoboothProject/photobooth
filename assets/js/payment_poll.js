@@ -41,7 +41,9 @@
     const observer = new MutationObserver(() => {
         const overlay = document.querySelector('.overlay');
 
-        if (!overlay) { return; }
+        if (!overlay) {
+            return;
+        }
 
         if (overlay.innerHTML.includes('QR') || overlay.innerHTML.includes('bezahlen')) {
             startPolling();

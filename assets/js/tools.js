@@ -27,22 +27,34 @@ const photoboothTools = (function () {
     };
 
     api.extractErrorMessage = function (payload) {
-        if (!payload) { return ''; }
-        if (typeof payload === 'string') { return payload; }
-        if (typeof payload.error === 'string') { return payload.error; }
+        if (!payload) {
+            return '';
+        }
+        if (typeof payload === 'string') {
+            return payload;
+        }
+        if (typeof payload.error === 'string') {
+            return payload.error;
+        }
         return '';
     };
 
     api.isCsrfErrorResponse = function (xhr) {
-        if (!xhr || xhr.status !== 403) { return false; }
+        if (!xhr || xhr.status !== 403) {
+            return false;
+        }
         const jsonMessage = api.extractErrorMessage(xhr.responseJSON);
         const textMessage = typeof xhr.responseText === 'string' ? xhr.responseText : '';
         return api.isCsrfErrorText(jsonMessage) || api.isCsrfErrorText(textMessage);
     };
 
     api.syncCsrfValue = function (csrfPayload) {
-        if (!api.hasCsrf()) { return false; }
-        if (!csrfPayload || typeof csrfPayload !== 'object') { return false; }
+        if (!api.hasCsrf()) {
+            return false;
+        }
+        if (!csrfPayload || typeof csrfPayload !== 'object') {
+            return false;
+        }
         if (typeof csrfPayload.key === 'string' && csrfPayload.key !== '') {
             csrf.key = csrfPayload.key;
         }
@@ -54,14 +66,18 @@ const photoboothTools = (function () {
     };
 
     const addCsrfToUrl = function (url) {
-        if (!api.hasCsrf()) { return url; }
+        if (!api.hasCsrf()) {
+            return url;
+        }
         const u = new URL(url, window.location.origin);
         u.searchParams.set(csrf.key, csrf.token);
         return u.toString();
     };
 
     api.addCsrfToPayload = function (payload = {}) {
-        if (!api.hasCsrf()) { return payload; }
+        if (!api.hasCsrf()) {
+            return payload;
+        }
         const csrfKey = csrf.key;
         const csrfToken = csrf.token;
 
@@ -88,8 +104,12 @@ const photoboothTools = (function () {
     };
 
     api.refreshCsrfToken = async function () {
-        if (!api.hasCsrf()) { return false; }
-        if (api.csrfRefreshPromise) { return api.csrfRefreshPromise; }
+        if (!api.hasCsrf()) {
+            return false;
+        }
+        if (api.csrfRefreshPromise) {
+            return api.csrfRefreshPromise;
+        }
 
         api.csrfRefreshPromise = fetch(environment.publicFolders.api + '/csrf.php', {
             method: 'GET',
@@ -97,7 +117,9 @@ const photoboothTools = (function () {
             credentials: 'same-origin'
         })
             .then(async (response) => {
-                if (!response.ok) { return false; }
+                if (!response.ok) {
+                    return false;
+                }
                 const csrfPayload = await response.json();
                 return api.syncCsrfValue(csrfPayload);
             })
@@ -110,7 +132,9 @@ const photoboothTools = (function () {
     };
 
     api.handleCsrfMismatch = function (context = '') {
-        if (api.csrfReloadScheduled) { return; }
+        if (api.csrfReloadScheduled) {
+            return;
+        }
         api.csrfReloadScheduled = true;
         const message = api.getTranslation('csrf_session_reloading');
         api.console.log('ERROR: CSRF token mismatch', context);
@@ -128,24 +152,26 @@ const photoboothTools = (function () {
             .done((data, textStatus, jqXHR) => deferred.resolve(data, textStatus, jqXHR))
             .fail((xhr, textStatus, errorThrown) => {
                 if (retryOnCsrf && api.isCsrfErrorResponse(xhr)) {
-                    api.refreshCsrfToken().then((refreshed) => {
-                        if (!refreshed) {
+                    api.refreshCsrfToken()
+                        .then((refreshed) => {
+                            if (!refreshed) {
+                                api.handleCsrfMismatch(requestOptions.url || 'unknown');
+                                deferred.reject(xhr, textStatus, errorThrown);
+                                return;
+                            }
+                            api.ajaxWithCsrf(ajaxOptions, false)
+                                .done((d, s, x) => deferred.resolve(d, s, x))
+                                .fail((reX, reS, reT) => {
+                                    if (api.isCsrfErrorResponse(reX)) {
+                                        api.handleCsrfMismatch(requestOptions.url || 'unknown');
+                                    }
+                                    deferred.reject(reX, reS, reT);
+                                });
+                        })
+                        .catch(() => {
                             api.handleCsrfMismatch(requestOptions.url || 'unknown');
                             deferred.reject(xhr, textStatus, errorThrown);
-                            return;
-                        }
-                        api.ajaxWithCsrf(ajaxOptions, false)
-                            .done((d, s, x) => deferred.resolve(d, s, x))
-                            .fail((reX, reS, reT) => {
-                                if (api.isCsrfErrorResponse(reX)) {
-                                    api.handleCsrfMismatch(requestOptions.url || 'unknown');
-                                }
-                                deferred.reject(reX, reS, reT);
-                            });
-                    }).catch(() => {
-                        api.handleCsrfMismatch(requestOptions.url || 'unknown');
-                        deferred.reject(xhr, textStatus, errorThrown);
-                    });
+                        });
                     return;
                 }
                 deferred.reject(xhr, textStatus, errorThrown);
@@ -154,9 +180,13 @@ const photoboothTools = (function () {
     };
 
     api.initialize = async function () {
-        const resultTranslations = await fetch(addCsrfToUrl(environment.publicFolders.api + '/translations.php'), { cache: 'no-store' });
+        const resultTranslations = await fetch(addCsrfToUrl(environment.publicFolders.api + '/translations.php'), {
+            cache: 'no-store'
+        });
         this.translations = await resultTranslations.json();
-        const resultSounds = await fetch(addCsrfToUrl(environment.publicFolders.api + '/sounds.php'), { cache: 'no-store' });
+        const resultSounds = await fetch(addCsrfToUrl(environment.publicFolders.api + '/sounds.php'), {
+            cache: 'no-store'
+        });
         this.sounds = await resultSounds.json();
         this.registerEvents();
     };
@@ -166,7 +196,9 @@ const photoboothTools = (function () {
             button.addEventListener('click', (event) => {
                 const target = event.currentTarget;
                 const data = target.dataset;
-                if (!['remotebuzzer', 'reload'].includes(data.command)) { return; }
+                if (!['remotebuzzer', 'reload'].includes(data.command)) {
+                    return;
+                }
                 event.preventDefault();
                 event.stopImmediatePropagation();
                 const name = 'photobooth.' + data.command;
@@ -176,7 +208,9 @@ const photoboothTools = (function () {
             });
         });
         document.addEventListener('photobooth.remotebuzzer', (event) => {
-            api.getRequest(`${window.location.protocol}//${config.remotebuzzer.serverip}:${config.remotebuzzer.port}/commands/${event.detail.data.action}`);
+            api.getRequest(
+                `${window.location.protocol}//${config.remotebuzzer.serverip}:${config.remotebuzzer.port}/commands/${event.detail.data.action}`
+            );
         });
         document.addEventListener('photobooth.reload', () => api.reloadPage());
     };
@@ -218,7 +252,8 @@ const photoboothTools = (function () {
             api.overlay.element.innerHTML = message;
             api.overlay.element.dataset.type = type;
         },
-        showWaiting: (message) => api.overlay.show(`<div><i class="${config.icons.spinner}"></i></div><div>${message}</div>`, 'progress'),
+        showWaiting: (message) =>
+            api.overlay.show(`<div><i class="${config.icons.spinner}"></i></div><div>${message}</div>`, 'progress'),
         showSuccess: (message) => api.overlay.show(message, 'success'),
         showWarning: (message) => api.overlay.show(message, 'warning'),
         showError: (message) => api.overlay.show(message, 'error'),
@@ -293,13 +328,24 @@ const photoboothTools = (function () {
             const buttonbar = document.createElement('div');
             buttonbar.className = 'dialog-buttonbar';
             const confirmBtn = api.button.create('confirm', 'fa fa-check', 'default', 'dialog-');
-            confirmBtn.addEventListener('click', () => { element.close(); element.remove(); resolve(true); });
+            confirmBtn.addEventListener('click', () => {
+                element.close();
+                element.remove();
+                resolve(true);
+            });
             const cancelBtn = api.button.create('cancel', 'fa fa-times', 'default', 'dialog-');
-            cancelBtn.addEventListener('click', () => { element.close(); element.remove(); resolve(false); });
+            cancelBtn.addEventListener('click', () => {
+                element.close();
+                element.remove();
+                resolve(false);
+            });
             buttonbar.appendChild(confirmBtn);
             buttonbar.appendChild(cancelBtn);
             element.appendChild(buttonbar);
-            element.addEventListener('cancel', () => { element.remove(); resolve(false); });
+            element.addEventListener('cancel', () => {
+                element.remove();
+                resolve(false);
+            });
             document.body.append(element);
             element.showModal();
         });
@@ -320,16 +366,28 @@ const photoboothTools = (function () {
             const inputText = document.createElement('input');
             inputText.className = 'form-input-copies';
             inputText.value = '1';
-            minusBtn.addEventListener('click', () => { inputText.value = Math.max(1, parseInt(inputText.value, 10) - 1); });
-            plusBtn.addEventListener('click', () => { inputText.value = Math.min(config.print.max_multi, parseInt(inputText.value, 10) + 1); });
+            minusBtn.addEventListener('click', () => {
+                inputText.value = Math.max(1, parseInt(inputText.value, 10) - 1);
+            });
+            plusBtn.addEventListener('click', () => {
+                inputText.value = Math.min(config.print.max_multi, parseInt(inputText.value, 10) + 1);
+            });
             inputSection.append(minusBtn, inputText, plusBtn);
             element.append(inputSection);
             const buttonbar = document.createElement('div');
             buttonbar.className = 'dialog-buttonbar';
             const printBtn = api.button.create('print', 'fa fa-check', 'default', 'dialog-');
-            printBtn.addEventListener('click', () => { element.close(); element.remove(); resolve(inputText.value); });
+            printBtn.addEventListener('click', () => {
+                element.close();
+                element.remove();
+                resolve(inputText.value);
+            });
             const cancelBtn = api.button.create('cancel', 'fa fa-times', 'default', 'dialog-');
-            cancelBtn.addEventListener('click', () => { element.close(); element.remove(); resolve(false); });
+            cancelBtn.addEventListener('click', () => {
+                element.close();
+                element.remove();
+                resolve(false);
+            });
             buttonbar.append(printBtn, cancelBtn);
             element.appendChild(buttonbar);
             document.body.append(element);
@@ -346,14 +404,19 @@ const photoboothTools = (function () {
     api.getRequest = (url) => {
         api.console.log('Sending GET request to: ' + url);
         fetch(new Request(addCsrfToUrl(url)), { method: 'GET', mode: 'cors', credentials: 'same-origin' })
-            .then(r => r.status === 200 ? r.text() : Promise.reject(new Error(r.status)))
-            .then(d => api.console.log(d))
-            .catch(e => api.console.log('Error occurred: ' + e.message));
+            .then((r) => (r.status === 200 ? r.text() : Promise.reject(new Error(r.status))))
+            .then((d) => api.console.log(d))
+            .catch((e) => api.console.log('Error occurred: ' + e.message));
     };
 
     api.isVideoFile = (filename) => ['mp4', 'gif'].includes(api.getFileExtension(filename));
     api.getFileExtension = (filename) => filename.split('.').pop();
-    api.resetPrintErrorMessage = (cb, to) => setTimeout(() => { api.overlay.close(); cb(); api.isPrinting = false; }, to);
+    api.resetPrintErrorMessage = (cb, to) =>
+        setTimeout(() => {
+            api.overlay.close();
+            cb();
+            api.isPrinting = false;
+        }, to);
 
     api.printImage = function (imageSrc, copies, cb) {
         if (api.isVideoFile(imageSrc)) {
@@ -362,24 +425,35 @@ const photoboothTools = (function () {
         } else if (!api.isPrinting) {
             api.overlay.show(api.getTranslation('printing'));
             api.isPrinting = true;
-            if (typeof remoteBuzzerClient !== 'undefined') { remoteBuzzerClient.inProgress('print'); }
+            if (typeof remoteBuzzerClient !== 'undefined') {
+                remoteBuzzerClient.inProgress('print');
+            }
             $.ajax({
                 method: 'GET',
                 url: environment.publicFolders.api + '/print.php',
                 data: { filename: imageSrc, copies: copies, [csrf.key]: csrf.token },
                 success: (data) => {
                     if (data.status === 'locking') {
-                        api.overlay.showWarning(`${config.print.locking_msg} (${api.getTranslation('printed')} ${data.count})`);
+                        api.overlay.showWarning(
+                            `${config.print.locking_msg} (${api.getTranslation('printed')} ${data.count})`
+                        );
                         api.resetPrintErrorMessage(cb, config.print.time);
                         $('.print-unlock-button').removeClass('hidden');
                     } else if (data.status === 'queued') {
                         api.overlay.showWarning(api.getTranslation('print_queued'));
                         api.resetPrintErrorMessage(cb, 2000);
                     } else {
-                        setTimeout(() => { api.overlay.close(); cb(); api.isPrinting = false; }, config.print.time);
+                        setTimeout(() => {
+                            api.overlay.close();
+                            cb();
+                            api.isPrinting = false;
+                        }, config.print.time);
                     }
                 },
-                error: () => { api.overlay.showError(api.getTranslation('error')); api.resetPrintErrorMessage(cb, notificationTimeout); }
+                error: () => {
+                    api.overlay.showError(api.getTranslation('error'));
+                    api.resetPrintErrorMessage(cb, notificationTimeout);
+                }
             });
         }
     };
@@ -391,7 +465,9 @@ const photoboothTools = (function () {
 
         api.overlay.show('💳 ' + paymentMessage);
         api.isPrinting = true;
-        if (typeof remoteBuzzerClient !== 'undefined') { remoteBuzzerClient.inProgress('print'); }
+        if (typeof remoteBuzzerClient !== 'undefined') {
+            remoteBuzzerClient.inProgress('print');
+        }
 
         $.ajax({
             method: 'POST',
@@ -405,14 +481,20 @@ const photoboothTools = (function () {
                     api.printImage(imageSrc, copies, cb);
                 } else if (data.status === 'success') {
                     api.overlay.show(data.message || '✅ Zahlung erfolgreich – Druck startet...');
-                    setTimeout(() => { api.overlay.close(); api.isPrinting = false; api.printImage(imageSrc, copies, cb); }, 1200);
+                    setTimeout(() => {
+                        api.overlay.close();
+                        api.isPrinting = false;
+                        api.printImage(imageSrc, copies, cb);
+                    }, 1200);
                 } else if (data.status === 'qr' || data.status === 'both') {
                     if (!data.payment_url) {
                         api.overlay.showError('QR-Zahlungslink fehlt');
                         api.resetPrintErrorMessage(cb, notificationTimeout);
                         return;
                     }
-                    const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(data.payment_url);
+                    const qrUrl =
+                        'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' +
+                        encodeURIComponent(data.payment_url);
                     api.overlay.show(`
                         <div style="text-align:center;">
                             <div style="font-size:1.4em; margin-bottom:12px;">💳 ${paymentMessage}</div>
@@ -421,18 +503,23 @@ const photoboothTools = (function () {
                             ${data.status === 'both' ? '<div style="margin-top:12px;">Oder direkt am Terminal bezahlen</div>' : ''}
                         </div>
                     `);
-                    api.isPrinting = false; 
+                    api.isPrinting = false;
                 } else {
                     api.overlay.showError(data.error || 'Zahlung fehlgeschlagen');
                     api.resetPrintErrorMessage(cb, notificationTimeout);
                 }
             },
-            error: () => { api.overlay.showError('Zahlungsfehler'); api.resetPrintErrorMessage(cb, notificationTimeout); }
+            error: () => {
+                api.overlay.showError('Zahlungsfehler');
+                api.resetPrintErrorMessage(cb, notificationTimeout);
+            }
         });
     };
 
     $(document).on('keyup', (ev) => {
-        if (config.reload.key && parseInt(config.reload.key, 10) === ev.keyCode) { api.reloadPage(); }
+        if (config.reload.key && parseInt(config.reload.key, 10) === ev.keyCode) {
+            api.reloadPage();
+        }
     });
     return api;
 })();

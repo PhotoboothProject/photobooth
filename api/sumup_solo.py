@@ -52,7 +52,10 @@ def parse_args():
     global MERCHANT_CODE, READER_ID, AFFILIATE_KEY, AMOUNT_CENTS
 
     if len(sys.argv) < 5:
-        print("Usage: sumup_solo.py MERCHANT READER AFFILIATE AMOUNT_CENTS", file=sys.stderr)
+        print(
+            "Usage: sumup_solo.py MERCHANT READER AFFILIATE AMOUNT_CENTS",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     MERCHANT_CODE = sys.argv[1].strip()
@@ -114,7 +117,10 @@ def start_checkout():
     client_transaction_id = data.get("client_transaction_id")
 
     if not client_transaction_id:
-        print("ERROR: checkout succeeded but no client_transaction_id returned", file=sys.stderr)
+        print(
+            "ERROR: checkout succeeded but no client_transaction_id returned",
+            file=sys.stderr,
+        )
         return None, checkout_reference
 
     return client_transaction_id, checkout_reference
@@ -170,14 +176,11 @@ def finish_print_job():
         print("ERROR: filename missing in JOB_FILE", file=sys.stderr)
         return False
 
-    cmd = [
-        "php",
-        PRINT_SCRIPT,
-        str(filename),
-        str(copies)
-    ]
+    cmd = ["php", PRINT_SCRIPT, str(filename), str(copies)]
 
-    result = subprocess.run(cmd, capture_output=True, text=True, cwd="/var/www/html/api")
+    result = subprocess.run(
+        cmd, capture_output=True, text=True, cwd="/var/www/html/api"
+    )
 
     print("PRINT OUTPUT STDOUT:", result.stdout, file=sys.stderr)
     print("PRINT OUTPUT STDERR:", result.stderr, file=sys.stderr)
