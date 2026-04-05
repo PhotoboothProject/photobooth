@@ -12,8 +12,8 @@ SKIP_WEBSERVER=false
 SKIP_PHP=false
 SKIP_NODE=false
 SKIP_PYTHON=false
-SKIP_GUNICORN=false
-SKIP_NGROK=false
+SKIP_GUNICORN=true
+SKIP_NGROK=true
 PHOTOBOOTH_FOUND=false
 INSTALLFOLDERPATH=""
 PHOTOBOOTH_SUBFOLDER=""
@@ -23,10 +23,8 @@ WEBBROWSER="unknown"
 
 # GitHub
 GIT_INSTALLED=false
-GIT_REPO_URL="https://github.com/frogro/photobooth.git"
-GIT_REMOTE_NAME="origin"
-BRANCH="feature/sumup-payment"
-REMOTE_BRANCH_API=""
+BRANCH="dev"
+REMOTE_BRANCH_API="https://api.github.com/repos/PhotoboothProject/photobooth/branches/${BRANCH}"
 REMOTE_BRANCH_SHA=""
 
 # OS environment
@@ -184,21 +182,21 @@ function error() {
 
 function print_logo() {
     local logo="
-                %@@@@.
-               @@    @@*
-            @@@@@@@@@@@@@@@@@@@@@@
-           @@%%%%%%%%%%%%%%%%%%%%%@
-           @@        @@@@@@        @@
-           @@     @@        @@     @@
-           @@   @@            @@   @@
-           @@   @@            @@   @@
-           @@     @@        @@     @@
-           @@        @@@@@@        @@
-           @@%%%%%%%%%%%%%%%%%%%%%@
+               %@@@@.
+              @@   @@*
+           @@@@@@@@@@@@@@@@@@@@@@
+          @@%%%%%%%%%%%%%%%%%%%%%@
+          @@       @@@@@@       @@
+          @@    @@        @@    @@
+          @@  @@            @@  @@
+          @@  @@            @@  @@
+          @@    @@        @@    @@
+          @@       @@@@@@       @@
+          @@%%%%%%%%%%%%%%%%%%%%%@
 
-             P H O T O B O O T H
+            P H O T O B O O T H
 
-           @@%%%%%%%%%%%%%%%%%%%%%@
+          @@%%%%%%%%%%%%%%%%%%%%%@
 "
 
     if [ "$SILENT" = true ]; then
@@ -216,28 +214,28 @@ function show_help() {
     echo ""
     echo "Adjust your setup for Photobooth. Available options:"
     echo ""
-    echo "  --branch=<branch>            Specify the Git branch to use for installation or updates."
-    echo "  --php=<version>              Set the PHP version for the setup (e.g., --php=8.3)."
-    echo "  --silent                     Run the Photobooth Setup Wizard in silent mode"
-    echo "                               for automated installation or updates."
-    echo "  --username=\"<username>\"      Required if --silent is used."
-    echo "                               Provide a username for installation or updates."
-    echo "  --raspberry                  Skip automatic Raspberry Pi detection and enable Raspberry Pi specific configuration."
-    echo "  --wayland                    Skip automatic Wayland detection and enable Wayland configuration."
-    echo "  --update                     Requires --silent to update Photobooth if installed already."
-    echo "  --skip-webserver             Skip web server setup"
-    echo "                               (if already configured or e.g. Nginx is used as Webserver)."
-    echo "  --skip-php                   Skip PHP installation"
-    echo "                               (if already configured for used Webserver)."
-    echo "  --skip-node                  Skip Node.js and npm installation"
-    echo "                               (if already installed as required)."
-    echo "  --skip-python                Skip python3 installation"
-    echo "                               (if already installed as required)."
-    echo "  --skip-gunicorn              Skip Gunicorn installation"
-    echo "                               (for SumUp webhook service)."
-    echo "  --skip-ngrok                 Skip ngrok installation"
-    echo "                               (for SumUp webhook tunnel)."
-    echo "  --skip-auto-update           Skip automatic updates for Photobooth Setup Wizard."
+    echo "  --branch=<branch>           Specify the Git branch to use for installation or updates."
+    echo "  --php=<version>             Set the PHP version for the setup (e.g., --php=8.3)."
+    echo "  --silent                    Run the Photobooth Setup Wizard in silent mode"
+    echo "                              for automated installation or updates."
+    echo "  --username=\"<username>\"     Required if --silent is used."
+    echo "                              Provide a username for installation or updates."
+    echo "  --raspberry                 Skip automatic Raspberry Pi detection and enable Raspberry Pi specific configuration."
+    echo "  --wayland                   Skip automatic Wayland detection and enable Wayland configuration."
+    echo "  --update                    Requires --silent to update Photobooth if installed already."
+    echo "  --skip-webserver            Skip web server setup"
+    echo "                              (if already configured or e.g. Nginx is used as Webserver)."
+    echo "  --skip-php                  Skip PHP installation"
+    echo "                              (if already configured for used Webserver)."
+    echo "  --skip-node                 Skip Node.js and npm installation"
+    echo "                              (if already installed as required)."
+    echo "  --skip-python               Skip python3 installation"
+    echo "                              (if already installed as required)."
+    echo "  --skip-gunicorn             Skip Gunicorn installation"
+    echo "                              (for SumUp webhook service)."
+    echo "  --skip-ngrok                Skip ngrok installation"
+    echo "                              (for SumUp webhook tunnel)."
+    echo "  --skip-auto-update          Skip automatic updates for Photobooth Setup Wizard."
     echo ""
     echo "Examples:"
     echo "  $0 --silent --branch=dev --php=8.3 --username=\"photobooth\" --update"
@@ -302,7 +300,7 @@ function is_wayland_env() {
 function install_system_icon() {
     local icon_dir="/usr/share/icons/hicolor/scalable/apps"
     local icon_file="$icon_dir/photobooth.svg"
-    local icon_url="https://github.com/frogro/photobooth/raw/refs/heads/${BRANCH}/resources/img/favicon.svg"
+    local icon_url="https://github.com/PhotoboothProject/photobooth/raw/refs/heads/dev/resources/img/favicon.svg"
     local local_file=""
 
     # Return if icon already exists
@@ -803,9 +801,8 @@ function self_update() {
     local curr_date
     curr_date="$(date +%Y%m%d%H%M%S)"
 
-    local script_name
-    script_name="$(basename "$0")"
-    local script_remote_url="https://raw.githubusercontent.com/frogro/photobooth/refs/heads/${BRANCH}/$script_name"
+    local script_name="install-photobooth.sh"
+    local script_remote_url="https://raw.githubusercontent.com/PhotoboothProject/photobooth/refs/heads/dev/$script_name"
     local script_temp_file="/tmp/$script_name"
     local script_backup_file="/tmp/${script_name}.bak_${curr_date}"
     local script_abs_path
@@ -959,7 +956,7 @@ function check_username() {
                 else
                     confirm "Invalid Username" "The username '$USERNAME' does not exist. Please try again."
                     USERNAME=""
-                    fi
+                fi
             fi
         else
             if [ "$SILENT" = true ]; then
@@ -2870,10 +2867,6 @@ function check_remote_sha() {
     local json_data
     local commit_sha
 
-    if [[ -z "$REMOTE_BRANCH_API" ]]; then
-        return 1
-    fi
-
     json_data=$(curl -s "$REMOTE_BRANCH_API")
     if [[ -z "$json_data" ]]; then
         info "Error" "Failed to retrieve remote branch data."
@@ -2941,18 +2934,13 @@ function check_photobooth_version() {
 
 function add_git_remote() {
     info "GitHub remote" "Checking needed remote information..."
-    if sudo -u www-data git config remote.${GIT_REMOTE_NAME}.url >/dev/null; then
-        info "GitHub remote" "${GIT_REMOTE_NAME} remote exists already"
-        if ! sudo -u www-data git remote set-url ${GIT_REMOTE_NAME} "${GIT_REPO_URL}" >/dev/null 2>&1; then
-            error "Updating ${GIT_REMOTE_NAME} remote failed."
-            confirm "GitHub remote Error" "Failed to update the Git remote URL."
-            return 1
-        fi
+    if sudo -u www-data git config remote.photoboothproject.url >/dev/null; then
+        info "GitHub remote" "photoboothproject remote exist already"
     else
-        info "GitHub remote" "Adding ${GIT_REMOTE_NAME} remote..."
-        if ! sudo -u www-data git remote add ${GIT_REMOTE_NAME} "${GIT_REPO_URL}"; then
-            error "Adding ${GIT_REMOTE_NAME} remote failed."
-            confirm "GitHub remote Error" "Failed to add the Git remote repository."
+        info "GitHub remote" "Adding photoboothproject remote..."
+        if ! sudo -u www-data git remote add photoboothproject https://github.com/PhotoboothProject/photobooth.git; then
+            error "Adding photoboothproject remote failed."
+            confirm "GitHub remote Error" "Failed to add the Photobooth remote repository."
             return 1
         fi
     fi
@@ -2970,7 +2958,7 @@ function do_git_clone() {
     chown www-data:www-data "$INSTALLFOLDERPATH"
 
     info "GitHub clone" "Cloning the Photobooth repository..."
-    if ! sudo -u www-data git clone "${GIT_REPO_URL}" "$INSTALLFOLDERPATH" >/dev/null 2>&1; then
+    if ! sudo -u www-data git clone https://github.com/PhotoboothProject/photobooth "$INSTALLFOLDERPATH" >/dev/null 2>&1; then
         error "Failed to clone the Photobooth repository."
         confirm "Error: git clone failed" "Failed to clone the Photobooth repository.\nPlease check your network connection and permissions, then retry."
         return 1
@@ -2994,8 +2982,8 @@ function start_git_install() {
     # Configure Git settings and fetch the specified branch
     info "GitHub installation" "Installing/Updating Photobooth via git."
     sudo -u www-data git config core.fileMode false >/dev/null 2>&1
-    sudo -u www-data git fetch ${GIT_REMOTE_NAME} "$BRANCH" >/dev/null 2>&1
-    if ! sudo -u www-data git checkout -B "$BRANCH" "${GIT_REMOTE_NAME}/$BRANCH" >/dev/null 2>&1; then
+    sudo -u www-data git fetch photoboothproject "$BRANCH" >/dev/null 2>&1
+    if ! sudo -u www-data git checkout photoboothproject/"$BRANCH" >/dev/null 2>&1; then
         error "Failed to fetch or checkout the branch: $BRANCH."
         return 2
     fi
@@ -3591,7 +3579,7 @@ function printer_setup() {
                        confirm "Printer Setup" "An unknown error occurred during setup to print from any address."
                        ;;
                esac
-                ;;
+               ;;
             2)
                 cups_disable_remote_any
                 case $? in
@@ -3608,7 +3596,7 @@ function printer_setup() {
                        confirm "Printer Setup" "An unknown error occurred during setup to disable print from any address."
                        ;;
                esac
-                ;;
+               ;;
             3)
                 cups_enable_share
                 case $? in
@@ -3625,7 +3613,7 @@ function printer_setup() {
                        confirm "Printer Setup" "An unknown error occurred during printer sharing."
                        ;;
                esac
-                ;;
+               ;;
             4)
                 cups_disable_share
                 case $? in
@@ -3642,7 +3630,7 @@ function printer_setup() {
                        confirm "Printer Setup" "An unknown error occurred during disabling printer sharing."
                        ;;
                esac
-                ;;
+               ;;
             5)
                 cups_enable_remote_admin
                 case $? in
@@ -3659,7 +3647,7 @@ function printer_setup() {
                        confirm "Printer Setup" "An unknown error occurred during remote administration setup."
                        ;;
                esac
-                ;;
+               ;;
             6)
                 cups_disable_remote_admin
                 case $? in
@@ -3676,7 +3664,7 @@ function printer_setup() {
                        confirm "Printer Setup" "An unknown error occurred during setup to disable remote administration."
                        ;;
                esac
-                ;;
+               ;;
             7)
                 setup_printer_groups
                 case $? in
