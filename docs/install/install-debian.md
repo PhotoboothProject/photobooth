@@ -8,11 +8,32 @@ If you encounter any issues or want more freedom to configure your Pi, Computer 
 
 The steps below were tested on "Raspberry Pi OS with desktop" based on Debian Buster, but should work for Debian and all Debian based distributions. Photobooth can also be used on any other PC/Laptop running a supported OS.
 
+---
+
 ## Update your system
 
 ```
 sudo apt update
 sudo apt dist-upgrade
+```
+
+## Install Node.js & npm
+
+Photobooth requires:
+
+- **Node.js ≥ 20.15.0**
+- **npm ≥ 10.7.0**
+
+Install Node.js and npm from the official NodeSource repository:
+
+```
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+Verify
+```
+node -v
+npm -v
 ```
 
 ## Install a Webserver
@@ -38,7 +59,7 @@ sudo apt install -y nginx php-fpm
 ## Install dependencies
 
 ```
-sudo apt install -y curl gcc g++ make git ffmpeg gphoto2 libimage-exiftool-perl nodejs php-xml php-gd php-zip php-mbstring python3 python3-gphoto2 python3-psutil python3-zmq rsync udisks2 v4l2loopback-dkms v4l-utils
+sudo apt install -y curl gcc g++ make git ffmpeg gphoto2 libimage-exiftool-perl php-xml php-gd php-zip php-mbstring python3 python3-gphoto2 python3-psutil python3-zmq rsync udisks2 v4l2loopback-dkms v4l-utils
 ```
 
 **Optional:** If you have a new camera, you can also install the latest version of libgphoto2 directly from the maintainer. Choose "Install last stable release":
