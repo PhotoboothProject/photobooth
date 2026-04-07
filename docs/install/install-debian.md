@@ -8,8 +8,6 @@ If you encounter any issues or want more freedom to configure your Pi, Computer 
 
 The steps below were tested on "Raspberry Pi OS with desktop" based on Debian Buster, but should work for Debian and all Debian based distributions. Photobooth can also be used on any other PC/Laptop running a supported OS.
 
----
-
 ## Update your system
 
 ```
