@@ -632,9 +632,14 @@ const photoboothTools = (function () {
     api.printPayment = function (imageSrc, copies, cb) {
         const priceCents = Number(config.payments?.price_cents || 0);
         const priceEuro = (priceCents / 100).toFixed(2).replace('.', ',');
-        const paymentMessage = (config.payments?.message || 'Bitte zahlen Sie %price% â‚¬').replace('%price%', priceEuro);
+        const paymentMessage = (config.payments?.message || api.getTranslation('payments_message')).replace(
+            '%price%',
+            priceEuro
+        );
+        const paymentQrMsg = api.getTranslation('payments_qr_message');
+        const paymentTerminalMsg = api.getTranslation('payments_terminal_message');
 
-        api.overlay.show('ðŸ’ ' + paymentMessage);
+        api.overlay.show(paymentMessage);
         api.isPrinting = true;
         if (typeof remoteBuzzerClient !== 'undefined') {
             remoteBuzzerClient.inProgress('print');
@@ -651,7 +656,7 @@ const photoboothTools = (function () {
                     api.isPrinting = false;
                     api.printImage(imageSrc, copies, cb);
                 } else if (data.status === 'success') {
-                    api.overlay.show(data.message || 'âœ… Zahlung erfolgreich â€“ Druck startet...');
+                    api.overlay.show(data.message || api.getTranslation('payments_success'));
                     setTimeout(() => {
                         api.overlay.close();
                         api.isPrinting = false;
@@ -659,7 +664,7 @@ const photoboothTools = (function () {
                     }, 1200);
                 } else if (data.status === 'qr' || data.status === 'both') {
                     if (!data.payment_url) {
-                        api.overlay.showError('QR-Zahlungslink fehlt');
+                        api.overlay.showError(api.getTranslation('payments_url_missing'));
                         api.resetPrintErrorMessage(cb, notificationTimeout);
                         return;
                     }
@@ -668,20 +673,20 @@ const photoboothTools = (function () {
                         encodeURIComponent(data.payment_url);
                     api.overlay.show(`
                         <div style="text-align:center;">
-                            <div style="font-size:1.4em; margin-bottom:12px;">ðŸ’ ${paymentMessage}</div>
-                            <div style="margin-bottom:10px;">QR-Code scannen und bezahlen</div>
+                            <div style="font-size:1.4em; margin-bottom:12px;">${paymentMessage}</div>
+                            <div style="margin-bottom:10px;">${paymentQrMsg}</div>
                             <img src="${qrUrl}" alt="QR Code" style="max-width:300px; width:80%; height:auto; background:#fff; padding:10px; border-radius:12px;">
-                            ${data.status === 'both' ? '<div style="margin-top:12px;">Oder direkt am Terminal bezahlen</div>' : ''}
+                            ${data.status === 'both' ? `<div style="margin-top:12px;">${paymentTerminalMsg}</div>` : ''}
                         </div>
                     `);
                     api.isPrinting = false;
                 } else {
-                    api.overlay.showError(data.error || 'Zahlung fehlgeschlagen');
+                    api.overlay.showError(data.error || api.getTranslation('payments_failed'));
                     api.resetPrintErrorMessage(cb, notificationTimeout);
                 }
             },
             error: () => {
-                api.overlay.showError('Zahlungsfehler');
+                api.overlay.showError(api.getTranslation('payments_error'));
                 api.resetPrintErrorMessage(cb, notificationTimeout);
             }
         });
