@@ -173,6 +173,20 @@
 <pre><code>sudo apt update
 sudo apt dist-upgrade
 </code></pre>
+<h2 id="install-nodejs-npm">Install Node.js &amp; npm</h2>
+<p>Photobooth requires:</p>
+<ul>
+<li><strong>Node.js ≥ 20.15.0</strong></li>
+<li><strong>npm ≥ 10.7.0</strong></li>
+</ul>
+<p>Install Node.js and npm from the official NodeSource repository:</p>
+<pre><code>curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+</code></pre>
+<p>Verify</p>
+<pre><code>node -v
+npm -v
+</code></pre>
 <h2 id="install-a-webserver">Install a Webserver</h2>
 <p>Currently NGINX and Apache Webserver are supported.
 For an easy and no-hassle setup you should install Apache Webserver.
@@ -185,7 +199,7 @@ NGINX has a smaller memory footprint and typically better performance, which is 
 </code></pre>
 <p><a href="../install-nginx/">Additional needed steps to enable PHP in NGINX</a></p>
 <h2 id="install-dependencies">Install dependencies</h2>
-<pre><code>sudo apt install -y curl gcc g++ make git ffmpeg gphoto2 libimage-exiftool-perl nodejs php-xml php-gd php-zip php-mbstring python3 python3-gphoto2 python3-psutil python3-zmq rsync udisks2 v4l2loopback-dkms v4l-utils
+<pre><code>sudo apt install -y curl gcc g++ make git ffmpeg gphoto2 libimage-exiftool-perl php-xml php-gd php-zip php-mbstring python3 python3-gphoto2 python3-psutil python3-zmq rsync udisks2 v4l2loopback-dkms v4l-utils
 </code></pre>
 <p><strong>Optional:</strong> If you have a new camera, you can also install the latest version of libgphoto2 directly from the maintainer. Choose "Install last stable release":</p>
 <pre><code>wget -O gphoto2-updater.sh https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto2-updater.sh
