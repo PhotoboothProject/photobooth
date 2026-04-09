@@ -671,6 +671,12 @@ const photoboothTools = (function () {
                     const qrUrl =
                         'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' +
                         encodeURIComponent(data.payment_url);
+                    const statusClass = {
+                        both: 'overlay-both',
+                        qr: 'overlay-qr'
+                    }[data.status];
+                    const overlay = document.querySelector('.overlay');
+
                     api.overlay.show(`
                         <div style="text-align:center;">
                             <div style="font-size:1.4em; margin-bottom:12px;">${paymentMessage}</div>
@@ -680,6 +686,8 @@ const photoboothTools = (function () {
                         </div>
                     `);
                     api.isPrinting = false;
+                    overlay.classList.remove('overlay-both', 'overlay-qr');
+                    overlay.classList.add(statusClass);
                 } else {
                     api.overlay.showError(data.error || api.getTranslation('payments_failed'));
                     api.resetPrintErrorMessage(cb, notificationTimeout);

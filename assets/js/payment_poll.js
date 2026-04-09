@@ -45,7 +45,7 @@
             return;
         }
 
-        if (overlay.innerHTML.includes('QR') || overlay.innerHTML.includes('bezahlen')) {
+        if (overlay.classList.contains('overlay-qr') || overlay.classList.contains('overlay-both')) {
             startPolling();
         }
     });
