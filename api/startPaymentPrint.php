@@ -15,7 +15,7 @@ try {
     if (empty($config['payments']['enabled'])) {
         echo json_encode([
             'status' => 'disabled',
-            'error' => 'Zahlungssystem ist deaktiviert',
+            'error' => 'Payment system disabled',
         ]);
         exit;
     }
@@ -68,7 +68,7 @@ try {
         http_response_code(500);
         echo json_encode([
             'status' => 'error',
-            'error' => 'Anbieter ist nicht SumUp',
+            'error' => 'Payment provider is not SumUp',
         ]);
         exit;
     }
@@ -77,7 +77,7 @@ try {
         http_response_code(500);
         echo json_encode([
             'status' => 'error',
-            'error' => 'SumUp Merchant Code fehlt',
+            'error' => 'SumUp Merchant Code missing',
         ]);
         exit;
     }
@@ -86,7 +86,7 @@ try {
         http_response_code(500);
         echo json_encode([
             'status' => 'error',
-            'error' => 'Preis (Cent) ist ungültig oder fehlt',
+            'error' => 'Price (cents) is invalid or missing',
         ]);
         exit;
     }
@@ -96,7 +96,7 @@ try {
             http_response_code(500);
             echo json_encode([
                 'status' => 'error',
-                'error' => 'SumUp Reader ID fehlt',
+                'error' => 'SumUp Reader ID missing',
             ]);
             exit;
         }
@@ -105,7 +105,7 @@ try {
             http_response_code(500);
             echo json_encode([
                 'status' => 'error',
-                'error' => 'SumUp Affiliate Key fehlt',
+                'error' => 'SumUp Affiliate Key missing',
             ]);
             exit;
         }
@@ -114,7 +114,7 @@ try {
             http_response_code(500);
             echo json_encode([
                 'status' => 'error',
-                'error' => 'sumup_solo.py wurde nicht gefunden',
+                'error' => 'sumup_solo.py not found',
             ]);
             exit;
         }
@@ -141,14 +141,14 @@ try {
         if ($returnVar === 0) {
             echo json_encode([
                 'status' => 'success',
-                'message' => 'Zahlung erfolgreich - Druck startet...',
+                'message' => 'Payment successful - printing starts...',
             ]);
             exit;
         }
 
         echo json_encode([
             'status' => 'error',
-            'error' => 'Zahlung fehlgeschlagen oder abgebrochen',
+            'error' => 'Payment failed or was cancelled',
             'log' => implode("\n", $output),
         ]);
         exit;
@@ -159,7 +159,7 @@ try {
             http_response_code(500);
             echo json_encode([
                 'status' => 'error',
-                'error' => 'ngrok URL / webhook_url fehlt',
+                'error' => 'ngrok URL / webhook_url missing',
             ]);
             exit;
         }
@@ -168,7 +168,7 @@ try {
             http_response_code(500);
             echo json_encode([
                 'status' => 'error',
-                'error' => 'create_checkout.py wurde nicht gefunden',
+                'error' => 'create_checkout.py not found',
             ]);
             exit;
         }
@@ -202,7 +202,7 @@ try {
             http_response_code(500);
             echo json_encode([
                 'status' => 'error',
-                'error' => 'QR-Zahlungslink konnte nicht erstellt werden',
+                'error' => 'The QR payment link could not be generated.',
                 'log' => implode("\n", $checkoutOutput),
             ]);
             exit;
@@ -229,7 +229,7 @@ try {
             echo json_encode([
                 'status' => 'qr',
                 'payment_url' => $paymentUrl,
-                'message' => 'QR-Zahlung bereit',
+                'message' => 'QR payment ready',
             ]);
             exit;
         }
@@ -238,7 +238,7 @@ try {
             http_response_code(500);
             echo json_encode([
                 'status' => 'error',
-                'error' => 'SumUp Reader ID fehlt',
+                'error' => 'SumUp Reader ID missing',
             ]);
             exit;
         }
@@ -247,7 +247,7 @@ try {
             http_response_code(500);
             echo json_encode([
                 'status' => 'error',
-                'error' => 'SumUp Affiliate Key fehlt',
+                'error' => 'SumUp Affiliate Key missing',
             ]);
             exit;
         }
@@ -256,7 +256,7 @@ try {
             http_response_code(500);
             echo json_encode([
                 'status' => 'error',
-                'error' => 'sumup_solo.py wurde nicht gefunden',
+                'error' => 'sumup_solo.py not found',
             ]);
             exit;
         }
@@ -280,7 +280,7 @@ try {
         echo json_encode([
             'status' => 'both',
             'payment_url' => $paymentUrl,
-            'message' => 'QR-Zahlung bereit, Terminal wurde im Hintergrund gestartet',
+            'message' => 'QR payment ready, Terminal started in background',
         ]);
         exit;
     }
@@ -288,7 +288,7 @@ try {
     http_response_code(500);
     echo json_encode([
         'status' => 'error',
-        'error' => 'Ungültiger Zahlungsmodus',
+        'error' => 'Invalid payment method',
     ]);
 } catch (\Throwable $e) {
     http_response_code(500);
