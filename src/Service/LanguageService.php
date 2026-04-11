@@ -65,7 +65,10 @@ class LanguageService
 
     public function all(): array
     {
-        return $this->translator->getCatalogue($this->locale)->all('photobooth');
+        $fallbackLang = $this->translator->getCatalogue('en')->all('photobooth');
+        $currentLang = $this->translator->getCatalogue($this->locale)->all('photobooth');
+
+        return array_replace($fallbackLang, $currentLang);
     }
 
     public static function getInstance(): self
