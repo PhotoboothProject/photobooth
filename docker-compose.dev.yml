@@ -1,0 +1,41 @@
+services:
+  photobooth:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./:/app
+      - photobooth_node_modules:/app/node_modules
+      - photobooth_vendor:/app/vendor
+    environment:
+      - COMPOSER_VERSION=2
+
+  watcher:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /app
+    user: application
+    command: >-
+      sh -lc "
+      git config --global --add safe.directory /app &&
+      [ -x node_modules/.bin/gulp ] || npm install &&
+      [ -f vendor/autoload.php ] || php bin/composer install &&
+      npm run build &&
+      npm run watch:gulp
+      "
+    volumes:
+      - ./:/app
+      - photobooth_node_modules:/app/node_modules
+      - photobooth_vendor:/app/vendor
+    environment:
+      - CHOKIDAR_USEPOLLING=1
+      - CHOKIDAR_INTERVAL=250
+      - WATCHPACK_POLLING=true
+      - COMPOSER_VERSION=2
+    depends_on:
+      - photobooth
+
+volumes:
+  photobooth_node_modules:
+  photobooth_vendor:
