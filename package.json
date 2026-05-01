@@ -85,7 +85,7 @@
     "colors": "^1.4.0",
     "eslint-plugin-n": "^17.24.0",
     "git-tag-version": "^1.4.0",
-    "globals": "^17.4.0",
+    "globals": "^17.6.0",
     "gulp-babel": "^8.0.0",
     "prettier": "^3.8.1",
     "rimraf": "^6.1.3"
