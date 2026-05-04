@@ -1,5 +1,4 @@
 /* globals photoboothTools */
-/* eslint-env browser */
 $(function () {
     initDirtyTracking();
 
