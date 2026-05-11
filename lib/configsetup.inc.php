@@ -1130,6 +1130,13 @@ return [
                 PathUtility::getAbsolutePath('private/images/background'),
             ]
         ],
+        'collage_background_render_mode' => [
+            'view' => 'advanced',
+            'type' => 'checkbox',
+            'name' => 'collage[background_render_mode]',
+            'data-theme-field' => 'true',
+            'value' => ($config['collage']['background_render_mode'] ?? 'behind_images') === 'overlay_frame' ? 'true' : 'false',
+        ],
         'collage_placeholder' => [
             'view' => 'expert',
             'type' => 'checkbox',

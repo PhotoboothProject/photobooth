@@ -23,6 +23,7 @@ class CollageConfigFactory
         $collageConfig->collagePlaceholderPosition = (int) $config['collage']['placeholderposition'] - 1;
         $collageConfig->collagePlaceholderPath = $config['collage']['placeholderpath'];
         $collageConfig->collageBackground = $config['collage']['background'];
+        $collageConfig->collageBackgroundRenderMode = $config['collage']['background_render_mode'];
         $collageConfig->collageDashedLineColor = $config['collage']['dashedline_color'];
         // If a placholder image should be used, we need to increase the limit here in order to count the images correct
         $collageConfig->collageLimit = (int) ($config['collage']['placeholder'] ? $config['collage']['limit'] + 1 : $config['collage']['limit']);

@@ -501,6 +501,10 @@ class Collage
             throw new \Exception('Failed to create collage resource.');
         }
 
+        $backgroundRenderMode = isset($c->collageBackgroundRenderMode) ? $c->collageBackgroundRenderMode : 'behind_images';
+        $renderBackgroundAsOverlay = $backgroundRenderMode === 'overlay_frame';
+        $backgroundImage = null;
+
         $c->collageBackground = Helper::getPrefixedFile($c->collageBackground, $c->collageLayout);
         if (!empty($c->collageBackground)) {
             $backgroundImage = $imageHandler->createFromImage($c->collageBackground);
@@ -511,6 +515,9 @@ class Collage
             if (!$backgroundImage instanceof \GdImage) {
                 throw new \Exception('Failed to resize collage background image resource.');
             }
+        }
+
+        if (!$renderBackgroundAsOverlay && $backgroundImage instanceof \GdImage) {
             imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, self::$collageWidth, self::$collageHeight);
         } else {
             $background = imagecolorallocate($my_collage, (int) $bg_r, (int) $bg_g, (int) $bg_b);
@@ -559,6 +566,11 @@ class Collage
 
             $imageHandler->addPicture($tmpImg, $my_collage);
             unset($tmpImg);
+        }
+
+        if ($renderBackgroundAsOverlay && $backgroundImage instanceof \GdImage) {
+            // Overlay mode keeps transparent "holes" in the background so images below stay visible.
+            imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, self::$collageWidth, self::$collageHeight);
         }
 
         if (self::$drawDashedLine == true) {

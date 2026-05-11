@@ -130,6 +130,18 @@ final class CollageConfiguration
                     ->end()
                 ->scalarNode('placeholderpath')->defaultValue('')->end()
                 ->scalarNode('background')->defaultValue('')->end()
+                ->enumNode('background_render_mode')
+                    ->values(['behind_images', 'overlay_frame'])
+                    ->beforeNormalization()
+                        ->ifTrue(static function ($value): bool {
+                            return is_bool($value);
+                        })
+                        ->then(static function (bool $value): string {
+                            return $value ? 'overlay_frame' : 'behind_images';
+                        })
+                        ->end()
+                    ->defaultValue('behind_images')
+                    ->end()
                 ->integerNode('limit')
                     ->defaultValue(4)
                     ->beforeNormalization()
