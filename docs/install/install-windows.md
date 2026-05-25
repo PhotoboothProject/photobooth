@@ -30,8 +30,14 @@ Open a powershell and run:
 wsl --install
 ```
 
-This will enable the required windows features, install ubuntu and sets the default
-version of wsl to version 2.
+This will enable the required windows features and sets the default
+version of wsl to version 2. 
+
+Check if a ditribution is installed by:
+
+```powershell
+wsl -l -v
+```
 
 If something goes wrong here, check out this [page](https://learn.microsoft.com/en-us/windows/wsl/install).
 
@@ -95,8 +101,14 @@ wget -O install-photobooth.sh https://raw.githubusercontent.com/PhotoboothProjec
 sudo bash install-photobooth.sh --username='<YourUsername>' --silent
 ```
 
+Be aware: Windows closes the resources for the virtual machine if no action is detected for a longer period.
+Prevent this by leaving a command window to the wsl open!
+
+
 Enjoy your Photobooth installation!
 
+Tip: Windows allows you to export or clone the whole virtual machine and thus make it a versatile tool for backup and dev testing.
+If you want to run two photobooth installations simultanously, you have to change the port of one apache server from 80 to 8080 for example.
 
 ## Direct installation on windows (method 2)
 
