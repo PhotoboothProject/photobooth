@@ -33,7 +33,7 @@ LOCAL_ARCH=$(uname -m)
 OS_CODENAME="unknown"
 
 # PHP
-PHP_VERSION="8.4"
+PHP_VERSION="8.5"
 DEBIAN=(
     "bullseye"
     "bookworm"
