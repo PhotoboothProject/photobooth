@@ -22,8 +22,11 @@ class CollageConfigFactory
         // If a placeholder is set, decrease the value by 1 in order to reflect array counting at 0
         $collageConfig->collagePlaceholderPosition = (int) $config['collage']['placeholderposition'] - 1;
         $collageConfig->collagePlaceholderPath = $config['collage']['placeholderpath'];
-        $collageConfig->collageBackground = $config['collage']['background'];
-        $collageConfig->collageBackgroundRenderMode = $config['collage']['background_render_mode'];
+        $collageConfig->collageBackground = $config['collage']['background'] ?? '';
+        $collageConfig->collageBackgroundLandscape = $config['collage']['background_landscape'] ?? '';
+        $collageConfig->collageBackgroundPortrait = $config['collage']['background_portrait'] ?? '';
+        $collageConfig->collageBackgroundStrip = $config['collage']['background_strip'] ?? '';
+        $collageConfig->collageBackgroundRenderMode = $config['collage']['background_render_mode'] ?? 'behind_images';
         $collageConfig->collageDashedLineColor = $config['collage']['dashedline_color'];
         // If a placholder image should be used, we need to increase the limit here in order to count the images correct
         $collageConfig->collageLimit = (int) ($config['collage']['placeholder'] ? $config['collage']['limit'] + 1 : $config['collage']['limit']);

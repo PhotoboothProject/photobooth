@@ -74,6 +74,36 @@ class Collage
         return null;
     }
 
+    private static function isPhotoStripLayout(string $layoutId): bool
+    {
+        $layoutId = strtolower($layoutId);
+
+        return str_contains($layoutId, 'strip')
+            || str_contains($layoutId, '2x3')
+            || str_contains($layoutId, '2x4');
+    }
+
+    private static function resolveConfiguredBackground(CollageConfig $c): string
+    {
+        $backgroundStrip = isset($c->collageBackgroundStrip) ? trim($c->collageBackgroundStrip) : '';
+        if (self::isPhotoStripLayout($c->collageLayout) && $backgroundStrip !== '') {
+            return $backgroundStrip;
+        }
+
+        $orientation = strtolower($c->collageOrientation);
+        $backgroundPortrait = isset($c->collageBackgroundPortrait) ? trim($c->collageBackgroundPortrait) : '';
+        if ($orientation === 'portrait' && $backgroundPortrait !== '') {
+            return $backgroundPortrait;
+        }
+
+        $backgroundLandscape = isset($c->collageBackgroundLandscape) ? trim($c->collageBackgroundLandscape) : '';
+        if ($orientation === 'landscape' && $backgroundLandscape !== '') {
+            return $backgroundLandscape;
+        }
+
+        return isset($c->collageBackground) ? $c->collageBackground : '';
+    }
+
     public static function reset(): void
     {
         self::$collageHeight = 0;
@@ -212,6 +242,7 @@ class Collage
         self::$pictureOrientation = $c->collageOrientation;
 
         $collageConfigFilePath = self::getCollageConfigPath($c->collageLayout, self::$pictureOrientation);
+        $layoutHasBackgroundOverride = false;
 
         // Save the original admin setting for text on collage
         $adminTextOnCollageEnabled = $c->textOnCollageEnabled;
@@ -235,6 +266,7 @@ class Collage
 
                     if (isset($collageJson['background']) && !empty($collageJson['background'])) {
                         $c->collageBackground = $collageJson['background'];
+                        $layoutHasBackgroundOverride = true;
                     }
 
                     if (isset($collageJson['width']) && isset($collageJson['height'])) {
@@ -505,7 +537,10 @@ class Collage
         $renderBackgroundAsOverlay = $backgroundRenderMode === 'overlay_frame';
         $backgroundImage = null;
 
-        $c->collageBackground = Helper::getPrefixedFile($c->collageBackground, $c->collageLayout);
+        $selectedBackground = $layoutHasBackgroundOverride
+            ? $c->collageBackground
+            : self::resolveConfiguredBackground($c);
+        $c->collageBackground = Helper::getPrefixedFile($selectedBackground, $c->collageLayout);
         if (!empty($c->collageBackground)) {
             $backgroundImage = $imageHandler->createFromImage($c->collageBackground);
             if (!$backgroundImage instanceof \GdImage) {

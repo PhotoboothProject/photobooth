@@ -14,6 +14,9 @@ class CollageConfig
     public int $collagePlaceholderPosition;
     public string $collagePlaceholderPath;
     public string $collageBackground;
+    public string $collageBackgroundLandscape;
+    public string $collageBackgroundPortrait;
+    public string $collageBackgroundStrip;
     public string $collageBackgroundRenderMode = 'behind_images';
     public string $collageDashedLineColor;
     public int $collageLimit;

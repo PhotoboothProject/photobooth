@@ -287,6 +287,10 @@ class ConfigurationService
         $config['ui']['shutter_cheese_img']   = $normalizePath($config['ui']['shutter_cheese_img'] ?? null);
         $config['picture']['frame']           = $normalizePath($config['picture']['frame'] ?? null);
         $config['collage']['frame']           = $normalizePath($config['collage']['frame'] ?? null);
+        $config['collage']['background']      = $normalizePath($config['collage']['background'] ?? null);
+        $config['collage']['background_landscape'] = $normalizePath($config['collage']['background_landscape'] ?? null);
+        $config['collage']['background_portrait']  = $normalizePath($config['collage']['background_portrait'] ?? null);
+        $config['collage']['background_strip']     = $normalizePath($config['collage']['background_strip'] ?? null);
         $config['collage']['placeholderpath'] = $normalizePath($config['collage']['placeholderpath'] ?? null);
         $config['background']['defaults']     = $normalizePath($config['background']['defaults'] ?? null);
         $config['background']['admin']        = $normalizePath($config['background']['admin'] ?? null);

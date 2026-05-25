@@ -124,6 +124,11 @@ if ($action === 'reset') {
 } elseif ($action === 'config') {
     $logger->debug('Saving Photobooth configuration...');
     $newConfig = ArrayUtility::mergeRecursive($defaultConfig, $data);
+    $collageInput = $data['collage'] ?? null;
+    if (!is_array($collageInput) || !array_key_exists('background', $collageInput)) {
+        // Keep legacy single background value if the field is not part of the current admin form.
+        $newConfig['collage']['background'] = $config['collage']['background'] ?? '';
+    }
 
     $rootPath = PathUtility::getRootPath();
 
@@ -149,6 +154,10 @@ if ($action === 'reset') {
     // Frames and backgrounds which may be selected via image picker
     $newConfig['picture']['frame']       = $normalizePath($newConfig['picture']['frame'] ?? null);
     $newConfig['collage']['frame']       = $normalizePath($newConfig['collage']['frame'] ?? null);
+    $newConfig['collage']['background']  = $normalizePath($newConfig['collage']['background'] ?? null);
+    $newConfig['collage']['background_landscape'] = $normalizePath($newConfig['collage']['background_landscape'] ?? null);
+    $newConfig['collage']['background_portrait']  = $normalizePath($newConfig['collage']['background_portrait'] ?? null);
+    $newConfig['collage']['background_strip']     = $normalizePath($newConfig['collage']['background_strip'] ?? null);
     $newConfig['background']['defaults'] = $normalizePath($newConfig['background']['defaults'] ?? null);
     $newConfig['background']['admin']    = $normalizePath($newConfig['background']['admin'] ?? null);
     $newConfig['background']['chroma']   = $normalizePath($newConfig['background']['chroma'] ?? null);

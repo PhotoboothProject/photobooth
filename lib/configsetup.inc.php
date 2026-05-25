@@ -1118,13 +1118,37 @@ return [
             'range_step' => 1,
             'unit' => 'degrees',
         ],
-        'collage_background' => [
+        'collage_background_landscape' => [
             'view' => 'expert',
             'type' => 'image',
-            'placeholder' => $defaultConfig['collage']['background'],
-            'name' => 'collage[background]',
+            'placeholder' => $defaultConfig['collage']['background_landscape'],
+            'name' => 'collage[background_landscape]',
             'data-theme-field' => 'true',
-            'value' => htmlentities($config['collage']['background'] ?? ''),
+            'value' => htmlentities($config['collage']['background_landscape'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/img/background'),
+                PathUtility::getAbsolutePath('private/images/background'),
+            ]
+        ],
+        'collage_background_portrait' => [
+            'view' => 'expert',
+            'type' => 'image',
+            'placeholder' => $defaultConfig['collage']['background_portrait'],
+            'name' => 'collage[background_portrait]',
+            'data-theme-field' => 'true',
+            'value' => htmlentities($config['collage']['background_portrait'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('resources/img/background'),
+                PathUtility::getAbsolutePath('private/images/background'),
+            ]
+        ],
+        'collage_background_strip' => [
+            'view' => 'expert',
+            'type' => 'image',
+            'placeholder' => $defaultConfig['collage']['background_strip'],
+            'name' => 'collage[background_strip]',
+            'data-theme-field' => 'true',
+            'value' => htmlentities($config['collage']['background_strip'] ?? ''),
             'paths' => [
                 PathUtility::getAbsolutePath('resources/img/background'),
                 PathUtility::getAbsolutePath('private/images/background'),
