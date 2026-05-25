@@ -15,14 +15,7 @@ final class EventConfiguration
                 ->booleanNode('enabled')->defaultValue(false)->end()
                 ->scalarNode('textRight')->defaultValue('')->end()
                 ->scalarNode('textLeft')->defaultValue('')->end()
-                ->enumNode('symbol')
-                    ->values([
-                        'fa-camera', 'fa-camera-retro', 'fa-birthday-cake', 'fa-gift', 'fa-tree', 'fa-snowflake',
-                        'fa-regular fa-heart', 'fa-solid fa-heart', 'fa-solid fa-heart-pulse', 'fa-brands fa-apple',
-                        'fa-anchor', 'fa-light fa-champagne-glasses', 'fa-gears', 'fa-users'
-                    ])
-                    ->defaultValue('fa-heart-o')
-                    ->end()
+                ->scalarNode('symbol')->defaultValue('camera')->end()
             ->end();
     }
 }
