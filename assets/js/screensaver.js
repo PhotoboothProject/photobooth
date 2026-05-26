@@ -114,7 +114,9 @@
                 'fa-users': 'users'
             };
             const isFontAwesomeValue = (iconName) => {
-                const value = String(iconName || '').trim().toLowerCase();
+                const value = String(iconName || '')
+                    .trim()
+                    .toLowerCase();
                 if (!value) {
                     return false;
                 }
@@ -141,7 +143,10 @@
                     raw = raw.slice(customImagePrefix.length);
                 }
 
-                raw = raw.replace(/\\/g, '/').replace(/^\/+/, '').replace(/\/{2,}/g, '/');
+                raw = raw
+                    .replace(/\\/g, '/')
+                    .replace(/^\/+/, '')
+                    .replace(/\/{2,}/g, '/');
                 if (!raw || raw.indexOf('..') !== -1 || raw.indexOf('\0') !== -1) {
                     return '';
                 }
@@ -169,7 +174,15 @@
                 if (!raw) {
                     return '';
                 }
-                const styleClasses = ['fa-solid', 'fa-regular', 'fa-brands', 'fa-light', 'fa-thin', 'fa-sharp', 'fa-classic'];
+                const styleClasses = [
+                    'fa-solid',
+                    'fa-regular',
+                    'fa-brands',
+                    'fa-light',
+                    'fa-thin',
+                    'fa-sharp',
+                    'fa-classic'
+                ];
                 const unique = {};
                 const classes = [];
                 let hasIconClass = false;
@@ -193,7 +206,9 @@
                 return classes.join(' ');
             };
             const isIconifyValue = (iconName) => {
-                const raw = String(iconName || '').trim().toLowerCase();
+                const raw = String(iconName || '')
+                    .trim()
+                    .toLowerCase();
                 if (!raw) {
                     return false;
                 }
@@ -201,7 +216,9 @@
                 return /^[a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9][a-z0-9._-]*$/.test(cleaned);
             };
             const normalizeIconifyValue = (iconName) => {
-                let raw = String(iconName || '').trim().toLowerCase();
+                let raw = String(iconName || '')
+                    .trim()
+                    .toLowerCase();
                 if (!raw) {
                     return '';
                 }
@@ -301,7 +318,9 @@
                     }
                     return `<iconify-icon class="screensaver-event-icon" icon="${iconifyName}" aria-hidden="true"></iconify-icon>`;
                 }
-                const lucideName = String(symbolValue || '').trim().toLowerCase();
+                const lucideName = String(symbolValue || '')
+                    .trim()
+                    .toLowerCase();
                 return `<i class="screensaver-event-icon" data-lucide="${lucideName}" aria-hidden="true"></i>`;
             };
             const renderLucideIcons = () => {
@@ -406,7 +425,7 @@
 
         api.stepScreensaver = function stepScreensaver() {
             const mode = overlay.data('mode') || screensaverMode;
-            photoboothTools.console.logDev('Screensaver: step in mode \'' + mode + '\'');
+            photoboothTools.console.logDev("Screensaver: step in mode '" + mode + "'");
 
             let nextSource = api.resolveSource();
             if (!nextSource && mode === 'gallery') {
@@ -422,7 +441,7 @@
                 screensaverLastGallerySource = nextSource;
             }
 
-            photoboothTools.console.logDev('Screensaver: next source \'' + nextSource + '\'');
+            photoboothTools.console.logDev("Screensaver: next source '" + nextSource + "'");
             if (nextSource) {
                 if (mode === 'folder') {
                     overlay.css('background-image', nextSource ? `url(${urlSafe(nextSource)})` : 'none');
