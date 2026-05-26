@@ -48,7 +48,7 @@ if (!$config['protect']['manual'] || (!$config['protect']['localhost_manual'] &&
 }
 
 // reboot
-if ((isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
+if ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || isset($_SESSION['rental'])) {
     echo getMenuBtn('reboot-btn', 'reboot_button');
 }
 
