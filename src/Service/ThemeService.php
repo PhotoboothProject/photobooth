@@ -81,7 +81,7 @@ class ThemeService
                 continue;
             }
 
-            $themes[$name] = $decoded;
+            $themes[$name] = $this->normalizeThemeData($decoded);
         }
 
         return $themes;
@@ -102,7 +102,7 @@ class ThemeService
             if ($raw !== false) {
                 $decoded = json_decode($raw, true);
                 if (is_array($decoded)) {
-                    return $decoded;
+                    return $this->normalizeThemeData($decoded);
                 }
             }
         }
@@ -327,6 +327,7 @@ class ThemeService
             @file_put_contents($targetPath, $content);
         }
 
+        $themeData = $this->normalizeThemeData($themeData);
         $this->save($safeName, $themeData);
 
         $zip->close();
@@ -336,6 +337,46 @@ class ThemeService
             'name' => $safeName,
             'theme' => $themeData,
         ];
+    }
+
+    /**
+     * Keep themes created before newer config fields compatible with the current admin form.
+     *
+     * @param array<string,mixed> $theme
+     *
+     * @return array<string,mixed>
+     */
+    private function normalizeThemeData(array $theme): array
+    {
+        if (!isset($theme['collage']) || !is_array($theme['collage'])) {
+            return $theme;
+        }
+
+        $collage = $theme['collage'];
+        $legacyBackground = isset($collage['background']) && is_string($collage['background'])
+            ? $collage['background']
+            : '';
+
+        if ($legacyBackground !== '') {
+            foreach (['background_landscape', 'background_portrait', 'background_strip'] as $backgroundKey) {
+                if (empty($collage[$backgroundKey])) {
+                    $collage[$backgroundKey] = $legacyBackground;
+                }
+            }
+        }
+
+        if (isset($collage['background_render_mode'])) {
+            $renderMode = $collage['background_render_mode'];
+            if (is_bool($renderMode) || in_array($renderMode, ['true', 'false', '1', '0'], true)) {
+                $collage['background_render_mode'] = filter_var($renderMode, FILTER_VALIDATE_BOOLEAN)
+                    ? 'overlay_frame'
+                    : 'behind_images';
+            }
+        }
+
+        $theme['collage'] = $collage;
+
+        return $theme;
     }
 
     private function getFilePath(string $name): string
