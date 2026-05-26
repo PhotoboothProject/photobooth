@@ -1,5 +1,4 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
-/* eslint-env browser */
 /* globals csrf photoboothTools */
 
 const MAX_ICON_GRID_ITEMS = 600;
