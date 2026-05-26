@@ -11,6 +11,7 @@ use Photobooth\Environment;
 use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\ImageMetadataCacheService;
+use Photobooth\Service\LanguageService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\MailService;
 use Photobooth\Service\PrintManagerService;
@@ -27,6 +28,7 @@ header('Content-Type: application/json');
 $loggerService = LoggerService::getInstance();
 $logger = $loggerService->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
+$languageService = LanguageService::getInstance();
 
 checkCsrfOrFail($_POST);
 
@@ -41,7 +43,7 @@ if ($action === 'event_symbol_upload') {
     if (!isset($_FILES['event_symbol_image']) || !is_array($_FILES['event_symbol_image'])) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Keine Datei zum Hochladen gefunden.',
+            'message' => $languageService->translate('event_symbol:api_no_file_uploaded'),
         ]);
         exit();
     }
@@ -51,7 +53,11 @@ if ($action === 'event_symbol_upload') {
     if ($uploadError !== UPLOAD_ERR_OK) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Upload fehlgeschlagen (Fehlercode: ' . $uploadError . ').',
+            'message' => str_replace(
+                '%d',
+                (string) $uploadError,
+                $languageService->translate('event_symbol:api_upload_failed_code'),
+            ),
         ]);
         exit();
     }
@@ -60,7 +66,7 @@ if ($action === 'event_symbol_upload') {
     if ($tmpName === '' || !is_uploaded_file($tmpName)) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Ungültige Upload-Datei.',
+            'message' => $languageService->translate('event_symbol:api_invalid_upload_file'),
         ]);
         exit();
     }
@@ -70,7 +76,7 @@ if ($action === 'event_symbol_upload') {
     if (!EventIconCatalogUtility::isAllowedCustomImageExtension($extension)) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Dateityp nicht erlaubt.',
+            'message' => $languageService->translate('event_symbol:api_file_type_not_allowed'),
         ]);
         exit();
     }
@@ -80,7 +86,7 @@ if ($action === 'event_symbol_upload') {
     if ($sizeBytes <= 0 || $sizeBytes > $maxBytes) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Datei ist leer oder zu groß (max. 8 MB).',
+            'message' => $languageService->translate('event_symbol:api_file_empty_or_too_large'),
         ]);
         exit();
     }
@@ -105,7 +111,7 @@ if ($action === 'event_symbol_upload') {
     if ($mime === '' || !isset($allowedMimes[$extension]) || !in_array($mime, $allowedMimes[$extension], true)) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Ungültiger MIME-Type.',
+            'message' => $languageService->translate('event_symbol:api_invalid_mime_type'),
         ]);
         exit();
     }
@@ -115,14 +121,14 @@ if ($action === 'event_symbol_upload') {
     if (!is_dir($targetDirAbsolute) && !@mkdir($targetDirAbsolute, 0775, true) && !is_dir($targetDirAbsolute)) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Upload-Verzeichnis konnte nicht erstellt werden.',
+            'message' => $languageService->translate('event_symbol:api_upload_dir_create_failed'),
         ]);
         exit();
     }
     if (!is_writable($targetDirAbsolute)) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Upload-Verzeichnis ist nicht beschreibbar.',
+            'message' => $languageService->translate('event_symbol:api_upload_dir_not_writable'),
         ]);
         exit();
     }
@@ -145,7 +151,7 @@ if ($action === 'event_symbol_upload') {
     if (!move_uploaded_file($tmpName, $targetAbsolutePath)) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Datei konnte nicht gespeichert werden.',
+            'message' => $languageService->translate('event_symbol:api_file_save_failed'),
         ]);
         exit();
     }
@@ -157,7 +163,7 @@ if ($action === 'event_symbol_upload') {
         @unlink($targetAbsolutePath);
         echo json_encode([
             'status' => 'error',
-            'message' => 'Custom-Icon konnte nicht erstellt werden.',
+            'message' => $languageService->translate('event_symbol:api_custom_icon_create_failed'),
         ]);
         exit();
     }
@@ -166,7 +172,7 @@ if ($action === 'event_symbol_upload') {
 
     echo json_encode([
         'status' => 'success',
-        'message' => 'Bild erfolgreich hochgeladen.',
+        'message' => $languageService->translate('event_symbol:api_upload_success'),
         'icon' => $iconEntry,
     ]);
     exit();
@@ -176,7 +182,7 @@ if ($action === 'event_symbol_upload') {
     if (!EventSymbolUtility::isCustomImageSymbol($normalized)) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Kein gültiges Custom-Bild ausgewählt.',
+            'message' => $languageService->translate('event_symbol:api_invalid_custom_image_selection'),
         ]);
         exit();
     }
@@ -187,7 +193,7 @@ if ($action === 'event_symbol_upload') {
     if (!str_starts_with($relativePath, $allowedPrefix) || str_contains($relativePath, '..')) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Ungültiger Dateipfad.',
+            'message' => $languageService->translate('event_symbol:api_invalid_file_path'),
         ]);
         exit();
     }
@@ -196,7 +202,7 @@ if ($action === 'event_symbol_upload') {
     if (!is_file($absolutePath)) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Datei nicht gefunden.',
+            'message' => $languageService->translate('event_symbol:api_file_not_found'),
         ]);
         exit();
     }
@@ -204,7 +210,7 @@ if ($action === 'event_symbol_upload') {
     if (!@unlink($absolutePath)) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Datei konnte nicht gelöscht werden.',
+            'message' => $languageService->translate('event_symbol:api_file_delete_failed'),
         ]);
         exit();
     }
@@ -213,7 +219,7 @@ if ($action === 'event_symbol_upload') {
 
     echo json_encode([
         'status' => 'success',
-        'message' => 'Bild erfolgreich gelöscht.',
+        'message' => $languageService->translate('event_symbol:api_delete_success'),
     ]);
     exit();
 } elseif ($action === 'reset') {

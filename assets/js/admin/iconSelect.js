@@ -1,6 +1,6 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
 /* eslint-env browser */
-/* globals csrf */
+/* globals csrf photoboothTools */
 
 const MAX_ICON_GRID_ITEMS = 600;
 const CUSTOM_IMAGE_PREFIX = 'image:';
@@ -8,6 +8,20 @@ const CUSTOM_IMAGE_CATEGORY = 'custom-images';
 const CUSTOM_IMAGE_DIRECTORY = 'private/images/event-symbols/';
 const ICON_UPLOAD_FIELD = 'event_symbol_image';
 const ADMIN_API_URL = '../api/admin.php';
+const CATEGORY_TRANSLATION_KEYS = {
+    all: 'event_symbol:category_all',
+    event: 'event_symbol:category_event',
+    photo: 'event_symbol:category_photo',
+    love: 'event_symbol:category_love',
+    food: 'event_symbol:category_food',
+    nature: 'event_symbol:category_nature',
+    music: 'event_symbol:category_music',
+    people: 'event_symbol:category_people',
+    time: 'event_symbol:category_time',
+    tools: 'event_symbol:category_tools',
+    legacy: 'event_symbol:category_legacy',
+    'custom-images': 'event_symbol:category_custom_images'
+};
 
 const LEGACY_TO_LUCIDE_MAP = {
     'fa-camera': 'camera',
@@ -29,6 +43,36 @@ const LEGACY_TO_LUCIDE_MAP = {
     'fa-users': 'users'
 };
 
+function translateLabel(key, fallback) {
+    if (
+        typeof photoboothTools !== 'undefined' &&
+        photoboothTools &&
+        photoboothTools.translations &&
+        typeof photoboothTools.translations === 'object' &&
+        typeof photoboothTools.getTranslation === 'function'
+    ) {
+        try {
+            const translated = photoboothTools.getTranslation(key);
+            if (typeof translated === 'string' && translated !== '' && translated !== key) {
+                return translated;
+            }
+        } catch {
+            // Fallback below
+        }
+    }
+
+    return fallback;
+}
+
+function getCategoryTitle(categoryId, fallback) {
+    const key = CATEGORY_TRANSLATION_KEYS[String(categoryId || '').trim()];
+    if (!key) {
+        return fallback || String(categoryId || '');
+    }
+
+    return translateLabel(key, fallback || String(categoryId || ''));
+}
+
 function normalizeLucideName(value) {
     return String(value || '')
         .trim()
@@ -39,7 +83,9 @@ function normalizeLucideName(value) {
 }
 
 function isFontAwesomeValue(value) {
-    const normalized = String(value || '').trim().toLowerCase();
+    const normalized = String(value || '')
+        .trim()
+        .toLowerCase();
     if (!normalized) {
         return false;
     }
@@ -91,7 +137,9 @@ function sanitizeFontAwesomeClasses(value) {
 }
 
 function isIconifyValue(value) {
-    const raw = String(value || '').trim().toLowerCase();
+    const raw = String(value || '')
+        .trim()
+        .toLowerCase();
     if (!raw) {
         return false;
     }
@@ -101,7 +149,9 @@ function isIconifyValue(value) {
 }
 
 function normalizeIconifyValue(value) {
-    let raw = String(value || '').trim().toLowerCase();
+    let raw = String(value || '')
+        .trim()
+        .toLowerCase();
     if (!raw) {
         return '';
     }
@@ -147,7 +197,10 @@ function normalizeCustomImageValue(value) {
         raw = raw.slice(CUSTOM_IMAGE_PREFIX.length);
     }
 
-    raw = raw.replace(/\\/g, '/').replace(/^\/+/, '').replace(/\/{2,}/g, '/');
+    raw = raw
+        .replace(/\\/g, '/')
+        .replace(/^\/+/, '')
+        .replace(/\/{2,}/g, '/');
 
     if (!raw || raw.indexOf('..') !== -1 || raw.indexOf('\0') !== -1) {
         return '';
@@ -219,7 +272,9 @@ function normalizeEventSymbolValue(value) {
 }
 
 function mapLegacyToLucide(value) {
-    const normalized = String(value || '').trim().toLowerCase();
+    const normalized = String(value || '')
+        .trim()
+        .toLowerCase();
     if (LEGACY_TO_LUCIDE_MAP[normalized]) {
         return LEGACY_TO_LUCIDE_MAP[normalized];
     }
@@ -302,11 +357,15 @@ function getLegacyIconsFromPicker(picker) {
 function fallbackCatalog() {
     return {
         categories: [
-            { id: 'all', title: 'Alle', source: 'system' },
-            { id: 'event', title: 'Event/Party', source: 'mixed' },
-            { id: 'photo', title: 'Foto/Media', source: 'mixed' },
-            { id: 'legacy', title: 'Klassisch (FA)', source: 'legacy' },
-            { id: CUSTOM_IMAGE_CATEGORY, title: 'Eigene Bilder', source: 'custom' }
+            { id: 'all', title: getCategoryTitle('all', 'All'), source: 'system' },
+            { id: 'event', title: getCategoryTitle('event', 'Event/Party'), source: 'mixed' },
+            { id: 'photo', title: getCategoryTitle('photo', 'Photo/Media'), source: 'mixed' },
+            { id: 'legacy', title: getCategoryTitle('legacy', 'Classic (FA)'), source: 'legacy' },
+            {
+                id: CUSTOM_IMAGE_CATEGORY,
+                title: getCategoryTitle(CUSTOM_IMAGE_CATEGORY, 'Custom images'),
+                source: 'custom'
+            }
         ],
         icons: [
             {
@@ -368,7 +427,9 @@ function createEntryFromCatalogItem(item) {
         return null;
     }
 
-    let provider = String(item.provider || '').trim().toLowerCase();
+    let provider = String(item.provider || '')
+        .trim()
+        .toLowerCase();
     if (!provider) {
         if (isCustomImageValue(normalizedValue)) {
             provider = 'image';
@@ -450,7 +511,8 @@ function createEntryFromRawValue(value) {
         provider = 'iconify';
     }
 
-    const rawLabel = provider === 'image' ? humanizeIconName(getFileBasename(normalizedValue)) : humanizeIconName(normalizedValue);
+    const rawLabel =
+        provider === 'image' ? humanizeIconName(getFileBasename(normalizedValue)) : humanizeIconName(normalizedValue);
 
     return createEntryFromCatalogItem({
         provider: provider,
@@ -523,7 +585,7 @@ function buildCategoryList(picker, entries) {
         }
 
         const id = String(item.id || '').trim();
-        const title = String(item.title || '').trim();
+        const title = getCategoryTitle(id, String(item.title || '').trim());
         if (!id || !title || seen[id] || !available[id]) {
             return;
         }
@@ -533,7 +595,7 @@ function buildCategoryList(picker, entries) {
     });
 
     if (!seen.all) {
-        result.unshift({ id: 'all', title: 'Alle', source: 'system' });
+        result.unshift({ id: 'all', title: getCategoryTitle('all', 'All'), source: 'system' });
     }
 
     return result;
@@ -663,7 +725,7 @@ function setPickerIcon(picker, value) {
 
 function buildIconButton(picker, entry) {
     const selectedValue = normalizeEventSymbolValue(
-        picker.querySelector('.adminIconSelection-input')?.value || picker.getAttribute('data-default-icon') || 'camera',
+        picker.querySelector('.adminIconSelection-input')?.value || picker.getAttribute('data-default-icon') || 'camera'
     );
 
     const isSelected = selectedValue === entry.value;
@@ -687,7 +749,7 @@ function buildIconButton(picker, entry) {
         const deleteButton = document.createElement('button');
         deleteButton.type = 'button';
         deleteButton.className = 'adminIconSelection-itemDelete';
-        deleteButton.textContent = 'Bild löschen';
+        deleteButton.textContent = translateLabel('event_symbol:delete_image', 'Delete image');
         deleteButton.addEventListener('click', function (event) {
             event.preventDefault();
             event.stopPropagation();
@@ -711,7 +773,9 @@ function renderIconGridForPicker(picker) {
     }
 
     const state = picker._iconPickerState;
-    const query = String(state.searchQuery || '').trim().toLowerCase();
+    const query = String(state.searchQuery || '')
+        .trim()
+        .toLowerCase();
     const activeCategory = state.activeCategory || 'all';
 
     const filtered = state.entries.filter((entry) => {
@@ -728,7 +792,8 @@ function renderIconGridForPicker(picker) {
 
     grid.innerHTML = '';
     if (filtered.length === 0) {
-        grid.innerHTML = '<div class="col-span-full text-center text-sm text-gray-500 py-8">Keine Icons für diesen Filter gefunden.</div>';
+        const noIconsLabel = translateLabel('event_symbol:no_icons_found', 'No icons found for this filter.');
+        grid.innerHTML = `<div class="col-span-full text-center text-sm text-gray-500 py-8">${escapeAttribute(noIconsLabel)}</div>`;
         return;
     }
 
@@ -740,8 +805,12 @@ function renderIconGridForPicker(picker) {
     if (filtered.length > MAX_ICON_GRID_ITEMS) {
         const hint = document.createElement('div');
         hint.className = 'col-span-full text-center text-xs text-gray-500 py-2';
-        hint.textContent =
-            `${filtered.length - MAX_ICON_GRID_ITEMS} weitere Icons ausgeblendet. Bitte Suche oder Kategorie weiter einschränken.`;
+        const hiddenCount = filtered.length - MAX_ICON_GRID_ITEMS;
+        const hiddenTemplate = translateLabel(
+            'event_symbol:hidden_icons_hint',
+            '%d more icons hidden. Please narrow down search or category.'
+        );
+        hint.textContent = hiddenTemplate.replace('%d', String(hiddenCount));
         grid.appendChild(hint);
     }
 
@@ -797,7 +866,9 @@ function updateUploadFileName(picker) {
         return;
     }
 
-    const emptyLabel = fileNameElement.getAttribute('data-empty-label') || 'Keine Datei ausgewählt';
+    const emptyLabel =
+        fileNameElement.getAttribute('data-empty-label') ||
+        translateLabel('event_symbol:upload_no_file_selected', 'No file selected');
     const fileName =
         fileInput.files && fileInput.files.length > 0 && fileInput.files[0] && fileInput.files[0].name
             ? fileInput.files[0].name
@@ -869,12 +940,16 @@ async function postIconAction(formData) {
         credentials: 'same-origin'
     });
 
-    const payload = await response
-        .json()
-        .catch(() => ({ status: 'error', message: 'Ungültige Serverantwort.' }));
+    const payload = await response.json().catch(() => ({
+        status: 'error',
+        message: translateLabel('event_symbol:invalid_server_response', 'Invalid server response.')
+    }));
 
     if (!response.ok || !payload || payload.status !== 'success') {
-        const message = payload && payload.message ? payload.message : 'Anfrage fehlgeschlagen.';
+        const message =
+            payload && payload.message
+                ? payload.message
+                : translateLabel('event_symbol:request_failed', 'Request failed.');
         throw new Error(message);
     }
 
@@ -886,7 +961,11 @@ async function uploadCustomImage(picker) {
     const uploadButton = picker.querySelector('.adminIconSelection-uploadBtn');
 
     if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-        setUploadStatus(picker, 'Bitte zuerst eine Datei auswählen.', 'error');
+        setUploadStatus(
+            picker,
+            translateLabel('event_symbol:upload_select_file_first', 'Please select a file first.'),
+            'error'
+        );
         return;
     }
 
@@ -899,7 +978,7 @@ async function uploadCustomImage(picker) {
         uploadButton.disabled = true;
     }
 
-    setUploadStatus(picker, 'Upload läuft...', 'info');
+    setUploadStatus(picker, translateLabel('event_symbol:upload_in_progress', 'Uploading...'), 'info');
 
     try {
         const payload = await postIconAction(data);
@@ -910,15 +989,30 @@ async function uploadCustomImage(picker) {
             updateCategoryButtons(picker, CUSTOM_IMAGE_CATEGORY);
             renderIconGridForPicker(picker);
             setPickerIcon(picker, entry.value);
-            setUploadStatus(picker, payload.message || 'Bild hochgeladen.', 'success');
+            setUploadStatus(
+                picker,
+                payload.message || translateLabel('event_symbol:upload_success', 'Image uploaded.'),
+                'success'
+            );
         } else {
-            setUploadStatus(picker, 'Upload erfolgreich, Icon konnte nicht eingelesen werden.', 'error');
+            setUploadStatus(
+                picker,
+                translateLabel(
+                    'event_symbol:upload_success_but_unreadable',
+                    'Upload succeeded, but icon entry could not be read.'
+                ),
+                'error'
+            );
         }
 
         fileInput.value = '';
         updateUploadFileName(picker);
     } catch (error) {
-        setUploadStatus(picker, error.message || 'Upload fehlgeschlagen.', 'error');
+        setUploadStatus(
+            picker,
+            error.message || translateLabel('event_symbol:upload_failed', 'Upload failed.'),
+            'error'
+        );
     } finally {
         if (uploadButton) {
             uploadButton.disabled = false;
@@ -929,7 +1023,11 @@ async function uploadCustomImage(picker) {
 async function deleteCustomImage(picker, value) {
     const normalizedValue = normalizeEventSymbolValue(value);
     if (!isCustomImageValue(normalizedValue)) {
-        setUploadStatus(picker, 'Aktuell ist kein eigenes Bild ausgewählt.', 'error');
+        setUploadStatus(
+            picker,
+            translateLabel('event_symbol:no_custom_image_selected', 'No custom image is currently selected.'),
+            'error'
+        );
         return;
     }
 
@@ -937,7 +1035,7 @@ async function deleteCustomImage(picker, value) {
     data.append('type', 'event_symbol_delete');
     data.append('value', normalizedValue);
 
-    setUploadStatus(picker, 'Bild wird gelöscht...', 'info');
+    setUploadStatus(picker, translateLabel('event_symbol:delete_in_progress', 'Deleting image...'), 'info');
 
     try {
         const payload = await postIconAction(data);
@@ -948,9 +1046,17 @@ async function deleteCustomImage(picker, value) {
             setPickerIcon(picker, 'camera');
         }
 
-        setUploadStatus(picker, payload.message || 'Bild gelöscht.', 'success');
+        setUploadStatus(
+            picker,
+            payload.message || translateLabel('event_symbol:delete_success', 'Image deleted.'),
+            'success'
+        );
     } catch (error) {
-        setUploadStatus(picker, error.message || 'Löschen fehlgeschlagen.', 'error');
+        setUploadStatus(
+            picker,
+            error.message || translateLabel('event_symbol:delete_failed', 'Delete failed.'),
+            'error'
+        );
     }
 }
 

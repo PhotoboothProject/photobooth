@@ -146,18 +146,18 @@ final class EventIconCatalogUtility
      * @var array<string,array{title:string,source:string}>
      */
     private const CATEGORY_DEFINITIONS = [
-        'all' => ['title' => 'Alle', 'source' => 'system'],
+        'all' => ['title' => 'All', 'source' => 'system'],
         'event' => ['title' => 'Event/Party', 'source' => 'mixed'],
-        'photo' => ['title' => 'Foto/Media', 'source' => 'mixed'],
-        'love' => ['title' => 'Liebe', 'source' => 'mixed'],
+        'photo' => ['title' => 'Photo/Media', 'source' => 'mixed'],
+        'love' => ['title' => 'Love', 'source' => 'mixed'],
         'food' => ['title' => 'Food/Drink', 'source' => 'mixed'],
-        'nature' => ['title' => 'Natur/Wetter', 'source' => 'mixed'],
+        'nature' => ['title' => 'Nature/Weather', 'source' => 'mixed'],
         'music' => ['title' => 'Musik', 'source' => 'mixed'],
-        'people' => ['title' => 'Menschen', 'source' => 'mixed'],
-        'time' => ['title' => 'Zeit/Ort', 'source' => 'mixed'],
+        'people' => ['title' => 'People', 'source' => 'mixed'],
+        'time' => ['title' => 'Time/Place', 'source' => 'mixed'],
         'tools' => ['title' => 'Tools', 'source' => 'mixed'],
-        'legacy' => ['title' => 'Klassisch (FA)', 'source' => 'legacy'],
-        'custom-images' => ['title' => 'Eigene Bilder', 'source' => 'custom'],
+        'legacy' => ['title' => 'Classic (FA)', 'source' => 'legacy'],
+        'custom-images' => ['title' => 'Custom images', 'source' => 'custom'],
     ];
 
     /**
@@ -302,7 +302,7 @@ final class EventIconCatalogUtility
             'value' => $normalized,
             'label' => $label,
             'categories' => ['custom-images'],
-            'search' => strtolower($label . ' ' . $path . ' custom image bild'),
+            'search' => strtolower($label . ' ' . $path . ' custom image'),
         ];
     }
 
