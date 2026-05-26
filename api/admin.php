@@ -134,7 +134,7 @@ if ($action === 'event_symbol_upload') {
     }
 
     $basename = strtolower(pathinfo($originalName, PATHINFO_FILENAME));
-    $basename = preg_replace('/[^a-z0-9._-]+/', '-', $basename ?? '');
+    $basename = preg_replace('/[^a-z0-9._-]+/', '-', $basename);
     $basename = trim((string) $basename, '-._');
     if ($basename === '') {
         $basename = 'symbol';

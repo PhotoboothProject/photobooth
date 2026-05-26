@@ -152,7 +152,7 @@ final class EventIconCatalogUtility
         'love' => ['title' => 'Love', 'source' => 'mixed'],
         'food' => ['title' => 'Food/Drink', 'source' => 'mixed'],
         'nature' => ['title' => 'Nature/Weather', 'source' => 'mixed'],
-        'music' => ['title' => 'Musik', 'source' => 'mixed'],
+        'music' => ['title' => 'Music', 'source' => 'mixed'],
         'people' => ['title' => 'People', 'source' => 'mixed'],
         'time' => ['title' => 'Time/Place', 'source' => 'mixed'],
         'tools' => ['title' => 'Tools', 'source' => 'mixed'],
@@ -482,9 +482,9 @@ final class EventIconCatalogUtility
 
         foreach ($seen as $entry) {
             $categoryIds = self::resolveUnifiedCategories(
-                strtolower((string) ($entry['value'] ?? '')),
+                strtolower($entry['value']),
                 $entry['categories'],
-                [strtolower((string) ($entry['label'] ?? ''))],
+                [strtolower($entry['label'])],
             );
             if ($categoryIds === []) {
                 $categoryIds = ['event'];
@@ -698,7 +698,68 @@ final class EventIconCatalogUtility
             return null;
         }
 
-        return $decoded;
+        $categories = [];
+        foreach ($decoded['categories'] as $category) {
+            if (!is_array($category)) {
+                return null;
+            }
+
+            $id = trim((string) ($category['id'] ?? ''));
+            $title = trim((string) ($category['title'] ?? ''));
+            $source = trim((string) ($category['source'] ?? ''));
+            if ($id === '' || $title === '' || $source === '') {
+                return null;
+            }
+
+            $categories[] = [
+                'id' => $id,
+                'title' => $title,
+                'source' => $source,
+            ];
+        }
+
+        $icons = [];
+        foreach ($decoded['icons'] as $icon) {
+            if (!is_array($icon)) {
+                return null;
+            }
+
+            $provider = trim((string) ($icon['provider'] ?? ''));
+            $value = trim((string) ($icon['value'] ?? ''));
+            $label = trim((string) ($icon['label'] ?? ''));
+            $search = trim((string) ($icon['search'] ?? ''));
+            if ($provider === '' || $value === '' || $label === '' || $search === '') {
+                return null;
+            }
+
+            $iconCategoriesRaw = $icon['categories'] ?? null;
+            if (!is_array($iconCategoriesRaw)) {
+                return null;
+            }
+
+            $iconCategories = [];
+            foreach ($iconCategoriesRaw as $iconCategory) {
+                $categoryId = trim((string) $iconCategory);
+                if ($categoryId === '') {
+                    continue;
+                }
+                $iconCategories[] = $categoryId;
+            }
+
+            $icons[] = [
+                'provider' => $provider,
+                'value' => $value,
+                'label' => $label,
+                'categories' => $iconCategories,
+                'search' => $search,
+            ];
+        }
+
+        return [
+            'generatedAt' => $decoded['generatedAt'],
+            'categories' => $categories,
+            'icons' => $icons,
+        ];
     }
 
     /**
@@ -792,13 +853,7 @@ final class EventIconCatalogUtility
 
         $seenValues = [];
         foreach ($catalog['icons'] as $icon) {
-            if (!is_array($icon)) {
-                continue;
-            }
-            $value = (string) ($icon['value'] ?? '');
-            if ($value !== '') {
-                $seenValues[$value] = true;
-            }
+            $seenValues[$icon['value']] = true;
         }
 
         foreach ($customEntries as $entry) {
@@ -896,7 +951,7 @@ final class EventIconCatalogUtility
             self::addCategoryIfValid($categoryMap, 'event');
         }
 
-        return array_keys($categoryMap);
+        return array_values(array_map(static fn (string|int $categoryId): string => (string) $categoryId, array_keys($categoryMap)));
     }
 
     /**

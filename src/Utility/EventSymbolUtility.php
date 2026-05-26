@@ -328,7 +328,12 @@ final class EventSymbolUtility
             return self::LEGACY_TO_LUCIDE_MAP[$lower];
         }
 
-        foreach (preg_split('/\\s+/', $lower) as $token) {
+        $tokens = preg_split('/\\s+/', $lower);
+        if (!is_array($tokens)) {
+            return 'camera';
+        }
+
+        foreach ($tokens as $token) {
             if (isset(self::LEGACY_TO_LUCIDE_MAP[$token])) {
                 return self::LEGACY_TO_LUCIDE_MAP[$token];
             }

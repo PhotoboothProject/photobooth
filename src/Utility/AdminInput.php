@@ -196,19 +196,13 @@ class AdminInput
             'legacy' => 'event_symbol:category_legacy',
             'custom-images' => 'event_symbol:category_custom_images',
         ];
-        if (is_array($iconCatalog['categories'] ?? null)) {
-            foreach ($iconCatalog['categories'] as &$category) {
-                if (!is_array($category)) {
-                    continue;
-                }
-
-                $categoryId = (string) ($category['id'] ?? '');
-                if ($categoryId !== '' && isset($categoryTranslationKeys[$categoryId])) {
-                    $category['title'] = $languageService->translate($categoryTranslationKeys[$categoryId]);
-                }
+        foreach ($iconCatalog['categories'] as &$category) {
+            $categoryId = $category['id'];
+            if (isset($categoryTranslationKeys[$categoryId])) {
+                $category['title'] = $languageService->translate($categoryTranslationKeys[$categoryId]);
             }
-            unset($category);
         }
+        unset($category);
         $catalogJson = (string) json_encode(
             $iconCatalog,
             JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT,
@@ -263,12 +257,8 @@ class AdminInput
         $uploadInputId = htmlspecialchars($uploadInputId, ENT_QUOTES);
 
         $categoryMarkup = '';
-        $categoryList = is_array($iconCatalog['categories'] ?? null) ? $iconCatalog['categories'] : [];
+        $categoryList = $iconCatalog['categories'];
         foreach ($categoryList as $category) {
-            if (!is_array($category) || !isset($category['id']) || !isset($category['title'])) {
-                continue;
-            }
-
             $categoryMarkup .= '
                 <button
                     type="button"
