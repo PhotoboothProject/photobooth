@@ -291,6 +291,13 @@ class ConfigurationService
         $config['collage']['background_landscape'] = $normalizePath($config['collage']['background_landscape'] ?? null);
         $config['collage']['background_portrait']  = $normalizePath($config['collage']['background_portrait'] ?? null);
         $config['collage']['background_strip']     = $normalizePath($config['collage']['background_strip'] ?? null);
+        if (!empty($config['collage']['background'])) {
+            foreach (['background_landscape', 'background_portrait', 'background_strip'] as $backgroundKey) {
+                if (empty($config['collage'][$backgroundKey])) {
+                    $config['collage'][$backgroundKey] = $config['collage']['background'];
+                }
+            }
+        }
         $config['collage']['placeholderpath'] = $normalizePath($config['collage']['placeholderpath'] ?? null);
         $config['background']['defaults']     = $normalizePath($config['background']['defaults'] ?? null);
         $config['background']['admin']        = $normalizePath($config['background']['admin'] ?? null);
