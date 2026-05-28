@@ -121,7 +121,7 @@
   "commands:take_collage_cmd": "Befehl um ein Collage-Bild aufzunehmen",
   "commands:take_picture_cmd": "Befehl zur Bildaufnahme",
   "commands:take_video_cmd": "Befehl zur Videoaufnahme",
-  "confirm": "bestätigen",
+  "confirm": "Bestätigen",
   "csrf_session_reloading": "Sitzung abgelaufen. Neuladen...",
   "current_version": "Installiert:",
   "currentPhpVersion": "Aktuelle PHP-Version:",
