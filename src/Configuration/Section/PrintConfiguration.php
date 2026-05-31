@@ -78,6 +78,29 @@ final class PrintConfiguration
                     ->values(['topLeft', 'top', 'topRight', 'right', 'bottomRight', 'bottom', 'bottomLeft', 'left'])
                     ->defaultValue('bottomRight')
                     ->end()
+				->enumNode('qrPositionMode')
+					->values(['absolute', 'relative'])
+					->defaultValue('absolute')
+					->end()
+					
+				
+				->floatNode('qrRelativeSize')
+					->defaultValue(0.08)
+					->min(0.01)
+					->max(1.0)
+					->end()
+
+				->floatNode('qrRelativeOffset')
+					->defaultValue(0.02)
+					->min(0)
+					->max(1)
+					->end()
+					
+					
+					
+					
+					
+					
                 ->integerNode('qrOffset')
                     ->defaultValue(10)
                     ->beforeNormalization()
