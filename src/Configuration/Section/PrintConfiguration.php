@@ -85,12 +85,20 @@ final class PrintConfiguration
 					
 				
 				->floatNode('qrRelativeSize')
+					->beforeNormalization()
+						->ifString()
+						->then(fn(string $value): float => (float) $value)
+					->end()
 					->defaultValue(0.08)
 					->min(0.01)
 					->max(1.0)
-					->end()
+				->end()
 
 				->floatNode('qrRelativeOffset')
+					->beforeNormalization()
+						->ifString()
+						->then(fn(string $value): float => (float) $value)
+					->end()
 					->defaultValue(0.02)
 					->min(0)
 					->max(1)
