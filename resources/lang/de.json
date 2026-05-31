@@ -954,6 +954,9 @@
   "print:print_qrMargin": "Rand für QR-Code",
   "print:print_qrOffset": "QR-Code Versatz",
   "print:print_qrPosition": "QR-Code Platzierung",
+	"print_qrPositionMode": "QR position mode",
+	"print_qrRelativeSize": "QR size relative to print width",
+	"print_qrRelativeOffset": "QR offset relative to print width"
   "print:print_qrSize": "QR-Code Größe (4 = klein, 10 = extra groß)",
   "print:print_reset_lock": "Drucken entsperren",
   "print:print_time": "Druckdauer",
