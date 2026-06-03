@@ -111,7 +111,9 @@ class SyncToDrive {
             try {
                 fs.mkdirSync(destinationPath, { recursive: true });
             } catch (err) {
-                throw new Error(`Error: Failed to create directory ${destinationPath} - ${err.message}`);
+                throw new Error(`Error: Failed to create directory ${destinationPath} - ${err.message}`, {
+                    cause: err
+                });
             }
         }
 
@@ -138,9 +140,8 @@ class SyncToDrive {
         log('Validating rsync command...');
         try {
             execSync(command + ' --dry-run', { shell: '/bin/bash', stdio: 'ignore' });
-            // eslint-disable-next-line no-unused-vars
         } catch (err) {
-            throw new Error('Error: Rsync validation failed. Check permissions and paths.');
+            throw new Error('Error: Rsync validation failed. Check permissions and paths.', { cause: err });
         }
 
         log('Starting sync to USB drive ...');
@@ -172,7 +173,7 @@ class SyncToDrive {
         log('Finding device ' + driveName);
 
         const requiredColumns = 'NAME,KNAME,PATH,LABEL,MOUNTPOINT,MOUNTPOINTS,SUBSYSTEMS,TYPE';
-        let json = {};
+        let json;
         try {
             // Try -ablJO first (all columns), fall back to explicit column list
             let output;
@@ -186,7 +187,8 @@ class SyncToDrive {
         } catch (err) {
             log(err.message);
             throw new Error(
-                'Could not parse the output of lsblk! Please make sure its installed and that it offers JSON output!'
+                'Could not parse the output of lsblk! Please make sure its installed and that it offers JSON output!',
+                { cause: err }
             );
         }
 
@@ -227,7 +229,7 @@ class SyncToDrive {
             blkidOutput = execSync('LC_ALL=C blkid 2>/dev/null').toString();
         } catch (err) {
             log('blkid fallback failed: ' + err.message);
-            throw new Error('Device ' + driveName + ' was not detected (blkid fallback also failed)');
+            throw new Error('Device ' + driveName + ' was not detected (blkid fallback also failed)', { cause: err });
         }
 
         // Parse blkid output lines
