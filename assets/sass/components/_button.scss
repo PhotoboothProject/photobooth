@@ -114,6 +114,7 @@
   }
 
   .button--label {
+    line-height: 1.2;
     text-overflow: ellipsis;
     overflow: hidden;
     max-width: calc(100% - 1rem);
