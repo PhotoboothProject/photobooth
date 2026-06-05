@@ -63,6 +63,15 @@ final class PrintConfiguration
                 ->booleanNode('no_rotate')->defaultValue(false)->end()
                 ->scalarNode('key')->defaultValue('')->end()
                 ->booleanNode('qrcode')->defaultValue(false)->end()
+
+                ->enumNode('qrPosition')
+                    ->values(['topLeft', 'top', 'topRight', 'right', 'bottomRight', 'bottom', 'bottomLeft', 'left'])
+                    ->defaultValue('bottomRight')
+                    ->end()
+				->enumNode('qrPositionMode')
+					->values(['absolute', 'relative'])
+					->defaultValue('absolute')
+					->end()
                 ->integerNode('qrSize')
                     ->defaultValue(4)
                     ->min(4)
@@ -73,17 +82,16 @@ final class PrintConfiguration
                             return intval($value);
                         })
                         ->end()
-                    ->end()
-                ->enumNode('qrPosition')
-                    ->values(['topLeft', 'top', 'topRight', 'right', 'bottomRight', 'bottom', 'bottomLeft', 'left'])
-                    ->defaultValue('bottomRight')
-                    ->end()
-				->enumNode('qrPositionMode')
-					->values(['absolute', 'relative'])
-					->defaultValue('absolute')
-					->end()
-					
-				
+                    ->end()					
+                ->integerNode('qrOffset')
+                    ->defaultValue(10)
+                    ->beforeNormalization()
+                        ->ifString()
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
+                        ->end()
+                    ->end()				
 				->floatNode('qrRelativeSize')
 					->beforeNormalization()
 						->ifString()
@@ -93,7 +101,6 @@ final class PrintConfiguration
 					->min(0.01)
 					->max(1.0)
 				->end()
-
 				->floatNode('qrRelativeOffset')
 					->beforeNormalization()
 						->ifString()
@@ -103,21 +110,6 @@ final class PrintConfiguration
 					->min(0)
 					->max(1)
 					->end()
-					
-					
-					
-					
-					
-					
-                ->integerNode('qrOffset')
-                    ->defaultValue(10)
-                    ->beforeNormalization()
-                        ->ifString()
-                        ->then(function (string $value): int {
-                            return intval($value);
-                        })
-                        ->end()
-                    ->end()
                 ->integerNode('qrMargin')
                     ->defaultValue(4)
                     ->min(0)

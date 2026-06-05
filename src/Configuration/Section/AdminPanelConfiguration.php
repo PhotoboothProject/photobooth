@@ -13,7 +13,7 @@ final class AdminPanelConfiguration
             ->ignoreExtraKeys()
             ->children()
                 ->enumNode('view')
-                    ->values(['basic', 'advanced', 'expert', 'testeintrag'])
+                    ->values(['basic', 'advanced', 'expert'])
                     ->defaultValue('basic')
                     ->end()
                 ->booleanNode('experimental_settings')->defaultValue(false)->end()

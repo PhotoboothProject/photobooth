@@ -952,12 +952,12 @@
   "print:print_qrBgColor": "QR-Code Hintergrundfarbe",
   "print:print_qrcode": "QR-Code auf dem Bild beim Drucken",
   "print:print_qrMargin": "Rand für QR-Code",
-  "print:print_qrOffset": "QR-Code Versatz",
+  "print:print_qrOffset": "QR-Code Versatz absolut",
   "print:print_qrPosition": "QR-Code Platzierung",
-	"print_qrPositionMode": "QR position mode",
-	"print_qrRelativeSize": "QR size relative to print width",
-	"print_qrRelativeOffset": "QR offset relative to print width"
-  "print:print_qrSize": "QR-Code Größe (4 = klein, 10 = extra groß)",
+	"print:qrPositionMode": "QR Positionierungs Modus",
+	"print:qrRelativeSize": "QR-Code Größe relativ (0,5 = 50% der Breite des Bildes)",
+	"print:qrRelativeOffset": "QR-Code Versatz relativ (0,2 = 20% der Breite des Bildes)"
+  "print:print_qrSize": "QR-Code Größe absolut (4 = klein, 10 = extra groß)",
   "print:print_reset_lock": "Drucken entsperren",
   "print:print_time": "Druckdauer",
   "print:textonprint_enabled": "Text auf das Bild drucken",

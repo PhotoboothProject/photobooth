@@ -955,6 +955,9 @@
   "print:print_qrOffset": "QR Code offset",
   "print:print_qrPosition": "QR Code position",
   "print:print_qrSize": "QR Code size (4 = small, 10 = extra large)",
+  "print:qrPositionMode": "QR positioning mode",
+	"print:qrRelativeSize": "QR Code size relative (0,5 = 50% of picture width)",
+	"print:qrRelativeOffset": "QR Code offset relative (0,2 = 20% of picture width)"
   "print:print_reset_lock": "Unlock print",
   "print:print_time": "Printing time",
   "print:textonprint_enabled": "Print text on image",
