@@ -285,27 +285,25 @@ class Image
      * The URL to generate a QR code for.
      */
     public string $qrUrl = '';
-	
-	/**
-	 * Positioning mode for QR code.
-	 * absolute = current behaviour
-	 * relative = size and offset relative to print width
-	 */
-	public string $qrPositionMode = 'absolute';
 
-	/**
-	 * QR size relative to final print width.
-	 * Example: 0.08 = 8%
-	 */
-	public float $qrRelativeSize = 0.08;
+    /**
+     * Positioning mode for QR code.
+     * absolute = current behaviour
+     * relative = size and offset relative to print width
+     */
+    public string $qrPositionMode = 'absolute';
 
-	/**
-	 * QR offset relative to final print width.
-	 * Example: 0.02 = 2%
-	 */
-	public float $qrRelativeOffset = 0.02;
+    /**
+     * QR size relative to final print width.
+     * Example: 0.08 = 8%
+     */
+    public float $qrRelativeSize = 0.08;
 
-
+    /**
+     * QR offset relative to final print width.
+     * Example: 0.02 = 2%
+     */
+    public float $qrRelativeOffset = 0.02;
 
     /**
      *
@@ -1292,41 +1290,41 @@ class Image
             $height = imagesy($imageResource);
             $qrWidth = imagesx($qrCode);
             $qrHeight = imagesy($qrCode);
-			
-			//for relative positioning
-			if ($this->qrPositionMode === 'relative') {
 
-				$targetSize = max(
-					20,
-					(int) round($width * $this->qrRelativeSize)
-				);
+            //for relative positioning
+            if ($this->qrPositionMode === 'relative') {
 
-				$offset = max(
-					0,
-					(int) round($width * $this->qrRelativeOffset)
-				);
+                $targetSize = max(
+                    20,
+                    (int) round($width * $this->qrRelativeSize)
+                );
 
-				$qrCode = $this->resizePngImage(
-					$qrCode,
-					$targetSize,
-					$targetSize
-				);
+                $offset = max(
+                    0,
+                    (int) round($width * $this->qrRelativeOffset)
+                );
 
-				if (!$qrCode instanceof GdImage) {
-					throw new \Exception('Unable to resize QR code.');
-				}
+                $qrCode = $this->resizePngImage(
+                    $qrCode,
+                    $targetSize,
+                    $targetSize
+                );
 
-				$qrWidth = imagesx($qrCode);
-				$qrHeight = imagesy($qrCode);
-			} else {
+                if (!$qrCode instanceof GdImage) {
+                    throw new \Exception('Unable to resize QR code.');
+                }
 
-				if (!is_numeric($this->qrOffset)) {
-					throw new \Exception('QR-Offset is not numeric.');
-				}
+                $qrWidth = imagesx($qrCode);
+                $qrHeight = imagesy($qrCode);
+            } else {
 
-				$offset = $this->qrOffset;
-			}
-			
+                if (!is_numeric($this->qrOffset)) {
+                    throw new \Exception('QR-Offset is not numeric.');
+                }
+
+                $offset = $this->qrOffset;
+            }
+
             switch ($this->qrPosition) {
                 case 'topLeft':
                     $x = $offset;

@@ -168,14 +168,14 @@ if (!file_exists($vars['printFile'])) {
             $imageHandler->qrColor = $config['print']['qrBgColor'];
             $imageHandler->qrOffset = $config['print']['qrOffset'];
             $imageHandler->qrPosition = $config['print']['qrPosition'];
-			$imageHandler->qrPositionMode =
-				$config['print']['qrPositionMode'] ?? 'absolute';
+            $imageHandler->qrPositionMode =
+                $config['print']['qrPositionMode'] ?? 'absolute';
 
-			$imageHandler->qrRelativeSize =
-				(float)($config['print']['qrRelativeSize'] ?? 0.08);
+            $imageHandler->qrRelativeSize =
+                (float)($config['print']['qrRelativeSize'] ?? 0.08);
 
-			$imageHandler->qrRelativeOffset =
-				(float)($config['print']['qrRelativeOffset'] ?? 0.02);
+            $imageHandler->qrRelativeOffset =
+                (float)($config['print']['qrRelativeOffset'] ?? 0.02);
             $qrCode = $imageHandler->createQr();
             if (!$qrCode instanceof \GdImage) {
                 throw new \Exception('Cannot create QR Code resource.');
