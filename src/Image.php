@@ -1171,18 +1171,11 @@ class Image
                 throw new \Exception('No URL for QR-Code generation defined.');
             }
 
-            if (!is_numeric($this->qrSize)) {
-                throw new \Exception('QR-Size is not numeric.');
-            }
             if ($this->qrSize % 2 != 0) {
                 throw new \Exception('QR-Size is not even.');
             }
             if ($this->qrSize < 2 || $this->qrSize > 10) {
                 throw new \Exception('QR-Size must be 2, 4, 6, 8 or 10.');
-            }
-
-            if (!is_numeric($this->qrMargin)) {
-                throw new \Exception('QR-Margin is not numeric.');
             }
             if ($this->qrMargin < 0 || $this->qrMargin > 10) {
                 throw new \Exception('QR-Size must be in range between 0 and 10.');
@@ -1281,9 +1274,6 @@ class Image
     public function applyQr(GdImage $qrCode, GdImage $imageResource): GdImage
     {
         try {
-            if (!is_numeric($this->qrOffset)) {
-                throw new \Exception('QR-Offset is not numeric.');
-            }
             $offset = $this->qrOffset;
 
             $width = imagesx($imageResource);
@@ -1317,11 +1307,6 @@ class Image
                 $qrWidth = imagesx($qrCode);
                 $qrHeight = imagesy($qrCode);
             } else {
-
-                if (!is_numeric($this->qrOffset)) {
-                    throw new \Exception('QR-Offset is not numeric.');
-                }
-
                 $offset = $this->qrOffset;
             }
 

@@ -31,7 +31,7 @@ wsl --install
 ```
 
 This will enable the required windows features and sets the default
-version of wsl to version 2. 
+version of wsl to version 2.
 
 If something goes wrong here, check out this [page](https://learn.microsoft.com/en-us/windows/wsl/install).
 
