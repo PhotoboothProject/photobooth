@@ -194,7 +194,10 @@ $(function () {
                     const normalized = typeof value === 'undefined' ? (isCheckbox ? false : '') : value;
                     if (isCheckbox) {
                         const checkedValue = $el.attr('data-theme-checked-value') ?? 'true';
-                        $el.prop('checked', normalized === true || normalized === 'true' || normalized === checkedValue);
+                        $el.prop(
+                            'checked',
+                            normalized === true || normalized === 'true' || normalized === checkedValue
+                        );
                     } else {
                         $el.val(normalized);
                     }
