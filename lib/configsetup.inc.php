@@ -1159,6 +1159,8 @@ return [
             'type' => 'checkbox',
             'name' => 'collage[background_render_mode]',
             'data-theme-field' => 'true',
+            'data-theme-checked-value' => 'overlay_frame',
+            'data-theme-unchecked-value' => 'behind_images',
             'value' => ($config['collage']['background_render_mode'] ?? 'behind_images') === 'overlay_frame' ? 'true' : 'false',
         ],
         'collage_placeholder' => [

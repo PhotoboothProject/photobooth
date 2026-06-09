@@ -149,7 +149,9 @@ $(function () {
                 let value;
                 if (el.tagName === 'INPUT') {
                     if ($el.attr('type') === 'checkbox') {
-                        value = $el.is(':checked') ? 'true' : 'false';
+                        const checkedValue = $el.attr('data-theme-checked-value') ?? 'true';
+                        const uncheckedValue = $el.attr('data-theme-unchecked-value') ?? 'false';
+                        value = $el.is(':checked') ? checkedValue : uncheckedValue;
                     } else {
                         value = $el.val();
                     }
@@ -191,7 +193,8 @@ $(function () {
                     const isCheckbox = $el.attr('type') === 'checkbox';
                     const normalized = typeof value === 'undefined' ? (isCheckbox ? false : '') : value;
                     if (isCheckbox) {
-                        $el.prop('checked', normalized === true || normalized === 'true');
+                        const checkedValue = $el.attr('data-theme-checked-value') ?? 'true';
+                        $el.prop('checked', normalized === true || normalized === 'true' || normalized === checkedValue);
                     } else {
                         $el.val(normalized);
                     }

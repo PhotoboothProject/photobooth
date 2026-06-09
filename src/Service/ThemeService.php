@@ -120,6 +120,7 @@ class ThemeService
         }
 
         $file = $this->getFilePath($name);
+        $data = $this->normalizeThemeData($data);
 
         if (!is_dir($this->themeDirectory)) {
             @mkdir($this->themeDirectory, 0775, true);
