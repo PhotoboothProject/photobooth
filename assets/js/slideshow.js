@@ -121,6 +121,8 @@ function initPhotoSlideFromDOM(gallerySelector) {
             $('.pswp__button--playpause i:first').toggleClass(config.icons.slideshow_toggle);
             setSlideshowState(ssButtonClass, !ssRunning);
         }
+        $('.pswp__button--close').empty();
+        $('.pswp__button--close').html('<i class="' + config.icons.close + '"></i>');
     });
 
     gallery.init();
