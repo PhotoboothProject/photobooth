@@ -222,6 +222,7 @@
     &--left-top,
     &--left-center {
       position: absolute;
+      width: auto;
       left: 4rem;
       right: 4rem;
     }
@@ -229,6 +230,7 @@
     &--right-top,
     &--right-center {
       position: absolute;
+      width: auto;
       left: -4rem;
       right: 4rem;
     }
