@@ -83,7 +83,64 @@ if (!function_exists('checkCsrfOrFail')) {
     function checkCsrfOrFail(array $source, string $key = 'csrf'): void
     {
         $sessionToken  = $_SESSION[$key] ?? '';
+
+        // Best-effort to locate an incoming CSRF token from multiple possible sources
         $incomingToken = $source[$key] ?? '';
+
+        // If the expected key is missing, try to find any POST/GET key that contains 'csrf'
+        if (empty($incomingToken)) {
+            foreach ($source as $k => $v) {
+                if (stripos((string)$k, 'csrf') !== false) {
+                    $incomingToken = (string)$v;
+                    break;
+                }
+            }
+        }
+
+        // Check common HTTP headers that might carry the token
+        $headerCandidates = [
+            'HTTP_X_CSRF_TOKEN',
+            'HTTP_X_CSRF',
+            'HTTP_X_CSRFTOKEN',
+            'HTTP_X_CSRF-TOKEN',
+            'HTTP_X_CSRFKEY',
+        ];
+        foreach ($headerCandidates as $h) {
+            if (!empty($_SERVER[$h])) {
+                $incomingToken = (string)$_SERVER[$h];
+                break;
+            }
+        }
+
+        // Also inspect HTTP request headers if available
+        if (empty($incomingToken) && function_exists('getallheaders')) {
+            $headers = getallheaders();
+            foreach ($headers as $hn => $hv) {
+                if (stripos((string)$hn, 'csrf') !== false) {
+                    $incomingToken = (string)$hv;
+                    break;
+                }
+            }
+        }
+
+        // If still empty, attempt to parse a JSON request body
+        if (empty($incomingToken)) {
+            $rawInput = file_get_contents('php://input');
+            $json = json_decode($rawInput, true);
+            if (is_array($json)) {
+                if (isset($json[$key])) {
+                    $incomingToken = (string)$json[$key];
+                } else {
+                    foreach ($json as $k => $v) {
+                        if (stripos((string)$k, 'csrf') !== false) {
+                            $incomingToken = (string)$v;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         if (!hash_equals((string)$sessionToken, (string)$incomingToken)) {
             $logger = Photobooth\Service\LoggerService::getInstance()->getLogger('main');
             $logger->debug('CSRF validation failed', [
