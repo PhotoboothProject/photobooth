@@ -9,6 +9,7 @@ use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Service\PrintManagerService;
 use Photobooth\Utility\PathUtility;
+use Photobooth\Utility\StartpageTextPosition;
 
 /*
  ** This file defines the admin panel of photobooth. The admin panel definition is done in a JSON variable and structured as follows
@@ -125,6 +126,12 @@ foreach ($layoutsEnabledValues as $layoutValue) {
     }
     $layoutsEnabledOptions[$layoutValue] = $layoutValue;
 }
+
+$startpageTextPosition = StartpageTextPosition::resolve(
+    $config['ui']['startpage_text_position'] ?? null,
+    $config['logo']['position'] ?? null,
+    $config['logo']['enabled'] ?? null
+);
 
 return [
     'general' => [
@@ -457,6 +464,7 @@ return [
                 'fa-light fa-champagne-glasses' => 'Champagne glasses',
                 'fa-gears' => 'Gears',
                 'fa-users' => 'People',
+                'fa-solid fa-sun' => 'Sun',
             ],
             'data-theme-field' => 'true',
             'value' => $config['event']['symbol'],
@@ -506,6 +514,7 @@ return [
             'view' => 'advanced',
             'type' => 'select',
             'name' => 'logo[position]',
+            'data-logo-position' => 'true',
             'options' => [
                 'center' => 'center',
                 'top_right' => 'Top Right',
@@ -515,6 +524,25 @@ return [
             ],
             'data-theme-field' => 'true',
             'value' => $config['logo']['position'],
+        ],
+        'ui_startpage_text_position' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'ui[startpage_text_position]',
+            'data-theme-field' => 'true',
+            'data-startpage-text-position' => 'true',
+            'options' => [
+                'top' => 'Top Center',
+                'center' => 'Center',
+                'bottom' => 'Bottom Center',
+                'left-top' => 'Left Top',
+                'left-center' => 'Left Center',
+                'left-bottom' => 'Left Bottom',
+                'right-top' => 'Right Top',
+                'right-center' => 'Right Center',
+                'right-bottom' => 'Right Bottom',
+            ],
+            'value' => $startpageTextPosition,
         ],
     ],
     'screensaver' => [

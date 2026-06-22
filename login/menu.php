@@ -1,9 +1,11 @@
 <?php
 
 use Photobooth\Service\LanguageService;
+use Photobooth\Utility\LoginMenuUtility;
 use Photobooth\Utility\PathUtility;
 
 $languageService = LanguageService::getInstance();
+$menuSessionActive = LoginMenuUtility::isMenuSessionActive($_SESSION);
 
 ?>
 
@@ -37,7 +39,7 @@ if (!$config['protect']['admin'] || (!$config['protect']['localhost_admin'] && (
 echo getMenuBtn(PathUtility::getPublicPath('gallery'), 'gallery', $config['icons']['gallery']);
 echo getMenuBtn(PathUtility::getPublicPath('slideshow'), 'slideshow', $config['icons']['slideshow']);
 
-if (!$config['protect']['index'] || (!$config['protect']['localhost_index'] && (isset($_SERVER['SERVER_ADDR']) && $_SERVER['REMOTE_ADDR'] === $_SERVER['SERVER_ADDR'])) || !$config['login']['enabled'] || (isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
+if (LoginMenuUtility::shouldShowChromaMenuEntry($config, $_SESSION, $_SERVER)) {
     echo getMenuBtn(PathUtility::getPublicPath('chroma'), 'chromaCapture', $config['icons']['chromaCapture']);
 }
 
@@ -48,17 +50,17 @@ if (!$config['protect']['manual'] || (!$config['protect']['localhost_manual'] &&
 }
 
 // reboot
-if ((isset($_SESSION['auth']) && $_SESSION['auth'] === true)) {
+if ($menuSessionActive) {
     echo getMenuBtn('reboot-btn', 'reboot_button');
 }
 
 // shutdown
-if ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || isset($_SESSION['rental'])) {
+if ($menuSessionActive) {
     echo getMenuBtn('shutdown-btn', 'shutdown_button');
 }
 
 // logout
-if ((isset($_SESSION['auth']) && $_SESSION['auth'] === true) || isset($_SESSION['rental'])) {
+if ($menuSessionActive) {
     echo getMenuBtn(PathUtility::getPublicPath('login/logout.php'), 'logout', $config['icons']['logout']);
 }
 
