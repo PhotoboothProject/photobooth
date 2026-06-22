@@ -5,6 +5,8 @@ require_once __DIR__ . '/../admin/admin_boot.php';
 use Photobooth\Service\ThemeService;
 
 $themeService = ThemeService::getInstance();
+$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+$query = $_GET;
 
 $sendJson = static function (array $payload): void {
     header('Content-Type: application/json');
@@ -12,8 +14,33 @@ $sendJson = static function (array $payload): void {
     exit();
 };
 
-$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-$query = $_GET;
+$getThemeUploadErrorMessage = static function (?int $uploadError = null) use ($method): string {
+    $uploadLimit = (string)ini_get('upload_max_filesize');
+    $postLimit = (string)ini_get('post_max_size');
+
+    if ($method === 'POST') {
+        $contentType = strtolower((string)($_SERVER['CONTENT_TYPE'] ?? ''));
+        $contentLength = (int)($_SERVER['CONTENT_LENGTH'] ?? 0);
+        if (str_contains($contentType, 'multipart/form-data') && $contentLength > 0 && empty($_POST) && empty($_FILES)) {
+            return sprintf(
+                'Theme import exceeded the server upload limit. Increase upload_max_filesize and post_max_size. Current limits: upload_max_filesize=%s, post_max_size=%s.',
+                $uploadLimit,
+                $postLimit
+            );
+        }
+    }
+
+    return match ($uploadError) {
+        UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => sprintf(
+            'Theme import exceeded the server upload limit. Increase upload_max_filesize and post_max_size. Current limits: upload_max_filesize=%s, post_max_size=%s.',
+            $uploadLimit,
+            $postLimit
+        ),
+        UPLOAD_ERR_PARTIAL => 'Theme zip was only partially uploaded. Please try again.',
+        UPLOAD_ERR_NO_FILE => 'No theme zip provided.',
+        default => 'Theme import failed while uploading the zip file.',
+    };
+};
 
 if ($method === 'GET') {
     $action = $query['action'] ?? 'list';
@@ -76,19 +103,34 @@ if ($method === 'GET') {
 
 // Handle multipart/form-data import first
 $postAction = $_POST['action'] ?? null;
+if (
+    $method === 'POST' &&
+    str_contains(strtolower((string)($_SERVER['CONTENT_TYPE'] ?? '')), 'multipart/form-data') &&
+    $postAction === null &&
+    empty($_FILES) &&
+    ((int)($_SERVER['CONTENT_LENGTH'] ?? 0) > 0)
+) {
+    $sendJson([
+        'status' => 'error',
+        'message' => $getThemeUploadErrorMessage(),
+    ]);
+}
+
 if ($postAction !== null) {
     checkCsrfOrFail($_POST);
 }
 if ($postAction === 'import') {
-    if (!isset($_FILES['theme_zip']) || !is_uploaded_file($_FILES['theme_zip']['tmp_name']) || $_FILES['theme_zip']['error'] !== UPLOAD_ERR_OK) {
+    $uploadError = $_FILES['theme_zip']['error'] ?? UPLOAD_ERR_NO_FILE;
+    $tmpFile = $_FILES['theme_zip']['tmp_name'] ?? '';
+
+    if (!isset($_FILES['theme_zip']) || !is_uploaded_file($tmpFile) || $uploadError !== UPLOAD_ERR_OK) {
         $sendJson([
             'status' => 'error',
-            'message' => 'No theme zip provided',
+            'message' => $getThemeUploadErrorMessage($uploadError),
         ]);
     }
 
     $targetName = isset($_POST['name']) ? (string)$_POST['name'] : null;
-    $tmpFile = $_FILES['theme_zip']['tmp_name'];
 
     $result = $themeService->importTheme($tmpFile, $targetName);
     if (!$result['success']) {

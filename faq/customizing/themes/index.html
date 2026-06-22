@@ -189,6 +189,7 @@ Typical examples include:</p>
 <li>Background images and frames</li>
 <li>Event text and icon</li>
 <li>Logo visibility, path and position</li>
+<li>Startpage text placement such as <code>ui.startpage_text_position</code></li>
 <li>Picture/collage specific appearance options (polaroid effect, text overlays, placeholders, …)</li>
 </ul>
 <h2 id="how-themes-are-stored">How themes are stored</h2>
@@ -198,6 +199,12 @@ Typical examples include:</p>
 <li>Format: <strong>grouped by category</strong>, similar to <code>my.config.inc.php</code>, for example:</li>
 </ul>
 <pre><code class="language-json">{
+  &quot;ui&quot;: {
+    &quot;startpage_text_position&quot;: &quot;left-center&quot;
+  },
+  &quot;logo&quot;: {
+    &quot;position&quot;: &quot;top_right&quot;
+  },
   &quot;event&quot;: {
     &quot;symbol&quot;: &quot;fa-birthday-cake&quot;,
     &quot;textLeft&quot;: &quot;Lisa &amp; Tom&quot;,
@@ -222,6 +229,7 @@ Typical examples include:</p>
 <ul>
 <li>Keys correspond to the configuration categories (for example <code>event</code>, <code>colors</code>, <code>picture</code>, <code>collage</code>).</li>
 <li>Inside each category, the keys match the setting names (for example <code>symbol</code>, <code>frame</code>, <code>background_color</code>).</li>
+<li>Startpage text positions support centered, left, and right placements across top, middle, and bottom. If the logo is enabled and centered, the runtime falls back to bottom center so both elements do not overlap.</li>
 </ul>
 <h2 id="using-themes">Using themes</h2>
 <p>In the <strong>Themes</strong> card you can:</p>

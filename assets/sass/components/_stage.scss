@@ -98,7 +98,7 @@
   &-inner {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     position: relative;
     height: 100%;
@@ -210,6 +210,83 @@
   }
 }
 
+.stage--start {
+  .stage-start__text {
+    display: flex;
+    pointer-events: none;
+    z-index: 1;
+    width: 100%;
+
+    &--top,
+    &--center,
+    &--left-top,
+    &--left-center {
+      position: absolute;
+      width: auto;
+      left: 4rem;
+      right: 4rem;
+    }
+
+    &--right-top,
+    &--right-center {
+      position: absolute;
+      width: auto;
+      left: -4rem;
+      right: 4rem;
+    }
+
+    &--top,
+    &--left-top,
+    &--right-top {
+      top: 4rem;
+    }
+
+    &--center,
+    &--left-center,
+    &--right-center {
+      top: 35%;
+      translate: 0 -50%;
+    }
+
+    &--top,
+    &--center,
+    &--bottom {
+      justify-content: center;
+      text-align: center;
+    }
+
+    &--left-top,
+    &--left-center,
+    &--left-bottom {
+      justify-content: flex-start;
+      text-align: left;
+    }
+
+    &--right-top,
+    &--right-center,
+    &--right-bottom {
+      justify-content: flex-end;
+      text-align: right;
+    }
+
+    &--bottom,
+    &--left-bottom,
+    &--right-bottom {
+      margin-bottom: 0;
+    }
+  }
+
+  .stage-start__actions {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+  }
+
+  .names {
+    max-width: min(100%, 40rem);
+  }
+}
+
 .stage--start .names .start-text {
   font-family: var(--font-family-start-text, --font-family-default), 'Dosis', sans-serif;
   color: var(--start-text-color, inherit);
@@ -222,6 +299,36 @@
   color: var(--event-text-color, inherit);
   font-weight: var(--event-text-weight, 400);
   font-style: var(--event-text-style, normal);
+}
+
+@media (max-width: 767px) {
+  .stage--start .stage-start__text {
+    &--top,
+    &--center,
+    &--left-top,
+    &--left-center {
+      left: 1rem;
+      right: 1rem;
+    }
+
+    &--right-top,
+    &--right-center {
+      left: -1rem;
+      right: 1rem;
+    }
+
+    &--top,
+    &--left-top,
+    &--right-top {
+      top: 1rem;
+    }
+
+    &--center,
+    &--left-center,
+    &--right-center {
+      top: 35%;
+    }
+  }
 }
 
 /* Respect iOS safe areas when viewport-fit=cover hides the status bar */

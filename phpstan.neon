@@ -7,6 +7,8 @@ parameters:
 
     ignoreErrors:
         - identifier: missingType.iterableValue
+        - '#^Call to method [A-Za-z0-9_]+\(\) on an unknown class Symfony\\Component\\Config\\Definition\\Builder\\NodeBuilder<.+>\.$#'
+        - '#^Call to method [A-Za-z0-9_]+\(\) on an unknown class Symfony\\Component\\Config\\Definition\\Builder\\ExprBuilder<.+>\.$#'
 
     bootstrapFiles:
         - %currentWorkingDirectory%/tools/phpunit/vendor/autoload.php
