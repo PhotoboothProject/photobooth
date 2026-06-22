@@ -4,13 +4,10 @@
 [data-ui-theme='modern'],
 [data-ui-theme='modern_squared'] {
   .stage--start {
-    .stage-inner {
-      justify-content: flex-end;
-      #collageDiv {
-        background: color-mix(in srgb, var(--primary-color), transparent 75%);
-        backdrop-filter: blur(10px);
-        border-radius: 1rem;
-      }
+    #collageDiv {
+      background: color-mix(in srgb, var(--primary-color), transparent 75%);
+      backdrop-filter: blur(10px);
+      border-radius: 1rem;
     }
 
     button[data-command='cups-button'] {
@@ -31,9 +28,9 @@
 
 [data-ui-theme='modern'] {
   .stage--start {
-    .stage-inner {
+    .stage-start__text {
+      display: flex;
       justify-content: flex-end;
-      align-items: flex-end;
     }
 
     .names {

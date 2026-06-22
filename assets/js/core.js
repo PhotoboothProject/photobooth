@@ -1413,11 +1413,6 @@ const photoBooth = (function () {
             photoboothPreview.startVideo(CameraDisplayMode.INIT);
         }
 
-        if (usesBackgroundPreview) {
-            photoboothTools.console.logDev('Preview: core: restart background video from api.renderPic');
-            photoboothPreview.startVideo(CameraDisplayMode.BACKGROUND);
-        }
-
         if (config.commands.post_photo) {
             api.shellCommand('post-command', filename);
         }

@@ -4,12 +4,19 @@
 [data-ui-theme='classic'],
 [data-ui-theme='classic_rounded'] {
   .stage--start {
-    .stage-inner {
+    .stage-start__text {
       width: auto;
-      height: auto;
-      margin-left: 2rem;
-      margin-right: 2rem;
+    }
+
+    .names {
+      width: auto;
       max-width: 40rem;
+      text-align: center;
+    }
+
+    .names-inner {
+      position: relative;
+      padding: 2rem;
 
       &:before {
         content: '';
@@ -23,13 +30,8 @@
       }
 
       > * {
-        // workaround to allow background blur
         position: relative;
       }
-    }
-
-    .names {
-      text-align: center;
     }
 
     .names--decoration {
@@ -76,8 +78,8 @@
 
 [data-ui-theme='classic_rounded'] {
   .stage--start {
-    .stage-inner,
-    .stage-inner:before {
+    .names-inner,
+    .names-inner:before {
       border-radius: 1rem;
     }
     #collageDiv {
