@@ -3373,7 +3373,7 @@ function manage_permissions() {
         fi
         if [ "$PHOTOBOOTH_FOUND" = true ]; then
             MENU_OPTIONS+=("2" "Fix general permissions")
-            MENU_OPTIONS+=("3" "Adjust PHP Upload limit to 20 MB")
+            MENU_OPTIONS+=("3" "Adjust PHP Upload limit to 64 MB")
             MENU_OPTIONS+=("4" "USB Sync policy")
             if [ "$RUNNING_ON_PI" = true ]; then
                MENU_OPTIONS+=("5" "Add GPIO permission for www-data")
