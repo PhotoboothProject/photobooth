@@ -1411,9 +1411,9 @@ const photoBooth = (function () {
 
         api.resetTimeOut();
 
-        if (usesBackgroundPreview && config.preview.camTakesPic) {
-            photoboothTools.console.logDev('Preview: core: warm device cam stream from api.renderPic');
-            photoboothPreview.warmBackground();
+        if (usesBackgroundPreview) {
+            photoboothTools.console.logDev('Preview: core: restart background video from api.renderPic');
+            photoboothPreview.startVideo(CameraDisplayMode.BACKGROUND);
         } else if (config.commands.preview && !config.preview.bsm) {
             photoboothTools.console.logDev('Preview: core: start video from api.renderPic');
             photoboothPreview.startVideo(CameraDisplayMode.INIT);
