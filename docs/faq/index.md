@@ -397,10 +397,44 @@ Directory listing for `images/` and `thumbs/` is blocked by `index.php` redirect
 
 Uploads run **asynchronously** in a background worker so the Photobooth UI is never blocked while files are transferred. After a photo is taken, a job is added to a local SQLite queue. The worker processes jobs one by one and retries up to 5 times on failure.
 
-To run the worker as a persistent background service, copy the provided systemd unit and enable it:
+To run the worker as a persistent background service, copy the provided systemd unit and enable it.
+
+If Photobooth is installed in `/var/www/html`, you can use the unit as-is:
 
 ```bash
 sudo cp resources/config/photobooth-upload-worker.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now photobooth-upload-worker
+sudo systemctl status photobooth-upload-worker
+```
+
+If Photobooth is installed in a subfolder such as `/var/www/html/photobooth`, edit the unit before enabling it so `WorkingDirectory` and `ExecStart` match your installation path:
+
+```ini
+[Unit]
+Description=Photobooth Async Upload Worker
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/html/photobooth
+ExecStart=/usr/bin/php bin/photobooth photobooth:upload:worker
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=photobooth-upload
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Then install and enable the adjusted unit:
+
+```bash
+sudo nano /etc/systemd/system/photobooth-upload-worker.service
 sudo systemctl daemon-reload
 sudo systemctl enable --now photobooth-upload-worker
 sudo systemctl status photobooth-upload-worker

@@ -345,6 +345,7 @@ try {
                 $vars['singleImageFile'],
                 (bool) $config['ftp']['create_webpage']
             );
+            // $uploadQueue->ensureWorkerRunning();
         }
 
         // Change permissions

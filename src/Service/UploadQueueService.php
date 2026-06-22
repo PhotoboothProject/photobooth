@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Photobooth\Service;
 
 use Photobooth\Logger\NamedLogger;
+use Photobooth\Utility\ProcessUtility;
 use Photobooth\Utility\PathUtility;
 
 class UploadQueueService
@@ -22,6 +23,7 @@ class UploadQueueService
         }
         $this->db = new \PDO('sqlite:' . $dbPath);
         $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $this->db->exec('PRAGMA busy_timeout = 5000');
         $this->initializeDatabase();
     }
 
@@ -98,29 +100,61 @@ class UploadQueueService
     /**
      * @return array{id: int, image_file: string, thumb_file: string, remote_filename: string, create_webpage: int, status: string, retries: int, error_message: string|null, created_at: string, updated_at: string}|null
      */
-    public function fetchNext(): ?array
+    public function claimNextPendingJob(): ?array
     {
-        $stmt = $this->db->prepare(
-            'SELECT * FROM upload_queue WHERE status = \'pending\' ORDER BY id ASC LIMIT 1'
-        );
-        $stmt->execute();
+        while (true) {
+            $this->db->exec('BEGIN IMMEDIATE TRANSACTION');
 
-        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+            try {
+                $stmt = $this->db->prepare(
+                    'SELECT * FROM upload_queue WHERE status = \'pending\' ORDER BY id ASC LIMIT 1'
+                );
+                $stmt->execute();
 
-        if ($row === false) {
-            return null;
+                $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+                if ($row === false) {
+                    $this->db->commit();
+
+                    return null;
+                }
+
+                $claimStmt = $this->db->prepare(
+                    'UPDATE upload_queue SET status = \'in_progress\', updated_at = datetime(\'now\') WHERE id = :id AND status = \'pending\''
+                );
+                $claimStmt->execute([':id' => $row['id']]);
+
+                if ($claimStmt->rowCount() !== 1) {
+                    $this->db->rollBack();
+                    continue;
+                }
+
+                $refreshStmt = $this->db->prepare('SELECT * FROM upload_queue WHERE id = :id');
+                $refreshStmt->execute([':id' => $row['id']]);
+                $claimedRow = $refreshStmt->fetch(\PDO::FETCH_ASSOC);
+                $this->db->commit();
+
+                if ($claimedRow === false) {
+                    return null;
+                }
+
+                /** @var array{id: int, image_file: string, thumb_file: string, remote_filename: string, create_webpage: int, status: string, retries: int, error_message: string|null, created_at: string, updated_at: string} $claimedRow */
+                return $claimedRow;
+            } catch (\Throwable $exception) {
+                if ($this->db->inTransaction()) {
+                    $this->db->rollBack();
+                }
+
+                throw $exception;
+            }
         }
-
-        /** @var array{id: int, image_file: string, thumb_file: string, remote_filename: string, create_webpage: int, status: string, retries: int, error_message: string|null, created_at: string, updated_at: string} $row */
-        return $row;
     }
 
-    public function markInProgress(int $id): void
+    public function ensureWorkerRunning(): void
     {
-        $stmt = $this->db->prepare(
-            'UPDATE upload_queue SET status = \'in_progress\', updated_at = datetime(\'now\') WHERE id = :id'
-        );
-        $stmt->execute([':id' => $id]);
+        $phpBinary = PHP_BINARY;
+        $command = escapeshellarg($phpBinary) . ' ' . escapeshellarg(PathUtility::getAbsolutePath('bin/photobooth')) . ' photobooth:upload:worker';
+
+        ProcessUtility::startProcess('uploadworker', $command);
     }
 
     public function markCompleted(int $id): void

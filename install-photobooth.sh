@@ -2262,6 +2262,59 @@ EOF
     return 0
 }
 
+function create_upload_worker_service() {
+    if ! check_installfolderpath; then
+        return 1
+    fi
+
+    local service_file="/etc/systemd/system/photobooth-upload-worker.service"
+    local php_bin
+    php_bin="$(command -v php)"
+    if [[ -z "$php_bin" ]]; then
+        return 2
+    fi
+
+    if ! cat >"$service_file" <<EOF
+[Unit]
+Description=Photobooth Async Upload Worker
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=$INSTALLFOLDERPATH
+ExecStart=$php_bin bin/photobooth photobooth:upload:worker
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=photobooth-upload
+
+[Install]
+WantedBy=multi-user.target
+EOF
+    then
+        return 3
+    fi
+
+    if [[ "$HAS_SYSTEMD" == true ]]; then
+        if ! systemctl daemon-reload >/dev/null 2>&1; then
+            return 4
+        fi
+        if ! systemctl enable --now photobooth-upload-worker.service >/dev/null 2>&1; then
+            return 5
+        fi
+    else
+        mkdir -p /etc/systemd/system/multi-user.target.wants
+        if ! ln -sf "$service_file" /etc/systemd/system/multi-user.target.wants/photobooth-upload-worker.service; then
+            return 6
+        fi
+    fi
+
+    return 0
+}
+
 function remove_ffmpeg_webcam_service() {
     if [[ -f /etc/systemd/system/ffmpeg-webcam.service ]]; then
         if [[ "$HAS_SYSTEMD" == true ]]; then
@@ -3132,6 +3185,31 @@ function install_or_update_photobooth() {
     esac
 
     general_permissions
+
+    create_upload_worker_service
+    case $? in
+        0)
+            info "Upload worker service" "Upload worker service created successfully."
+            ;;
+        1)
+            warn "Upload worker service could not be configured because the install path is missing."
+            ;;
+        2)
+            warn "Upload worker service could not be configured because PHP CLI was not found."
+            ;;
+        3)
+            warn "Failed to write the upload worker service file."
+            ;;
+        4)
+            warn "Failed to reload the systemd daemon for the upload worker service."
+            ;;
+        5)
+            warn "Failed to enable or start the upload worker service."
+            ;;
+        6)
+            warn "Failed to create the upload worker service symlink."
+            ;;
+    esac
 
     if [ "$update" = true ]; then
         fix_git_modules

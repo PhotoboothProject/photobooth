@@ -9,6 +9,8 @@ use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\RemoteStorageService;
 use Photobooth\Service\UploadQueueService;
+use Photobooth\Utility\PathUtility;
+use Photobooth\Utility\ProcessUtility;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,6 +23,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class UploadWorkerCommand extends Command
 {
+    private const PROCESS_NAME = 'uploadworker';
+
     protected function configure(): void
     {
         $this->setDescription('Processes the async FTP/SFTP upload queue');
@@ -35,6 +39,18 @@ class UploadWorkerCommand extends Command
         $once = (bool) $input->getOption('once');
         $pollInterval = (int) $input->getOption('poll-interval');
 
+        if (!$once && ProcessUtility::processIsRunning(self::PROCESS_NAME)) {
+            $output->writeln('Upload worker already running.');
+            $logger->info('Upload worker start skipped, process already running.');
+
+            return Command::SUCCESS;
+        }
+
+        if (!$once) {
+            $this->writePidFile();
+            register_shutdown_function(fn () => $this->cleanupPidFile());
+        }
+
         $output->writeln('Upload worker started.');
         $logger->info('Upload worker started');
 
@@ -45,7 +61,7 @@ class UploadWorkerCommand extends Command
         $lastConfigHash = '';
 
         while (true) {
-            $job = $queue->fetchNext();
+            $job = $queue->claimNextPendingJob();
 
             if ($job === null) {
                 if ($once) {
@@ -64,8 +80,6 @@ class UploadWorkerCommand extends Command
 
             $output->writeln('Processing job #' . $jobId . ': ' . $imageFile . ' -> ' . $remoteFilename);
             $logger->info('Processing upload job', ['id' => $jobId, 'image' => $imageFile, 'remote' => $remoteFilename]);
-
-            $queue->markInProgress($jobId);
 
             try {
                 // Reload config from disk and create fresh RemoteStorageService per job
@@ -122,5 +136,36 @@ class UploadWorkerCommand extends Command
                 return Command::SUCCESS;
             }
         }
+    }
+
+    private function writePidFile(): void
+    {
+        $pidFile = $this->getPidFile();
+        $directory = dirname($pidFile);
+        if (!is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        file_put_contents($pidFile, (string) getmypid());
+    }
+
+    private function cleanupPidFile(): void
+    {
+        $pidFile = $this->getPidFile();
+        if (!file_exists($pidFile)) {
+            return;
+        }
+
+        $pid = file_get_contents($pidFile);
+        if ($pid === false || trim($pid) !== (string) getmypid()) {
+            return;
+        }
+
+        unlink($pidFile);
+    }
+
+    private function getPidFile(): string
+    {
+        return PathUtility::getAbsolutePath('var/run/' . self::PROCESS_NAME . '.pid');
     }
 }
