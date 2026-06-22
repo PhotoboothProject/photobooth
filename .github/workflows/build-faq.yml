@@ -44,6 +44,6 @@ jobs:
           else
             echo "created=false" >> "$GITHUB_OUTPUT"
           fi
-      - name: Push changes to dev
+      - name: Push changes
         if: steps.commit.outputs.created == 'true'
-        run: git push origin dev
+        run: git push origin HEAD:${{ github.ref_name }}

@@ -1,66 +1,49 @@
 <?php
 
-if (file_exists('config.inc.php')) {
-    $templateConfig = require 'config.inc.php';
+if (file_exists(__DIR__ . '/config.inc.php')) {
+    $templateConfig = require __DIR__ . '/config.inc.php';
 }
 
 if (!isset($templateConfig)) {
     die('config.inc.php missing');
 }
 
+// Determine access mode: single image view or gallery
+$requestedImage = isset($_GET['img']) ? basename((string) $_GET['img']) : '';
+$galleryEnabled = (bool) ($templateConfig['gallery_enabled'] ?? false);
+$mode = $requestedImage !== '' ? 'single' : ($galleryEnabled ? 'gallery' : 'single');
+
 $images = [
-    'images' => glob($templateConfig['paths']['images'] . '/*.{jpg,JPG}', GLOB_BRACE) ?: [],
-    'thumbs' => glob($templateConfig['paths']['thumbs'] . '/*.{jpg,JPG}', GLOB_BRACE) ?: [],
+    'images' => glob(__DIR__ . '/' . $templateConfig['paths']['images'] . '/*.{jpg,JPG,png,PNG}', GLOB_BRACE) ?: [],
+    'thumbs' => glob(__DIR__ . '/' . $templateConfig['paths']['thumbs'] . '/*.{jpg,JPG,png,PNG}', GLOB_BRACE) ?: [],
 ];
 
-asort($images['images']);
-asort($images['thumbs']);
+usort($images['images'], fn ($a, $b) => filemtime($b) - filemtime($a));
+usort($images['thumbs'], fn ($a, $b) => filemtime($b) - filemtime($a));
 
-$firstImage = $images['images'][0] ?? null;
 $totalImages = count($images['images']);
 
 $requestUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-$urlPrefix = $requestUrl;
-if (substr($urlPrefix, -4) === '.php') {
-    $baseName = basename($urlPrefix);
-    $urlPrefix = rtrim($urlPrefix, $baseName);
-}
+$urlPrefix = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']);
 if (substr($urlPrefix, -1) !== '/') {
     $urlPrefix .= '/';
 }
 
-$ogImage = $urlPrefix . $firstImage;
-
-header('Cache-Control: max-age=' . $templateConfig['meta']['max-age']);
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    zipFilesAndDownload($images['images'], $templateConfig);
-}
-
-function zipFilesAndDownload($files, $templateConfig)
-{
-    // create new zip opbject
+// ZIP download handler
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $mode === 'gallery') {
     $zip = new ZipArchive();
+    $tmp_file = tempnam(sys_get_temp_dir(), 'zipped');
+    $zip->open($tmp_file, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
-    // create a temp file & open it
-    $tmp_file = tempnam('.', 'zipped');
-    $zip->open($tmp_file, ZipArchive::CREATE);
-
-    // loop through each file
-    foreach ($files as $file) {
-        if (str_contains($file, 'tmb_')) {
+    foreach ($images['images'] as $file) {
+        $download_file = file_get_contents($file);
+        if ($download_file === false) {
             continue;
         }
-
-        // download file
-        $download_file = file_get_contents($file);
-        //add it to the zip
         $zip->addFromString(basename($file), $download_file);
     }
-    // close zip
     $zip->close();
 
-    // send the file to the browser as a download
     header('Content-disposition: attachment; filename="' . $templateConfig['files']['download_prefix'] . '.zip"');
     header('Content-type: application/zip');
     header('Content-length: ' . filesize($tmp_file));
@@ -69,6 +52,15 @@ function zipFilesAndDownload($files, $templateConfig)
     readfile($tmp_file);
     ignore_user_abort(true);
     unlink($tmp_file);
+    exit;
+}
+
+header('Cache-Control: max-age=' . $templateConfig['meta']['max-age']);
+
+// Determine display content based on mode
+if ($mode === 'single' && $requestedImage !== '') {
+    $singleImageUrl = 'images/' . rawurlencode($requestedImage);
+    $singleDownloadName = $templateConfig['files']['download_prefix'] . '_' . $requestedImage;
 }
 
 $styles = '';
@@ -87,6 +79,7 @@ $styles .= '</style>' . PHP_EOL;
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
@@ -98,13 +91,14 @@ $styles .= '</style>' . PHP_EOL;
     <!--  Essential META Tags -->
     <meta property="og:title" content="<?= $templateConfig['meta']['title'] ?>">
     <meta property="og:type" content="article" />
-    <meta property="og:image" content="<?= $ogImage ?>">
-    <meta property="og:url" content="<?= $requestUrl ?>">
+    <?php if ($mode === 'single' && $requestedImage !== ''): ?>
+        <meta property="og:image" content="<?= $urlPrefix . $singleImageUrl ?>">
+    <?php endif; ?>
+    <meta property="og:url" content="<?= htmlspecialchars($requestUrl) ?>">
     <meta name="twitter:card" content="summary_large_image">
 
     <!--  Non-Essential, But Recommended -->
     <meta property="og:site_name" content="<?= $templateConfig['meta']['sitename'] ?>">
-    <meta name="twitter:image" content="<?= $ogImage ?>">
     <title><?= $templateConfig['meta']['title'] ?></title>
 
     <?= $styles ?>
@@ -127,7 +121,7 @@ $styles .= '</style>' . PHP_EOL;
             font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             font-weight: 600;
             background-image: linear-gradient(135deg, var(--primary-color) 30%, var(--secondary-color));
-            color: var(--primary-color);
+            color: var(--font-color);
             min-height: 100dvh;
         }
 
@@ -137,7 +131,7 @@ $styles .= '</style>' . PHP_EOL;
         }
 
         .front-cover {
-            background-image: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.85)), url(<?= $urlPrefix . $firstImage ?>);
+            background-image: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.85));
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
@@ -268,7 +262,99 @@ $styles .= '</style>' . PHP_EOL;
         .lightbox-action-bar > a {
             margin: 0 1rem;
         }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            padding: 1rem 1.25rem;
+            background: rgba(0,0,0,.35);
+            border-radius: .5rem;
+            line-height: 1;
+            transition: background .2s;
+            z-index: 1;
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(0,0,0,.6);
+        }
+
+        .lightbox-nav-prev { left: .75rem; }
+        .lightbox-nav-next { right: .75rem; }
+
+        /* Single image viewer */
+        .viewer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+            min-height: 80vh;
+            justify-content: center;
+        }
+
+        .viewer-container img {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: .5rem;
+            box-shadow: 0 10px 30px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .viewer-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .viewer-actions a {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .75rem 1.5rem;
+            border-radius: 2rem;
+            background: var(--primary-color);
+            color: var(--button-font-color);
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,.25);
+            transition: background .3s;
+        }
+
+        .viewer-actions a:hover {
+            background: color-mix(in srgb, var(--primary-color), var(--button-font-color) 20%);
+        }
     </style>
+    <script>
+        var pbTotal = <?= $totalImages ?>;
+        document.addEventListener('keydown', function (e) {
+            var hash = window.location.hash;
+            var m = hash.match(/^#lightbox-uid-(\d+)$/);
+            if (!m) return;
+            var cur = parseInt(m[1], 10);
+            if (e.key === 'ArrowLeft')  { window.location.hash = '#lightbox-uid-' + (cur > 0 ? cur - 1 : pbTotal - 1); }
+            if (e.key === 'ArrowRight') { window.location.hash = '#lightbox-uid-' + (cur < pbTotal - 1 ? cur + 1 : 0); }
+            if (e.key === 'Escape')     { window.location.hash = '#gallery-list-item-' + cur; }
+        });
+
+        function pbShare(imageUrl, fallbackUrl) {
+            if (navigator.share && navigator.canShare) {
+                fetch(imageUrl)
+                    .then(function (r) { return r.blob(); })
+                    .then(function (blob) {
+                        var file = new File([blob], 'photo.jpg', { type: blob.type });
+                        if (navigator.canShare({ files: [file] })) {
+                            navigator.share({ files: [file] }).catch(function () {});
+                            return;
+                        }
+                        window.open(fallbackUrl);
+                    })
+                    .catch(function () { window.open(fallbackUrl); });
+            } else {
+                window.open(fallbackUrl);
+            }
+        }
+    </script>
 </head>
 <body>
     <header class="front-cover">
@@ -276,48 +362,90 @@ $styles .= '</style>' . PHP_EOL;
             <?= $templateConfig['meta']['title'] ?>
         </div>
     </header>
-    <div class="container">
-        <div class="gallery-list">
-            <?php foreach ($images['images'] as $key => $filename) { ?>
-                <?php
-                    $filename = basename($filename);
-                $image = $urlPrefix . $templateConfig['paths']['images'] . '/' . $filename;
-                $thumbnail = $image;
-                $possibleThumbnail = $templateConfig['paths']['thumbs'] . '/' . $filename;
-                if (file_exists($possibleThumbnail)) {
-                    $thumbnail = $urlPrefix . $possibleThumbnail;
-                }
-                ?>
-                <a class="gallery-list-item" id="gallery-list-item-<?= $key ?>" href="#lightbox-uid-<?= $key ?>">
-                    <figure>
-                        <img src="<?= $thumbnail ?>" alt="<?= basename($filename) ?>" loading="lazy" />
-                    </figure>
+
+    <?php if ($mode === 'single' && $requestedImage !== ''): ?>
+        <!-- Single Image Viewer: JS checks if image is accessible, retries on error -->
+        <div class="viewer-container">
+            <div id="pb-uploading" style="text-align:center;color:var(--font-color,#fff);">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size:3rem;margin-bottom:1.5rem;display:block;opacity:.6;"></i>
+                <p style="font-size:1.2rem;margin:0;"><?= $templateConfig['labels']['image_uploading'] ?? 'Your photo is being uploaded...' ?></p>
+            </div>
+            <img id="pb-photo" src="<?= $singleImageUrl ?>" alt="Photo" style="display:none" />
+            <div id="pb-actions" class="viewer-actions" style="display:none">
+                <a href="<?= $singleImageUrl ?>" download="<?= htmlspecialchars($singleDownloadName) ?>">
+                    <i class="fa-solid fa-download"></i> <?= $templateConfig['labels']['download'] ?>
                 </a>
-                <div class="lightbox" id="lightbox-uid-<?= $key ?>">
-                    <div class="lightbox-content">
-                        <div class="lightbox-action-bar-outer">
-                            <div class="lightbox-action-bar">
-                                <a href="<?= $image ?>" download="<?= $templateConfig['files']['download_prefix'] ?>_<?= basename($image) ?>">
-                                    <i class="fa-solid fa-download"></i>
-                                </a>
-                                <a href="whatsapp://send?text=<?= urlencode(sprintf($templateConfig['labels']['share'], $image))?>">
-                                    <i class="fa-brands fa-whatsapp"></i>
-                                </a>
-                                <a href="#gallery-list-item-<?= $key ?>" title="<?= $templateConfig['labels']['close'] ?>">
-                                    <i class="fa-solid fa-xmark"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <img src="<?= $image ?>" alt="<?= $image ?>" loading="lazy" />
-                    </div>
-                </div>
-            <?php } ?>
+                <a href="#" onclick="pbShare('<?= $singleImageUrl ?>', 'https://wa.me/?text=<?= urlencode(sprintf($templateConfig['labels']['share'], $requestUrl)) ?>'); return false;">
+                    <i class="fa-solid fa-share-nodes"></i>
+                </a>
+            </div>
         </div>
-    </div>
-    <div class="container">
-        <form target="_blank" action="" method="post" onsubmit="return confirm('<?= sprintf($templateConfig['labels']['download_confirmation_images'], $totalImages) ?>')">
-            <button type="submit" class="big-button"><?= $templateConfig['labels']['download'] ?></button>
-        </form>
-    </div>
+        <script>
+            (function () {
+                var img = document.getElementById('pb-photo');
+                var uploading = document.getElementById('pb-uploading');
+                var actions = document.getElementById('pb-actions');
+                img.onload = function () {
+                    uploading.style.display = 'none';
+                    img.style.display = 'block';
+                    actions.style.display = 'flex';
+                };
+                img.onerror = function () {
+                    setTimeout(function () { window.location.reload(); }, 3000);
+                };
+            }());
+        </script>
+    <?php elseif ($mode === 'gallery'): ?>
+        <!-- Gallery View -->
+        <div class="container">
+            <div class="gallery-list">
+                <?php foreach ($images['images'] as $key => $filename) { ?>
+                    <?php
+                        $filename = basename($filename);
+                    $imageUrl = 'images/' . rawurlencode($filename);
+                    $thumbnailUrl = $imageUrl;
+                    $possibleThumbnail = __DIR__ . '/' . $templateConfig['paths']['thumbs'] . '/' . $filename;
+                    if (file_exists($possibleThumbnail)) {
+                        $thumbnailUrl = 'thumbs/' . rawurlencode($filename);
+                    }
+                    ?>
+                    <a class="gallery-list-item" id="gallery-list-item-<?= $key ?>" href="#lightbox-uid-<?= $key ?>">
+                        <figure>
+                            <img src="<?= $thumbnailUrl ?>" alt="<?= htmlspecialchars(basename($filename)) ?>" loading="lazy" />
+                        </figure>
+                    </a>
+                    <?php
+                        $prevKey = $key > 0 ? $key - 1 : $totalImages - 1;
+                    $nextKey = $key < $totalImages - 1 ? $key + 1 : 0;
+                    ?>
+                    <div class="lightbox" id="lightbox-uid-<?= $key ?>">
+                        <div class="lightbox-content">
+                            <div class="lightbox-action-bar-outer">
+                                <div class="lightbox-action-bar">
+                                    <a href="<?= $imageUrl ?>" download="<?= $templateConfig['files']['download_prefix'] ?>_<?= htmlspecialchars(basename($filename)) ?>">
+                                        <i class="fa-solid fa-download"></i>
+                                    </a>
+                                    <a href="#" onclick="pbShare('<?= $imageUrl ?>', 'https://wa.me/?text=<?= urlencode(sprintf($templateConfig['labels']['share'], $urlPrefix . '?img=' . rawurlencode($filename))) ?>'); return false;">
+                                        <i class="fa-solid fa-share-nodes"></i>
+                                    </a>
+                                    <a href="#gallery-list-item-<?= $key ?>" title="<?= $templateConfig['labels']['close'] ?>">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <a class="lightbox-nav lightbox-nav-prev" href="#lightbox-uid-<?= $prevKey ?>"><i class="fa-solid fa-chevron-left"></i></a>
+                            <a class="lightbox-nav lightbox-nav-next" href="#lightbox-uid-<?= $nextKey ?>"><i class="fa-solid fa-chevron-right"></i></a>
+                            <img src="<?= $imageUrl ?>" alt="<?= htmlspecialchars(basename($filename)) ?>" loading="lazy" />
+                        </div>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+        <div class="container">
+            <form target="_blank" action="" method="post" onsubmit="return confirm('<?= sprintf($templateConfig['labels']['download_confirmation_images'], $totalImages) ?>')">
+                <button type="submit" class="big-button"><?= $templateConfig['labels']['download'] ?></button>
+            </form>
+        </div>
+    <?php endif; ?>
 </body>
 </html>

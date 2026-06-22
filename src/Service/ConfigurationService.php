@@ -43,7 +43,22 @@ class ConfigurationService
         }
         $configuration = (new Processor())->processConfiguration(new PhotoboothConfiguration(), [$userConfiguration]);
         $configuration = $this->addDefaults($configuration);
+        $configuration = $this->decryptSensitiveValues($configuration);
         $this->configuration = $configuration;
+    }
+
+    protected function decryptSensitiveValues(array $config): array
+    {
+        $encryption = EncryptionService::getInstance();
+
+        if (!empty($config['ftp']['password'])) {
+            $config['ftp']['password'] = $encryption->decrypt($config['ftp']['password']);
+        }
+        if (!empty($config['mail']['password'])) {
+            $config['mail']['password'] = $encryption->decrypt($config['mail']['password']);
+        }
+
+        return $config;
     }
 
     public function update(array $data): void

@@ -2433,9 +2433,9 @@ return [
         'mail_password' => [
             'view' => 'basic',
             'type' => 'input',
-            'placeholder' => $defaultConfig['mail']['password'],
+            'placeholder' => !empty($config['mail']['password']) ? '********' : '',
             'name' => 'mail[password]',
-            'value' => htmlentities($config['mail']['password'] ?? ''),
+            'value' => '',
         ],
         'mail_fromAddress' => [
             'view' => 'basic',
@@ -2717,9 +2717,9 @@ return [
         'password' => [
             'view' => 'advanced',
             'type' => 'input',
-            'placeholder' => '',
+            'placeholder' => !empty($config['ftp']['password']) ? '********' : '',
             'name' => 'ftp[password]',
-            'value' => $config['ftp']['password'],
+            'value' => '',
         ],
         'test_connection' => [
             'view' => 'basic',
@@ -2734,13 +2734,6 @@ return [
             'placeholder' => 'mysite',
             'name' => 'ftp[baseFolder]',
             'value' => $config['ftp']['baseFolder'],
-        ],
-        'folder' => [
-            'view' => 'advanced',
-            'type' => 'input',
-            'placeholder' => 'photobooth',
-            'name' => 'ftp[folder]',
-            'value' => $config['ftp']['folder'],
         ],
         'title' => [
             'view' => 'advanced',
@@ -2761,13 +2754,6 @@ return [
             'placeholder' => 'https://photobooth.com',
             'name' => 'ftp[website]',
             'value' => $config['ftp']['website'],
-        ],
-        'urlTemplate' => [
-            'view' => 'advanced',
-            'type' => 'input',
-            'placeholder' => '%website%/%folder%/%title%',
-            'name' => 'ftp[urlTemplate]',
-            'value' => $config['ftp']['urlTemplate'],
         ],
         'create_webpage' => [
             'view' => 'basic',

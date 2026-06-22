@@ -10,13 +10,12 @@ use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\ImageMetadataCacheService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\RemoteStorageService;
+use Photobooth\Service\UploadQueueService;
 
 header('Content-Type: application/json');
 
 $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
-
-$remoteStorage = RemoteStorageService::getInstance();
 
 try {
     if (empty($_POST['file'])) {
@@ -81,8 +80,11 @@ foreach ($filesToDelete as $fileName) {
     }
 
     if ($config['ftp']['enabled'] && $config['ftp']['delete']) {
-        $remoteStorage->delete($remoteStorage->getStorageFolder() . '/images/' . $fileName);
-        $remoteStorage->delete($remoteStorage->getStorageFolder() . '/thumbs/' . $fileName);
+        $remoteStorage = RemoteStorageService::getInstance();
+        $uploadQueue = UploadQueueService::getInstance();
+        $remoteFilename = $uploadQueue->getRemoteFilename($fileName) ?? $fileName;
+        $remoteStorage->delete('images/' . $remoteFilename);
+        $remoteStorage->delete('thumbs/' . $remoteFilename);
     }
 }
 

@@ -30,6 +30,7 @@ class Application extends BaseApplication
                 (new Command\ConfigListCommand())
                     ->setPhotoboothConfig($this->photoboothConfig),
                 new Command\EnvironmentListCommand(),
+                new Command\UploadWorkerCommand(),
             ]
         );
     }

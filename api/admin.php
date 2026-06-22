@@ -12,6 +12,7 @@ use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\ImageMetadataCacheService;
 use Photobooth\Service\LoggerService;
+use Photobooth\Service\EncryptionService;
 use Photobooth\Service\MailService;
 use Photobooth\Service\PrintManagerService;
 use Photobooth\Service\ProcessService;
@@ -182,6 +183,14 @@ if ($action === 'reset') {
     $newConfig['login']['pin']        = $keepExistingSecret('pin', $newConfig['login']['pin'] ?? null, $config);
     $newConfig['login']['rental_pin'] = $keepExistingSecret('rental_pin', $newConfig['login']['rental_pin'] ?? null, $config);
 
+    // Keep existing FTP/Mail passwords when the form sends an empty value
+    if (($newConfig['ftp']['password'] ?? '') === '' && !empty($config['ftp']['password'])) {
+        $newConfig['ftp']['password'] = $config['ftp']['password'];
+    }
+    if (($newConfig['mail']['password'] ?? '') === '' && !empty($config['mail']['password'])) {
+        $newConfig['mail']['password'] = $config['mail']['password'];
+    }
+
     // Hash password early when a new value is provided
     if (!empty($newConfig['login']['password']) && $newConfig['login']['password'] !== ($config['login']['password'] ?? null)) {
         $newConfig['login']['password'] = password_hash($newConfig['login']['password'], PASSWORD_DEFAULT);
@@ -332,6 +341,15 @@ if ($action === 'reset') {
         if (!empty($newConfig['login'][$pinField]) && !AdminKeypad::isHashedPin($newConfig['login'][$pinField])) {
             $newConfig['login'][$pinField] = password_hash($newConfig['login'][$pinField], PASSWORD_DEFAULT);
         }
+    }
+
+    // Encrypt FTP and Mail passwords before saving to config file
+    $encryptionService = EncryptionService::getInstance();
+    if (!empty($newConfig['ftp']['password']) && !$encryptionService->isEncrypted($newConfig['ftp']['password'])) {
+        $newConfig['ftp']['password'] = $encryptionService->encrypt($newConfig['ftp']['password']);
+    }
+    if (!empty($newConfig['mail']['password']) && !$encryptionService->isEncrypted($newConfig['mail']['password'])) {
+        $newConfig['mail']['password'] = $encryptionService->encrypt($newConfig['mail']['password']);
     }
 
     if ($newConfig['logo']['enabled']) {
