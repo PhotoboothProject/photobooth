@@ -2034,6 +2034,7 @@ return [
             'view' => 'advanced',
             'type' => 'select',
             'name' => 'print[qrPositionMode]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['print']['qrPositionMode'],
             'options' => [
                 'absolute' => 'absolute',
@@ -2065,6 +2066,7 @@ return [
             'view' => 'advanced',
             'type' => 'number',
             'name' => 'print[qrRelativeSize]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['print']['qrRelativeSize'],
             'value' => $config['print']['qrRelativeSize'],
             'step' => 0.01,
@@ -2075,6 +2077,7 @@ return [
             'view' => 'advanced',
             'type' => 'number',
             'name' => 'print[qrRelativeOffset]',
+            'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['print']['qrRelativeOffset'],
             'value' => $config['print']['qrRelativeOffset'],
             'step' => 0.01,
