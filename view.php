@@ -48,6 +48,12 @@ $eventTitleLines = $config['event']['enabled']
 if ($eventTitleLines === []) {
     $eventTitleLines = [$viewerFallbackTitle];
 }
+
+// Public event hosts may expose this viewer and api/download.php, but still 404
+// the usual Photobooth assets under /resources, /node_modules, /private and
+// api/settings.php. Keep this page self-contained unless those asset paths are
+// available again. As a consequence, shared JS/CSS, Font Awesome icons and the
+// actual configured custom font files are not used here.
 ?>
 <!DOCTYPE html>
 <html lang="<?= htmlspecialchars($config['ui']['language'] ?? 'en') ?>">
