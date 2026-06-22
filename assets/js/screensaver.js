@@ -105,6 +105,7 @@
                 'fa-regular fa-heart': 'heart',
                 'fa-solid fa-heart': 'heart',
                 'fa-solid fa-heart-pulse': 'heart-pulse',
+                'fa-solid fa-sun': 'sun',
                 'fa-brands fa-apple': 'apple',
                 'fa-anchor': 'anchor',
                 'fa-light fa-champagne-glasses': 'party-popper',

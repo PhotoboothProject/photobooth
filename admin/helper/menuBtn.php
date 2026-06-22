@@ -11,7 +11,8 @@ function getMenuBtn($target, $label, $icon = '', $newTab = false)
     $iconElement = empty($icon) ? '' : '<i class="mr-3 ' . $icon . '"></i>';
 
     if ($target == 'shutdown-btn' || $target == 'reboot-btn') {
-        $iconElement = '<i class="mr-3 fa fa-power-off"></i>';
+        $iconClass = $target == 'reboot-btn' ? 'fa fa-rotate-right' : 'fa fa-power-off';
+        $iconElement = '<i class="mr-3 ' . $iconClass . '"></i>';
         return '
             <div class="' . $btnClass . '" id="' . $target . '">
                 ' . $iconElement . '

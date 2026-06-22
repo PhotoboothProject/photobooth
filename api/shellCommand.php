@@ -13,6 +13,8 @@ $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
 $mode = $_POST['mode'] ?? '';
+$isAdmin = isset($_SESSION['auth']) && $_SESSION['auth'] === true;
+$isRental = !empty($_SESSION['rental']);
 
 if (empty($mode)) {
     $data = [
@@ -28,7 +30,8 @@ if (empty($mode)) {
 // If login is enabled, require auth for administrative modes (e.g., reboot/shutdown).
 if (
     ($config['login']['enabled'] ?? false)
-    && (!isset($_SESSION['auth']) || $_SESSION['auth'] !== true)
+    && !$isAdmin
+    && !($isRental && in_array($mode, ['reboot', 'shutdown'], true))
     && !in_array($mode, ['pre-command', 'post-command'], true)
 ) {
     $data = [
@@ -61,8 +64,8 @@ switch ($mode) {
         break;
     case 'reboot':
     case 'shutdown':
-        // Require authenticated admin session for system-level actions
-        if (!isset($_SESSION['auth']) || $_SESSION['auth'] !== true) {
+        // Rental PIN is intentionally allowed to perform power actions only.
+        if (!$isAdmin && !$isRental) {
             $data = [
                 'success' => 'false',
                 'mode' => 'Unauthorized',
@@ -84,35 +87,13 @@ switch ($mode) {
         die();
 }
 
-$success = exec($cmd, $output, $retval);
-
-if ($success) {
-    switch ($retval) {
-        case 127:
-            $output = 'Command not found';
-            $success = false;
-            break;
-        case 0:
-            $success = true;
-            break;
-        default:
-            $success = 'unknown';
-            break;
-    }
-
-    $data = [
-        'success' => $success,
-        'output' => $output,
-        'retval' => $retval,
-        'command' => $cmd,
-    ];
-    $logger->debug('data', $data);
-} else {
-    $data = [
-        'success' => 'false',
-        'command' => $cmd,
-    ];
-}
+exec($cmd . ' 2>&1', $output, $retval);
+$data = [
+    'success' => $retval === 0,
+    'output' => $output,
+    'retval' => $retval,
+    'command' => $cmd,
+];
 
 $logger->debug('data', $data);
 echo json_encode($data);

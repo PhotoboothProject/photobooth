@@ -15,7 +15,7 @@ final class EventConfiguration
                 ->booleanNode('enabled')->defaultValue(false)->end()
                 ->scalarNode('textRight')->defaultValue('')->end()
                 ->scalarNode('textLeft')->defaultValue('')->end()
-                ->scalarNode('symbol')->defaultValue('camera')->end()
+                ->scalarNode('symbol')->defaultValue('fa-regular fa-heart')->end()
             ->end();
     }
 }

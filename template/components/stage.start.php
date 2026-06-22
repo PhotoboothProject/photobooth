@@ -1,6 +1,7 @@
 <?php
 use Photobooth\Utility\PathUtility;
 use Photobooth\Utility\EventSymbolUtility;
+use Photobooth\Utility\StartpageTextPosition;
 
 $eventSymbolType = EventSymbolUtility::getSymbolType($config['event']['symbol'] ?? '');
 $eventSymbolValue = match ($eventSymbolType) {
@@ -10,55 +11,57 @@ $eventSymbolValue = match ($eventSymbolType) {
     default => EventSymbolUtility::getLucideFallback($config['event']['symbol'] ?? ''),
 };
 
+$startpageTextPosition = StartpageTextPosition::resolve(
+    $config['ui']['startpage_text_position'] ?? null,
+    $config['logo']['position'] ?? null,
+    $config['logo']['enabled'] ?? null
+);
 ?>
 <!-- Start Page -->
 <div class="stage stage--start rotarygroup" data-stage="start">
     <?php include PathUtility::getAbsolutePath('template/components/start.logo.php'); ?>
     <div class="stage-inner">
-        <?php if ($config['event']['enabled'] || $config['start_screen']['title_visible']): ?>
-            <div class="names<?= ($config['ui']['decore_lines']) ? ' names--decoration' : '' ?>">
-                <div class="names-inner">
-                    <?php if ($config['event']['enabled']): ?>
-                        <h1 class="event-text">
-                            <?= $config['event']['textLeft'] ?>
-                            <?php if ($eventSymbolType === 'fa'): ?>
-                                <i class="event-symbol-icon <?= htmlspecialchars($eventSymbolValue, ENT_QUOTES) ?>" aria-hidden="true"></i>
-                            <?php elseif ($eventSymbolType === 'iconify'): ?>
-                                <iconify-icon class="event-symbol-icon" icon="<?= htmlspecialchars($eventSymbolValue, ENT_QUOTES) ?>" aria-hidden="true"></iconify-icon>
-                            <?php elseif ($eventSymbolType === 'image' && $eventSymbolValue !== ''): ?>
-                                <img class="event-symbol-icon event-symbol-image" src="<?= htmlspecialchars($eventSymbolValue, ENT_QUOTES) ?>" alt="" aria-hidden="true">
-                            <?php else: ?>
-                                <i class="event-symbol-icon" data-lucide="<?= htmlspecialchars($eventSymbolValue, ENT_QUOTES) ?>" aria-hidden="true"></i>
-                            <?php endif; ?>
-                            <?= $config['event']['textRight'] ?>
-                        </h1>
-                        <?php if ($config['start_screen']['title_visible']): ?>
-                            <h1 class="start-text"><?= $config['start_screen']['title'] ?></h1>
+        <?php if ($config['event']['enabled'] || $config['start_screen']['title_visible'] || $config['start_screen']['subtitle_visible']): ?>
+            <div class="stage-start__text stage-start__text--<?= $startpageTextPosition ?>">
+                <div class="names<?= ($config['ui']['decore_lines']) ? ' names--decoration' : '' ?>">
+                    <div class="names-inner">
+                        <?php if ($config['event']['enabled']): ?>
+                            <h1 class="event-text">
+                                <?= $config['event']['textLeft'] ?>
+                                <?php if ($eventSymbolType === 'fa'): ?>
+                                    <i class="event-symbol-icon <?= htmlspecialchars($eventSymbolValue, ENT_QUOTES) ?>" aria-hidden="true"></i>
+                                <?php elseif ($eventSymbolType === 'iconify'): ?>
+                                    <iconify-icon class="event-symbol-icon" icon="<?= htmlspecialchars($eventSymbolValue, ENT_QUOTES) ?>" aria-hidden="true"></iconify-icon>
+                                <?php elseif ($eventSymbolType === 'image' && $eventSymbolValue !== ''): ?>
+                                    <img class="event-symbol-icon event-symbol-image" src="<?= htmlspecialchars($eventSymbolValue, ENT_QUOTES) ?>" alt="" aria-hidden="true">
+                                <?php else: ?>
+                                    <i class="event-symbol-icon" data-lucide="<?= htmlspecialchars($eventSymbolValue, ENT_QUOTES) ?>" aria-hidden="true"></i>
+                                <?php endif; ?>
+                                <?= $config['event']['textRight'] ?>
+                            </h1>
                         <?php endif; ?>
-                        <?php if ($config['start_screen']['subtitle_visible']): ?>
-                            <h2 class="start-text"><?= $config['start_screen']['subtitle'] ?></h2>
-                        <?php endif; ?>
-                    <?php else: ?>
                         <?php if ($config['start_screen']['title_visible']): ?>
                         <h1 class="start-text"><?= $config['start_screen']['title'] ?></h1>
                         <?php endif; ?>
                         <?php if ($config['start_screen']['subtitle_visible']): ?>
                         <h2 class="start-text"><?= $config['start_screen']['subtitle'] ?></h2>
                         <?php endif; ?>
-                    <?php endif; ?>
+                    </div>
                 </div>
             </div>
         <?php endif; ?>
-<?php
-if ($config['ui']['selfie_mode']) {
-    include PathUtility::getAbsolutePath('template/components/selfieAction.php');
-} else {
-    include PathUtility::getAbsolutePath('template/components/actionBtn.php');
-    if ($config['collage']['enabled'] && $config['collage']['allow_selection']) {
-        include PathUtility::getAbsolutePath('template/components/collageSelection.php');
-    }
-}
+        <div class="stage-start__actions">
+            <?php
+            if ($config['ui']['selfie_mode']) {
+                include PathUtility::getAbsolutePath('template/components/selfieAction.php');
+            } else {
+                include PathUtility::getAbsolutePath('template/components/actionBtn.php');
+                if ($config['collage']['enabled'] && $config['collage']['allow_selection']) {
+                    include PathUtility::getAbsolutePath('template/components/collageSelection.php');
+                }
+            }
 ?>
+        </div>
     </div>
     <?php
     $screensaverMode = $config['screensaver']['mode'] ?? 'image';
