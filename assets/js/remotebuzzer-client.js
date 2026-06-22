@@ -5,30 +5,6 @@ let remoteBuzzerClient;
 let rotaryController;
 let buttonController;
 
-// Quick reachability probe so we don't start socket.io polling when the server is down.
-// Uses XMLHttpRequest to avoid Node fetch lint issues; runs in the browser.
-const checkRemoteBuzzerReachable = (baseUrl, timeoutMs = 3000) =>
-    new Promise((resolve) => {
-        const xhr = new XMLHttpRequest();
-        const timeout = setTimeout(() => {
-            xhr.abort();
-            resolve(false);
-        }, timeoutMs);
-
-        xhr.onerror = () => {
-            clearTimeout(timeout);
-            resolve(false);
-        };
-
-        xhr.onload = () => {
-            clearTimeout(timeout);
-            resolve(true);
-        };
-
-        xhr.open('GET', baseUrl + '/socket.io/?EIO=4&transport=polling&t=' + Date.now(), true);
-        xhr.send();
-    });
-
 // eslint-disable-next-line no-unused-vars
 function initRemoteBuzzerFromDOM() {
     photoboothTools.console.logDev(
@@ -64,101 +40,94 @@ function initRemoteBuzzerFromDOM() {
             if (config.remotebuzzer.serverip) {
                 const baseUrl =
                     window.location.protocol + '//' + config.remotebuzzer.serverip + ':' + config.remotebuzzer.port;
+                photoboothTools.console.logDev('Remote buzzer connecting to ' + baseUrl);
 
-                checkRemoteBuzzerReachable(baseUrl)
-                    .then((reachable) => {
-                        if (!reachable) {
-                            photoboothTools.console.log(
-                                'Remote buzzer server not reachable at ' + baseUrl + ' - skipping connection.'
-                            );
-                            return;
-                        }
+                ioClient = io(baseUrl, {
+                    reconnection: true,
+                    reconnectionAttempts: Infinity,
+                    reconnectionDelay: 1000,
+                    timeout: 3000
+                });
 
-                        photoboothTools.console.log(
-                            'Remote buzzer server is reachable at ' + baseUrl + ' - skipping connection.'
-                        );
+                ioClient.on('photobooth-socket', function (data) {
+                    switch (data) {
+                        case 'start-picture':
+                            buttonController.takePicture();
+                            break;
 
-                        serverReachable = true;
-                        ioClient = io(baseUrl);
-                        photoboothTools.console.logDev('Remote buzzer connecting to ' + baseUrl);
+                        case 'start-collage':
+                            buttonController.takeCollage();
+                            break;
 
-                        ioClient.on('photobooth-socket', function (data) {
-                            switch (data) {
-                                case 'start-picture':
-                                    buttonController.takePicture();
-                                    break;
+                        case 'start-custom':
+                            buttonController.takeCustom();
+                            break;
 
-                                case 'start-collage':
-                                    buttonController.takeCollage();
-                                    break;
+                        case 'start-video':
+                            buttonController.takeVideo();
+                            break;
 
-                                case 'start-custom':
-                                    buttonController.takeCustom();
-                                    break;
-
-                                case 'start-video':
-                                    buttonController.takeVideo();
-                                    break;
-
-                                case 'collage-next':
-                                    // Need to handle collage process in button handler
-                                    if (buttonController.waitingToProcessCollage) {
-                                        buttonController.processCollage();
-                                    } else {
-                                        buttonController.takeCollageNext();
-                                    }
-                                    break;
-
-                                case 'print':
-                                    buttonController.print();
-                                    break;
-
-                                case 'rotary-cw':
-                                    rotaryController.focusNext();
-                                    break;
-
-                                case 'rotary-ccw':
-                                    rotaryController.focusPrev();
-                                    break;
-
-                                case 'rotary-btn-press':
-                                    rotaryController.click();
-                                    break;
-
-                                case 'start-move2usb':
-                                    buttonController.move2usb();
-                                    break;
-
-                                default:
-                                    break;
+                        case 'collage-next':
+                            // Need to handle collage process in button handler
+                            if (buttonController.waitingToProcessCollage) {
+                                buttonController.processCollage();
+                            } else {
+                                buttonController.takeCollageNext();
                             }
-                        });
+                            break;
 
-                        ioClient.on('connect_error', function () {
-                            photoboothTools.console.log(
-                                'ERROR: Remote buzzer client unable to connect to Remote buzzer Server - please ensure Remote buzzer server is running on ' +
-                                    config.remotebuzzer.serverip +
-                                    '. Set Photobooth loglevel to 1 (or above) to create log file for debugging.'
-                            );
-                        });
+                        case 'print':
+                            buttonController.print();
+                            break;
 
-                        ioClient.on('connect', function () {
-                            photoboothTools.console.logDev(
-                                'Remote buzzer client successfully connected to Remote buzzer Server.'
-                            );
-                        });
+                        case 'rotary-cw':
+                            rotaryController.focusNext();
+                            break;
 
-                        buttonController.init();
-                        rotaryController.init();
+                        case 'rotary-ccw':
+                            rotaryController.focusPrev();
+                            break;
 
-                        rotaryController.focusSet('.stage[data-stage="start"]');
-                    })
-                    .catch(() => {
-                        serverReachable = false;
-                        photoboothTools.console.log(
-                            'Remote buzzer server not reachable at ' + baseUrl + ' - skipping connection.'
-                        );
-                    });
+                        case 'rotary-btn-press':
+                            rotaryController.click();
+                            break;
+
+                        case 'start-move2usb':
+                            buttonController.move2usb();
+                            break;
+
+                        default:
+                            break;
+                    }
+                });
+
+                ioClient.on('connect_error', function () {
+                    serverReachable = false;
+                    photoboothTools.console.log(
+                        'ERROR: Remote buzzer client unable to connect to Remote buzzer Server - retrying at ' +
+                            baseUrl +
+                            '. Please ensure Remote buzzer server is running on ' +
+                            config.remotebuzzer.serverip +
+                            '. Set Photobooth loglevel to 1 (or above) to create log file for debugging.'
+                    );
+                });
+
+                ioClient.on('disconnect', function () {
+                    serverReachable = false;
+                    photoboothTools.console.log('Remote buzzer client disconnected from ' + baseUrl + '.');
+                });
+
+                ioClient.on('connect', function () {
+                    serverReachable = true;
+                    photoboothTools.console.logDev(
+                        'Remote buzzer client successfully connected to Remote buzzer Server.'
+                    );
+                });
+
+                buttonController.init();
+                rotaryController.init();
+
+                rotaryController.focusSet('.stage[data-stage="start"]');
             } else {
                 photoboothTools.console.log(
                     'ERROR: Remote buzzer client unable to connect - Remote buzzer Server IP not defined in photobooth config!'
