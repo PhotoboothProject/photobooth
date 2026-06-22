@@ -54,8 +54,7 @@
   line-height: 1;
 
   &.focused,
-  &:hover,
-  &:focus {
+  &:focus-visible {
     --button-background: var(--button-focus-background);
   }
 
@@ -64,6 +63,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover {
+    --button-background: var(--button-focus-background);
   }
 }
 
