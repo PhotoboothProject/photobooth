@@ -144,6 +144,22 @@ const photoboothPreview = (function () {
         }
     };
 
+    api.warmBackground = function () {
+        if (config.preview.mode !== PreviewMode.DEVICE.valueOf()) {
+            return;
+        }
+
+        if (config.commands.preview && !config.preview.bsm) {
+            photoboothTools.console.logDev('Preview: Running preview cmd (BACKGROUND warmup).');
+            api.runCmd('start');
+        }
+
+        if (!api.stream || !api.stream.active) {
+            photoboothTools.console.logDev('Preview: Warm hidden device cam stream.');
+            api.initializeMedia();
+        }
+    };
+
     api.runCmd = function (mode) {
         const dataVideo = {
             play: mode,
