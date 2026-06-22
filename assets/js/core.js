@@ -142,7 +142,10 @@ const photoBooth = (function () {
     api.init = function () {
         api.reset();
         startPage.addClass('stage--active');
-        if (usesBackgroundPreview) {
+        if (usesBackgroundPreview && config.preview.camTakesPic) {
+            photoboothTools.console.logDev('Preview: core: warm device cam stream from api.init.');
+            photoboothPreview.initializeMedia();
+        } else if (usesBackgroundPreview) {
             photoboothPreview.startVideo(CameraDisplayMode.BACKGROUND);
             photoboothTools.console.logDev('Preview: core: start video (BACKGROUND) from api.init.');
         } else if (config.commands.preview && !config.preview.bsm) {
@@ -1408,7 +1411,10 @@ const photoBooth = (function () {
 
         api.resetTimeOut();
 
-        if (config.commands.preview && !config.preview.bsm) {
+        if (usesBackgroundPreview && config.preview.camTakesPic) {
+            photoboothTools.console.logDev('Preview: core: warm device cam stream from api.renderPic');
+            photoboothPreview.initializeMedia();
+        } else if (config.commands.preview && !config.preview.bsm) {
             photoboothTools.console.logDev('Preview: core: start video from api.renderPic');
             photoboothPreview.startVideo(CameraDisplayMode.INIT);
         }
