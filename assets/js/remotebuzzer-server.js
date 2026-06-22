@@ -40,7 +40,7 @@ const writePIDFile = (filename) => {
         fs.writeFileSync(filename, parseInt(PID, 10).toString(), { flag: 'w' });
         log(`PID file created [${filename}]`);
     } catch (err) {
-        throw new Error(`Unable to write PID file [${filename}] - ${err.message}`);
+        throw new Error(`Unable to write PID file [${filename}] - ${err.message}`, { cause: err });
     }
 };
 
@@ -598,7 +598,7 @@ function move2usbAction() {
     log('USB target ', parsedConfig.drive);
 
     const getDriveInfo = ({ drive }) => {
-        let json = null;
+        let json;
         const requiredColumns = 'NAME,KNAME,PATH,LABEL,MOUNTPOINT,MOUNTPOINTS,SUBSYSTEMS,TYPE';
 
         drive = drive.toLowerCase();

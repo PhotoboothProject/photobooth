@@ -71,7 +71,6 @@ function setNaviItem(item) {
     }
 }
 
-// eslint-disable-next-line no-unused-vars
 function toggleAdminNavi() {
     if ($('.adminNavi').hasClass('isActive')) {
         $('.adminNavi').removeClass('isActive');
@@ -79,3 +78,5 @@ function toggleAdminNavi() {
         $('.adminNavi').addClass('isActive');
     }
 }
+
+window.toggleAdminNavi = toggleAdminNavi;

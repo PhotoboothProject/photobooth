@@ -1807,16 +1807,16 @@ function update_php_ini() {
     info "PHP INI Update" "Backup of PHP INI created at '$php_ini_bak'."
 
     # Update upload_max_filesize
-    if sed -i 's/^upload_max_filesize =.*/upload_max_filesize = 20M/' "$php_ini"; then
-        info "PHP INI Update" "Updated upload_max_filesize to 20M in '$php_ini'."
+    if sed -i 's/^upload_max_filesize =.*/upload_max_filesize = 64M/' "$php_ini"; then
+        info "PHP INI Update" "Updated upload_max_filesize to 64M in '$php_ini'."
     else
         warn "Failed to update upload_max_filesize in '$php_ini'."
         return 4
     fi
 
     # Update post_max_size
-    if sed -i 's/^post_max_size =.*/post_max_size = 20M/' "$php_ini"; then
-        info "PHP INI Update" "Updated post_max_size to 20M in '$php_ini'."
+    if sed -i 's/^post_max_size =.*/post_max_size = 64M/' "$php_ini"; then
+        info "PHP INI Update" "Updated post_max_size to 64M in '$php_ini'."
     else
         warn "Failed to update post_max_size in '$php_ini'."
         return 5

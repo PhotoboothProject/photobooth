@@ -28,7 +28,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository and submodules
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           submodules: true
 
@@ -50,6 +50,9 @@ jobs:
 
       - name: Install modules
         run: npm install
+
+      - name: Cleanup Composer auth token
+        run: rm -f "$HOME/.composer/auth.json" "$HOME/.config/composer/auth.json"
 
       - name: Build
         run: npm run build

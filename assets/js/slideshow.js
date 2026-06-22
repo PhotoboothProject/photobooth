@@ -1,5 +1,5 @@
 /* exported initPhotoSlideFromDOM */
-/* global photoboothTools */
+/* global photoboothTools standaloneReturnUrl */
 
 let ssTimeOut,
     ssRunning = false,
@@ -11,6 +11,7 @@ const ssDelay = config.slideshow.pictureTime,
     ajaxurl = environment.publicFolders.api + '/gallery.php?status';
 
 function initPhotoSlideFromDOM(gallerySelector) {
+    const hasStandaloneReturnUrl = typeof standaloneReturnUrl !== 'undefined' && Boolean(standaloneReturnUrl);
     const gallery = new PhotoSwipeLightbox({
         gallery: gallerySelector,
         children: 'a',
@@ -18,17 +19,17 @@ function initPhotoSlideFromDOM(gallerySelector) {
         spacing: 0.1,
         loop: true,
         pinchToClose: false,
-        closeOnVerticalDrag: false,
+        closeOnVerticalDrag: hasStandaloneReturnUrl,
         hideAnimationDuration: 333,
         showAnimationDuration: 333,
         zoomAnimationDuration: 333,
-        escKey: false,
-        close: false,
+        escKey: hasStandaloneReturnUrl,
+        close: hasStandaloneReturnUrl,
         zoom: false,
         arrowKeys: true,
         returnFocus: true,
         maxWidthToAnimate: 4000,
-        clickToCloseNonZoomable: false,
+        clickToCloseNonZoomable: hasStandaloneReturnUrl,
         imageClickAction: 'toggle-controls',
         bgClickAction: 'toggle-controls',
         tapAction: 'toggle-controls',
@@ -120,6 +121,8 @@ function initPhotoSlideFromDOM(gallerySelector) {
             $('.pswp__button--playpause i:first').toggleClass(config.icons.slideshow_toggle);
             setSlideshowState(ssButtonClass, !ssRunning);
         }
+        $('.pswp__button--close').empty();
+        $('.pswp__button--close').html('<i class="' + config.icons.close + '"></i>');
     });
 
     gallery.init();
@@ -154,12 +157,14 @@ $(function () {
         $('#gallery').addClass('scrollbar');
     }
 
-    const reloadElement = $('<button class="button gallery__refresh rotaryfocus" data-command="gallery__refresh">');
-    reloadElement.append('<span class="button--icon"><i class="' + config.icons.refresh + '"></i></span>');
-    reloadElement.append('<span class="button--label">Reload</span>');
-    reloadElement.attr('href', '#');
-    reloadElement.on('click', () => photoboothTools.reloadPage());
-    reloadElement.appendTo('.gallery__header');
+    if (typeof standaloneReturnUrl === 'undefined' || !standaloneReturnUrl) {
+        const reloadElement = $('<button class="button gallery__refresh rotaryfocus" data-command="gallery__refresh">');
+        reloadElement.append('<span class="button--icon"><i class="' + config.icons.refresh + '"></i></span>');
+        reloadElement.append('<span class="button--label">Reload</span>');
+        reloadElement.attr('href', '#');
+        reloadElement.on('click', () => photoboothTools.reloadPage());
+        reloadElement.appendTo('.gallery-actions');
+    }
 
     $('#gallery').addClass('gallery--open');
 

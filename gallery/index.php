@@ -5,6 +5,7 @@ require_once '../lib/boot.php';
 use Photobooth\Service\ApplicationService;
 use Photobooth\Service\AssetService;
 use Photobooth\Service\ProcessService;
+use Photobooth\Utility\LoginMenuUtility;
 use Photobooth\Utility\PathUtility;
 
 $assetService = AssetService::getInstance();
@@ -12,6 +13,7 @@ $pageTitle = 'Gallery - ' . ApplicationService::getInstance()->getTitle();
 $photoswipe = true;
 $randomImage = false;
 $remoteBuzzer = true;
+$standaloneReturnUrl = LoginMenuUtility::isMenuSessionActive($_SESSION) ? PathUtility::getPublicPath('login') : null;
 
 include PathUtility::getAbsolutePath('template/components/main.head.php');
 ?>
@@ -20,6 +22,7 @@ include PathUtility::getAbsolutePath('template/components/main.head.php');
 
     <script>
         onStandaloneGalleryView = true;
+        standaloneReturnUrl = <?= json_encode($standaloneReturnUrl) ?>;
     </script>
 
     <?php include PathUtility::getAbsolutePath('template/components/main.footer.php'); ?>
