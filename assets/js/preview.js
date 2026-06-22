@@ -46,7 +46,76 @@ const photoboothPreview = (function () {
         url,
         pictureFrame,
         collageFrame,
-        retryGetMedia = 3;
+        retryGetMedia = 3,
+        screenshotPreviewCommandStarted = false;
+
+    function isDeviceCamScreenshotMode() {
+        return config.preview.mode === PreviewMode.DEVICE.valueOf() && config.preview.camTakesPic;
+    }
+
+    function resumeVideoElement(cb = null) {
+        const videoEl = video && video.get(0);
+        const done =
+            typeof cb === 'function'
+                ? cb
+                : function () {
+                      return undefined;
+                  };
+
+        if (!videoEl) {
+            done();
+            return;
+        }
+
+        const playPromise = videoEl.play();
+        if (playPromise && typeof playPromise.finally === 'function') {
+            playPromise
+                .catch(function (error) {
+                    photoboothTools.console.log('ERROR: Preview: Could not resume video playback: ', error);
+                })
+                .finally(done);
+            return;
+        }
+
+        done();
+    }
+
+    function maybeStartPreviewCommandForScreenshotWarmup() {
+        if (
+            !isDeviceCamScreenshotMode() ||
+            !config.commands.preview ||
+            screenshotPreviewCommandStarted ||
+            api.hasLiveFrame()
+        ) {
+            return;
+        }
+
+        photoboothTools.console.logDev('Preview: Running preview cmd (SCREENSHOT warmup).');
+        screenshotPreviewCommandStarted = true;
+        api.runCmd('start');
+    }
+
+    function onWarmDeviceCamReady(mode = null) {
+        if (mode === null) {
+            api.hidePreviewDisplay();
+            return;
+        }
+
+        api.changeVideoMode(mode);
+    }
+
+    api.hasLiveFrame = function () {
+        const videoEl = video && video.get(0);
+
+        return !!(
+            api.stream &&
+            api.stream.active &&
+            videoEl &&
+            videoEl.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA &&
+            videoEl.videoWidth > 0 &&
+            videoEl.videoHeight > 0
+        );
+    };
 
     api.changeVideoMode = function (mode) {
         photoboothTools.console.logDev('Preview: Changing video mode: ' + mode);
@@ -113,8 +182,9 @@ const photoboothPreview = (function () {
             .then(function (stream) {
                 photoboothTools.console.logDev('Preview: getMedia done!');
                 api.stream = stream;
-                video.get(0).srcObject = stream;
-                cb();
+                const videoEl = video.get(0);
+                videoEl.srcObject = stream;
+                resumeVideoElement(cb);
             })
             .catch(function (error) {
                 photoboothTools.console.log('ERROR: Preview: Could not get user media: ', error);
@@ -134,18 +204,71 @@ const photoboothPreview = (function () {
             });
     };
 
-    api.getAndDisplayMedia = function (mode) {
-        if (api.stream && api.stream.active) {
-            api.changeVideoMode(mode);
-        } else {
-            api.initializeMedia(() => {
-                api.changeVideoMode(mode);
-            });
+    api.ensureWarmDeviceCamStream = function (mode = null) {
+        maybeStartPreviewCommandForScreenshotWarmup();
+
+        if (api.hasLiveFrame()) {
+            onWarmDeviceCamReady(mode);
+            return;
         }
+
+        if (api.stream && api.stream.active) {
+            resumeVideoElement(function () {
+                if (api.hasLiveFrame()) {
+                    onWarmDeviceCamReady(mode);
+                    return;
+                }
+
+                api.initializeMedia(function () {
+                    onWarmDeviceCamReady(mode);
+                });
+            });
+            return;
+        }
+
+        api.initializeMedia(function () {
+            onWarmDeviceCamReady(mode);
+        });
+    };
+
+    api.getAndDisplayMedia = function (mode) {
+        if (isDeviceCamScreenshotMode()) {
+            api.ensureWarmDeviceCamStream(mode);
+            return;
+        }
+
+        if (api.hasLiveFrame()) {
+            api.changeVideoMode(mode);
+            return;
+        }
+
+        if (api.stream && api.stream.active) {
+            resumeVideoElement(function () {
+                if (api.hasLiveFrame()) {
+                    api.changeVideoMode(mode);
+                    return;
+                }
+
+                api.initializeMedia(() => {
+                    api.changeVideoMode(mode);
+                });
+            });
+            return;
+        }
+
+        api.initializeMedia(() => {
+            api.changeVideoMode(mode);
+        });
     };
 
     api.warmBackground = function () {
         if (config.preview.mode !== PreviewMode.DEVICE.valueOf()) {
+            return;
+        }
+
+        if (isDeviceCamScreenshotMode()) {
+            photoboothTools.console.logDev('Preview: Keep screenshot mode warm in background.');
+            api.ensureWarmDeviceCamStream();
             return;
         }
 
@@ -154,10 +277,18 @@ const photoboothPreview = (function () {
             api.runCmd('start');
         }
 
-        if (!api.stream || !api.stream.active) {
-            photoboothTools.console.logDev('Preview: Warm hidden device cam stream.');
-            api.initializeMedia();
+        if (api.hasLiveFrame()) {
+            return;
         }
+
+        photoboothTools.console.logDev('Preview: Warm hidden device cam stream.');
+
+        if (api.stream && api.stream.active) {
+            resumeVideoElement();
+            return;
+        }
+
+        api.initializeMedia();
     };
 
     api.runCmd = function (mode) {
@@ -197,10 +328,20 @@ const photoboothPreview = (function () {
 
         switch (mode) {
             case CameraDisplayMode.INIT:
+                if (isDeviceCamScreenshotMode()) {
+                    photoboothTools.console.logDev('Preview: Ensure warm screenshot mode (INIT).');
+                    api.ensureWarmDeviceCamStream();
+                    break;
+                }
                 photoboothTools.console.logDev('Preview: Running preview cmd (INIT).');
                 api.runCmd('start');
                 break;
             case CameraDisplayMode.BACKGROUND:
+                if (isDeviceCamScreenshotMode()) {
+                    photoboothTools.console.logDev('Preview: Show warm screenshot mode as background.');
+                    api.ensureWarmDeviceCamStream(CameraDisplayMode.BACKGROUND);
+                    break;
+                }
                 if (
                     config.preview.mode === PreviewMode.DEVICE.valueOf() &&
                     config.commands.preview &&
@@ -212,6 +353,11 @@ const photoboothPreview = (function () {
                 api.getAndDisplayMedia(CameraDisplayMode.BACKGROUND);
                 break;
             case CameraDisplayMode.COUNTDOWN:
+                if (isDeviceCamScreenshotMode()) {
+                    photoboothTools.console.logDev('Preview: Use warm screenshot mode at countdown.');
+                    api.ensureWarmDeviceCamStream(CameraDisplayMode.COUNTDOWN);
+                    break;
+                }
                 if (config.commands.preview) {
                     if (
                         config.preview.bsm ||
@@ -237,7 +383,11 @@ const photoboothPreview = (function () {
             case CameraDisplayMode.TEST:
                 if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
                     photoboothTools.console.logDev('Preview: Preview from device cam.');
-                    api.getAndDisplayMedia(CameraDisplayMode.TEST);
+                    if (isDeviceCamScreenshotMode()) {
+                        api.ensureWarmDeviceCamStream(CameraDisplayMode.TEST);
+                    } else {
+                        api.getAndDisplayMedia(CameraDisplayMode.TEST);
+                    }
                 } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
                     photoboothTools.console.logDev('Preview: Preview from URL.');
                     setTimeout(function () {
@@ -253,28 +403,45 @@ const photoboothPreview = (function () {
         }
     };
 
-    api.stopPreview = function () {
-        if (config.commands.preview_kill) {
-            api.runCmd('stop');
-        }
-        if (config.preview.mode === PreviewMode.DEVICE.valueOf() || config.preview.mode === PreviewMode.URL.valueOf()) {
-            api.stopVideo();
-        }
-    };
-
-    api.stopVideo = function () {
+    api.hidePreviewDisplay = function () {
         loader.css('--stage-background', 'var(--background-countdown-color)');
-        if (api.stream) {
-            const tracks = api.stream.getTracks();
-            tracks.forEach((track) => track.stop());
-            api.stream = null;
-        }
         url.removeClass('streaming');
         url.hide();
         url.css('background-image', 'none');
         video.hide();
         pictureFrame.hide();
         collageFrame.hide();
+    };
+
+    api.teardownPreview = function () {
+        api.hidePreviewDisplay();
+
+        if (api.stream) {
+            const tracks = api.stream.getTracks();
+            tracks.forEach((track) => track.stop());
+            api.stream = null;
+        }
+
+        const videoEl = video && video.get(0);
+        if (videoEl) {
+            videoEl.srcObject = null;
+        }
+
+        screenshotPreviewCommandStarted = false;
+    };
+
+    api.stopPreview = function () {
+        if (config.commands.preview_kill) {
+            api.runCmd('stop');
+        }
+
+        if (config.preview.mode === PreviewMode.DEVICE.valueOf() || config.preview.mode === PreviewMode.URL.valueOf()) {
+            api.teardownPreview();
+        }
+    };
+
+    api.stopVideo = function () {
+        api.teardownPreview();
     };
 
     api.setElements = () => {
@@ -287,6 +454,10 @@ const photoboothPreview = (function () {
 
     api.init = function () {
         api.setElements();
+
+        window.addEventListener('pagehide', function () {
+            api.stopPreview();
+        });
     };
 
     return api;

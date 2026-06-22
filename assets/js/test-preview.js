@@ -67,14 +67,14 @@ const photoboothPreviewTest = (function () {
         photoboothTools.console.log('Starting preview...');
         buttonStartPreview.hide();
         previewNone.hide();
-        if (config.commands.preview) {
+        if (config.commands.preview && !(config.preview.mode === PreviewMode.DEVICE.valueOf() && config.preview.camTakesPic)) {
             photoboothTools.console.logDev('Running preview cmd (TEST).');
             api.runCmd('start');
         }
         photoboothPreview.startVideo(CameraDisplayMode.TEST);
 
         setTimeout(() => {
-            if (photoboothPreview.stream || config.preview.mode === PreviewMode.URL.valueOf()) {
+            if (photoboothPreview.hasLiveFrame() || config.preview.mode === PreviewMode.URL.valueOf()) {
                 buttonStopPreview.show();
             } else {
                 buttonStartPreview.show();
@@ -90,18 +90,10 @@ const photoboothPreviewTest = (function () {
         previewFrameCollage.hide();
         previewFramePicture.hide();
         previewNone.show();
-        if (config.commands.preview_kill) {
-            api.runCmd('stop');
-        }
-        if (config.preview.mode === PreviewMode.DEVICE.valueOf()) {
-            photoboothPreview.stopVideo();
-        } else if (config.preview.mode === PreviewMode.URL.valueOf()) {
-            previewIpcam.removeClass('streaming');
-            previewIpcam.hide();
-        }
+        photoboothPreview.stopPreview();
 
         setTimeout(() => {
-            if (photoboothPreview.stream) {
+            if (photoboothPreview.hasLiveFrame()) {
                 buttonStopPreview.show();
             } else {
                 buttonStartPreview.show();

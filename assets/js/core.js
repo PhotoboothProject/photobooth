@@ -61,10 +61,6 @@ const photoBooth = (function () {
         videoAnimation = $('#videoAnimation'),
         resultVideo = $('#resultVideo'),
         resultVideoQR = $('#resultVideoQR'),
-        usesBackgroundPreview =
-            config.preview.asBackground &&
-            config.preview.mode === PreviewMode.DEVICE.valueOf() &&
-            ((config.commands.preview && !config.preview.bsm) || !config.commands.preview),
         timeToLive = parseInt(config.picture.time_to_live, 10) * 1000,
         continuousCollageTime = config.collage.continuous_time * 1000,
         retryTimeout = config.picture.retry_timeout * 1000,
@@ -79,6 +75,14 @@ const photoBooth = (function () {
         screensaverTimeoutMs = (config.screensaver.timeout_minutes || 0) * 60000,
         screensaverSwitchMs = (config.screensaver.switch_seconds || 60) * 1000,
         urlSafe = (src) => (src ? encodeURI(src) : '');
+
+    const isDeviceCamScreenshotMode = () =>
+        config.preview.mode === PreviewMode.DEVICE.valueOf() && config.preview.camTakesPic;
+
+    const usesBackgroundPreview = () =>
+        config.preview.asBackground &&
+        config.preview.mode === PreviewMode.DEVICE.valueOf() &&
+        (isDeviceCamScreenshotMode() || (config.commands.preview && !config.preview.bsm) || !config.commands.preview);
 
     let timeOut,
         chromaFile = '',
@@ -142,10 +146,10 @@ const photoBooth = (function () {
     api.init = function () {
         api.reset();
         startPage.addClass('stage--active');
-        if (usesBackgroundPreview && config.preview.camTakesPic) {
-            photoboothTools.console.logDev('Preview: core: warm device cam stream from api.init.');
-            photoboothPreview.warmBackground();
-        } else if (usesBackgroundPreview) {
+        if (isDeviceCamScreenshotMode()) {
+            photoboothTools.console.logDev('Preview: core: ensure warm screenshot stream from api.init.');
+            photoboothPreview.ensureWarmDeviceCamStream(usesBackgroundPreview() ? CameraDisplayMode.BACKGROUND : null);
+        } else if (usesBackgroundPreview()) {
             photoboothPreview.startVideo(CameraDisplayMode.BACKGROUND);
             photoboothTools.console.logDev('Preview: core: start video (BACKGROUND) from api.init.');
         } else if (config.commands.preview && !config.preview.bsm) {
@@ -208,14 +212,15 @@ const photoBooth = (function () {
     };
 
     api.stopPreviewAndCaptureFromVideo = () => {
-        if (config.preview.camTakesPic) {
-            if (photoboothPreview.stream) {
+        if (isDeviceCamScreenshotMode()) {
+            if (photoboothPreview.hasLiveFrame()) {
                 videoSensor.get(0).width = previewVideo.get(0).videoWidth;
                 videoSensor.get(0).height = previewVideo.get(0).videoHeight;
                 videoSensor.get(0).getContext('2d').drawImage(previewVideo.get(0), 0, 0);
             }
+            return;
         }
-        if (!config.commands.preview_kill || config.preview.camTakesPic) {
+        if (!config.commands.preview_kill) {
             photoboothTools.console.logDev('Preview: core: stopping preview from stopPreviewAndCaptureFromVideo.');
             photoboothPreview.stopPreview();
         }
@@ -289,7 +294,7 @@ const photoBooth = (function () {
                         }
 
                         // stop second hit
-                        if (remainingSeconds === stop && !config.preview.camTakesPic) {
+                        if (remainingSeconds === stop && !isDeviceCamScreenshotMode()) {
                             photoboothTools.console.logDev('Preview: core: stopping preview at countdown.');
                             photoboothPreview.stopPreview();
                         }
@@ -553,7 +558,7 @@ const photoBooth = (function () {
             }
 
             let maxGetMediaRetry = Math.max(countdownTime - 1, 0);
-            if (config.commands.preview_kill && maxGetMediaRetry > 0) {
+            if (config.commands.preview_kill && maxGetMediaRetry > 0 && !isDeviceCamScreenshotMode()) {
                 maxGetMediaRetry = Math.max(countdownTime - parseInt(config.preview.stop_time, 10), 0);
             }
             photoboothPreview.startVideo(CameraDisplayMode.COUNTDOWN, retry, maxGetMediaRetry);
@@ -606,7 +611,7 @@ const photoBooth = (function () {
             await api.countdown.start(countdownTime);
             await api.cheese.start();
 
-            if (config.preview.camTakesPic && !photoboothPreview.stream && !config.dev.demo_images) {
+            if (isDeviceCamScreenshotMode() && !photoboothPreview.hasLiveFrame() && !config.dev.demo_images) {
                 api.errorPic({
                     error: 'No preview by device cam available!'
                 });
@@ -730,8 +735,12 @@ const photoBooth = (function () {
                         );
 
                         if (result.current + 1 < api.collageLimit) {
-                            photoboothTools.console.logDev('core: initialize Media.');
-                            photoboothPreview.warmBackground();
+                            if (isDeviceCamScreenshotMode()) {
+                                photoboothPreview.hidePreviewDisplay();
+                            } else {
+                                photoboothTools.console.logDev('core: initialize Media.');
+                                photoboothPreview.warmBackground();
+                            }
                             api.takingPic = false;
                         }
 
@@ -1411,9 +1420,9 @@ const photoBooth = (function () {
 
         api.resetTimeOut();
 
-        if (usesBackgroundPreview) {
-            photoboothTools.console.logDev('Preview: core: restart background video from api.renderPic');
-            photoboothPreview.startVideo(CameraDisplayMode.BACKGROUND);
+        if (isDeviceCamScreenshotMode()) {
+            photoboothTools.console.logDev('Preview: core: keep screenshot stream warm after api.renderPic.');
+            photoboothPreview.hidePreviewDisplay();
         } else if (config.commands.preview && !config.preview.bsm) {
             photoboothTools.console.logDev('Preview: core: start video from api.renderPic');
             photoboothPreview.startVideo(CameraDisplayMode.INIT);
