@@ -34,9 +34,7 @@ $(document).ready(function () {
             loader.addClass('showBackgroundImage');
         }
 
-        loaderMessage.html(
-            '<i class="' + config.icons.spinner + '"></i><br>' + photoboothTools.getTranslation('busy')
-        );
+        loaderMessage.html('<i class="' + config.icons.spinner + '"></i><br>' + photoboothTools.getTranslation('busy'));
         startPage.removeClass('stage--active');
         loader.addClass('stage--active');
     };
