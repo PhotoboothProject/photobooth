@@ -45,7 +45,7 @@ function initRemoteBuzzerFromDOM() {
                 ioClient = io(baseUrl, {
                     reconnection: true,
                     reconnectionAttempts: Infinity,
-                    reconnectionDelay: 1000,
+                    reconnectionDelay: 5 * 1000,
                     timeout: 3000
                 });
 
