@@ -74,6 +74,7 @@ if (isset($_POST['submit'])) {
                         <option value="private/images/cheese" <?= $folderName === 'private/images/cheese' ? 'selected' : '' ?>>images/cheese</option>
                         <option value="private/images/demo" <?= $folderName === 'private/images/demo' ? 'selected' : '' ?>>images/demo</option>
                         <option value="private/videos/background" <?= $folderName === 'private/videos/background' ? 'selected' : '' ?>>videos/background</option>
+                        <option value="private/screensavers" <?= $folderName === 'private/screensavers' ? 'selected' : '' ?>>screensavers</option>
                         <option value="private/fonts" <?= $folderName === 'private/fonts' ? 'selected' : '' ?>>fonts</option>
                     </select>
                     <label class="<?= $labelClass ?>" for="files"><?=$languageService->translate('upload_selection')?></label>
