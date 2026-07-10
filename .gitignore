@@ -56,3 +56,4 @@ tools/*/vendor
 scripts/rembg_venv/
 /.venv
 /site
+/.envrc
