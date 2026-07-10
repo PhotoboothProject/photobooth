@@ -1,6 +1,7 @@
 /* globals photoboothTools */
 $(function () {
     initDirtyTracking();
+    initStartpageTextPositionConstraint();
 
     // adminRangeInput
     $(document).on('input', '.adminRangeInput', function () {
@@ -20,6 +21,34 @@ $(function () {
     });
     initCollageLayoutOptions();
 });
+
+function initStartpageTextPositionConstraint() {
+    const $logoEnabled = $('input[type="checkbox"][name="logo[enabled]"]');
+    const $logoPosition = $('select[name="logo[position]"]');
+    const $textPosition = $('select[name="ui[startpage_text_position]"]');
+
+    if ($logoEnabled.length === 0 || $logoPosition.length === 0 || $textPosition.length === 0) {
+        return;
+    }
+
+    const sync = function () {
+        const isCenteredLogo = $logoEnabled.is(':checked') && $logoPosition.val() === 'center';
+
+        $textPosition.find('option').each(function () {
+            const shouldDisable = isCenteredLogo && this.value !== 'bottom';
+            $(this).prop('disabled', shouldDisable);
+        });
+
+        if (isCenteredLogo && $textPosition.val() !== 'bottom') {
+            $textPosition.val('bottom').trigger('change');
+        }
+    };
+
+    $logoEnabled.on('change', sync);
+    $logoPosition.on('change', sync);
+    $textPosition.on('change', sync);
+    sync();
+}
 
 function initCollageLayoutOptions() {
     if (typeof environment === 'undefined' || !environment.publicFolders || !environment.publicFolders.api) {
