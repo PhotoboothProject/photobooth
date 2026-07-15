@@ -153,7 +153,7 @@ if (!file_exists($vars['printFile'])) {
                 $remoteStorageService = RemoteStorageService::getInstance();
                 $url = $remoteStorageService->getWebpageUri();
                 if ($config['qr']['append_filename']) {
-                    $url .= '/images/';
+                    $url .= '/?photo=';
                 }
             }
             if ($config['qr']['append_filename']) {

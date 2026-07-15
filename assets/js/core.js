@@ -97,6 +97,8 @@ const photoBooth = (function () {
     api.photoStyle = '';
     api.collageLayout = config.collage.layout;
     api.collageLimit = config.collage.limit;
+    api.remoteUploadFiles = [];
+    api.uploadStatusTimer = null;
 
     api.isTimeOutPending = function () {
         return typeof timeOut !== 'undefined';
@@ -983,6 +985,10 @@ const photoBooth = (function () {
 
     api.processPic = function (result) {
         startTime = new Date().getTime();
+        if (api.uploadStatusTimer) {
+            clearInterval(api.uploadStatusTimer);
+            api.uploadStatusTimer = null;
+        }
         loader.addClass('stage--active');
         startPage.removeClass('stage--active');
         resultPage.removeClass('stage--active');
@@ -1037,6 +1043,11 @@ const photoBooth = (function () {
                         photoboothTools.getRequest(getUrl);
                     }
 
+                    api.remoteUploadFiles = data.error ? [] : data.remoteUploads || [];
+                    if (api.remoteUploadFiles.length > 0) {
+                        api.triggerRemoteUpload(api.remoteUploadFiles);
+                    }
+
                     if (data.error) {
                         api.errorPic(data);
                     } else if (api.photoStyle === PhotoStyle.CHROMA) {
@@ -1063,6 +1074,8 @@ const photoBooth = (function () {
 
     api.processVideo = function (result) {
         startTime = new Date().getTime();
+        // videos are not uploaded to the remote storage
+        api.remoteUploadFiles = [];
 
         videoSensor.hide();
         previewVideo.hide();
@@ -1283,6 +1296,25 @@ const photoBooth = (function () {
         const text = document.createElement('p');
         text.innerHTML = qrHelpText;
         body.appendChild(text);
+
+        if (config.ftp.enabled && config.ftp.useForQr) {
+            $.getJSON({
+                url:
+                    environment.publicFolders.api +
+                    '/remoteStorageUpload.php?status&files=' +
+                    encodeURIComponent(filename),
+                success: (result) => {
+                    const state = (result.files[filename] || {}).status;
+                    if (['pending', 'uploading', 'failed'].includes(state)) {
+                        const uploadStatus = document.createElement('p');
+                        uploadStatus.textContent = photoboothTools.getTranslation(
+                            state === 'failed' ? 'remoteUploadFailed' : 'remoteUploadPending'
+                        );
+                        body.appendChild(uploadStatus);
+                    }
+                }
+            });
+        }
     };
 
     api.renderPic = function (filename, files) {
@@ -1392,6 +1424,16 @@ const photoBooth = (function () {
                     qrCaption.classList.add('stage-code__caption');
                     qrCaption.textContent = qrShortText;
                     qrWrapper.append(qrCaption);
+                }
+
+                if (config.ftp.enabled && config.ftp.useForQr && api.remoteUploadFiles.length > 0) {
+                    const qrStatus = document.createElement('span');
+                    qrStatus.id = 'qrUploadStatus';
+                    qrStatus.classList.add('stage-code__status');
+                    qrStatus.innerHTML = '<i class="' + config.icons.spinner + '"></i>';
+                    qrStatus.title = photoboothTools.getTranslation('remoteUploadPending');
+                    qrWrapper.append(qrStatus);
+                    api.pollUploadStatus(api.remoteUploadFiles);
                 }
             }
 
@@ -1564,6 +1606,89 @@ const photoBooth = (function () {
                 setTimeout(() => photoboothTools.reloadPage(), notificationTimeout);
             }
         });
+    };
+
+    api.triggerRemoteUpload = function (files) {
+        if (!config.ftp.enabled) {
+            return;
+        }
+        photoboothTools
+            .ajaxWithCsrf({
+                method: 'POST',
+                url: environment.publicFolders.api + '/remoteStorageUpload.php',
+                data: {
+                    files: (files || []).join(',')
+                }
+            })
+            .done((data) => {
+                photoboothTools.console.logDev('Remote upload triggered', data);
+            })
+            .fail((jqXHR, textStatus) => {
+                // fire-and-forget: the queue is drained again on the next capture
+                photoboothTools.console.log('Failed to trigger remote upload: ' + textStatus);
+            });
+    };
+
+    api.pollUploadStatus = function (files) {
+        if (api.uploadStatusTimer) {
+            clearInterval(api.uploadStatusTimer);
+            api.uploadStatusTimer = null;
+        }
+        if (!files || files.length === 0) {
+            return;
+        }
+
+        const pollingStart = new Date().getTime();
+        const statusUrl =
+            environment.publicFolders.api +
+            '/remoteStorageUpload.php?status&files=' +
+            encodeURIComponent(files.join(','));
+        let retriggered = false;
+
+        const stopPolling = () => {
+            clearInterval(api.uploadStatusTimer);
+            api.uploadStatusTimer = null;
+        };
+        const setStatusIcon = (iconClass, statusClass, translationKey) => {
+            const statusEl = document.getElementById('qrUploadStatus');
+            if (!statusEl) {
+                return;
+            }
+            statusEl.innerHTML = '<i class="' + iconClass + '"></i>';
+            statusEl.classList.add(statusClass);
+            statusEl.title = photoboothTools.getTranslation(translationKey);
+        };
+
+        api.uploadStatusTimer = setInterval(() => {
+            const statusEl = document.getElementById('qrUploadStatus');
+            if (!statusEl || new Date().getTime() - pollingStart > 120000) {
+                stopPolling();
+
+                return;
+            }
+            $.getJSON({
+                url: statusUrl,
+                success: (result) => {
+                    const states = files.map((file) => (result.files[file] || {}).status);
+                    if (states.every((state) => state === 'done')) {
+                        setStatusIcon(config.icons.admin_save_success, 'status--done', 'remoteUploadDone');
+                        stopPolling();
+                    } else if (states.some((state) => state === 'failed')) {
+                        setStatusIcon(config.icons.admin_save_error, 'status--failed', 'remoteUploadFailed');
+                        stopPolling();
+                    } else if (
+                        !retriggered &&
+                        result.counts.uploading === 0 &&
+                        states.some((state) => state === 'pending')
+                    ) {
+                        // the drain that should handle our files is not running
+                        // (e.g. it exited just before they were enqueued) - retrigger once
+                        retriggered = true;
+                        api.triggerRemoteUpload(files);
+                    }
+                }
+            });
+        }, 2000);
     };
 
     $('.imageFilter').on('click', function (e) {

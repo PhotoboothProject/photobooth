@@ -4,6 +4,7 @@
 
 require_once __DIR__ . '/../admin/admin_boot.php';
 
+use Photobooth\Environment;
 use Photobooth\Service\PrintManagerService;
 use Photobooth\Utility\PathUtility;
 
@@ -12,6 +13,8 @@ header('Content-Type: application/json');
 function handleDebugPanel(string $content, array $config): string|false
 {
     switch ($content) {
+        case 'nav-environmentinfo':
+            return getEnvironmentInfo();
         case 'nav-devlog':
             return readFileContents(PathUtility::getAbsolutePath('var/log/main.log'));
         case 'nav-remotebuzzerlog':
@@ -54,6 +57,46 @@ function handleDebugPanel(string $content, array $config): string|false
             http_response_code(400);
             return json_encode(['error' => 'Unknown debug panel parameter']);
     }
+}
+
+function getEnvironmentInfo(): string
+{
+    $lines = [];
+    $lines[] = 'Operating system: ' . Environment::getOperatingSystem();
+    $lines[] = 'PHP version:      ' . PHP_VERSION;
+    $lines[] = 'Base URL:         ' . PathUtility::getBaseUrl();
+    $lines[] = 'Primary IP:       ' . (Environment::getIp() ?: 'unknown');
+    $lines[] = '';
+    $lines[] = 'Network interfaces (addresses to reach this machine, e.g. via SSH/VNC):';
+    $lines[] = '';
+
+    $interfaces = Environment::getNetworkInterfaces();
+    if (empty($interfaces)) {
+        $lines[] = 'No network interface information available.';
+    }
+    foreach ($interfaces as $name => $interface) {
+        $lines[] = '################################';
+        $title = 'Interface: ' . $name . ' (' . ($interface['up'] ? 'up' : 'down') . ')';
+        if ($interface['description'] !== null && $interface['description'] !== $name) {
+            $title .= ' - ' . $interface['description'];
+        }
+        $lines[] = $title;
+        if ($interface['ssid'] !== null) {
+            $lines[] = 'Wi-Fi network (SSID): ' . $interface['ssid'];
+        }
+        foreach ($interface['addresses'] as $address) {
+            $line = str_pad($address['family'] . ':', 6) . '  ' . $address['address'];
+            if ($address['network'] !== null) {
+                $line .= '   (network: ' . $address['network'] . ')';
+            }
+            $lines[] = $line;
+        }
+        $lines[] = '----------------';
+    }
+
+    // rendered via innerHTML in the debug panel; SSIDs and interface
+    // descriptions are externally controlled strings
+    return htmlspecialchars(implode("\r\n", $lines), ENT_QUOTES);
 }
 
 function getLatestCommits(): string|false
