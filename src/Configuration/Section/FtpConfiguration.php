@@ -46,6 +46,7 @@ final class FtpConfiguration
                 ->scalarNode('urlTemplate')->defaultValue('%website%/%folder%/%title%')->end()
                 ->booleanNode('create_webpage')->defaultValue(false)->end()
                 ->scalarNode('template_location')->defaultValue('resources/template/index.php')->end()
+                ->scalarNode('template_config_location')->defaultValue('private/template/config.inc.php')->end()
                 ->booleanNode('delete')->defaultValue(false)->end()
             ->end();
     }
