@@ -6,7 +6,9 @@ require_once __DIR__ . '/../admin/admin_boot.php';
 
 use Photobooth\Environment;
 use Photobooth\Service\PrintManagerService;
+use Photobooth\Service\RemoteStorageQueueService;
 use Photobooth\Utility\PathUtility;
+use Photobooth\Utility\QrCodeUtility;
 
 header('Content-Type: application/json');
 
@@ -23,6 +25,8 @@ function handleDebugPanel(string $content, array $config): string|false
             return readFileContents(PathUtility::getAbsolutePath('var/log/synctodrive.log'));
         case 'nav-remotestoragelog':
             return readFileContents(PathUtility::getAbsolutePath('var/log/remotestorage.log'));
+        case 'nav-remotestoragequeue':
+            return getRemoteStorageQueueHtml();
         case 'nav-rembglog':
             return readFileContents(PathUtility::getAbsolutePath('var/log/rembg.log'));
         case 'nav-myconfig':
@@ -59,8 +63,72 @@ function handleDebugPanel(string $content, array $config): string|false
     }
 }
 
+function getRemoteStorageQueueHtml(): string
+{
+    $queue = RemoteStorageQueueService::getInstance();
+    $counts = $queue->getCounts();
+    $entries = $queue->getEntries();
+
+    $html = '<h2 class="center">Remote storage upload queue</h2>' . "\r\n";
+    $countParts = [];
+    foreach ($counts as $status => $count) {
+        $countParts[] = $status . ': ' . $count;
+    }
+    $html .= '<p class="center">' . htmlspecialchars(implode(' | ', $countParts), ENT_QUOTES) . '</p>' . "\r\n";
+
+    if (empty($entries)) {
+        return $html . '<p class="center">Queue is empty. Note: successful uploads are removed from the queue after 24 hours, see the remote storage log for the full history.</p>';
+    }
+
+    // newest first: during an event the recent activity is what matters
+    uasort($entries, fn ($a, $b) => ($b['enqueuedAt'] ?? 0) <=> ($a['enqueuedAt'] ?? 0));
+
+    $statusColors = [
+        RemoteStorageQueueService::STATUS_PENDING => '#6b7280',
+        RemoteStorageQueueService::STATUS_UPLOADING => '#b45309',
+        RemoteStorageQueueService::STATUS_DONE => '#1a7f37',
+        RemoteStorageQueueService::STATUS_FAILED => '#b42318',
+    ];
+
+    $html .= '<table style="width:90%; margin-left: auto; margin-right: auto;">' . "\r\n";
+    $html .= '    <thead><tr>';
+    foreach (['File', 'Status', 'Attempts', 'Error', 'Queued at', 'Uploaded at'] as $column) {
+        $html .= '<th>' . $column . '</th>';
+    }
+    $html .= '</tr></thead>' . "\r\n";
+    $html .= '    <tbody>' . "\r\n";
+    foreach ($entries as $entry) {
+        $status = (string) ($entry['status'] ?? 'unknown');
+        $color = $statusColors[$status] ?? '#6b7280';
+        $html .= '        <tr>';
+        $html .= '<td>' . htmlspecialchars((string) ($entry['file'] ?? ''), ENT_QUOTES) . '</td>';
+        $html .= '<td class="center"><span style="color:' . $color . '; font-weight: bold;">' . htmlspecialchars($status, ENT_QUOTES) . '</span></td>';
+        $html .= '<td class="center">' . (int) ($entry['attempts'] ?? 0) . '</td>';
+        $html .= '<td>' . htmlspecialchars((string) ($entry['error'] ?? ''), ENT_QUOTES) . '</td>';
+        $html .= '<td class="center">' . formatQueueTimestamp($entry['enqueuedAt'] ?? null) . '</td>';
+        $html .= '<td class="center">' . formatQueueTimestamp($entry['uploadedAt'] ?? null) . '</td>';
+        $html .= '</tr>' . "\r\n";
+    }
+    $html .= '    </tbody>' . "\r\n";
+    $html .= '</table>' . "\r\n";
+
+    return $html;
+}
+
+function formatQueueTimestamp(mixed $timestamp): string
+{
+    if (!is_numeric($timestamp) || (int) $timestamp <= 0) {
+        return '-';
+    }
+
+    return date('Y-m-d H:i:s', (int) $timestamp);
+}
+
 function getEnvironmentInfo(): string
 {
+    // rendered via innerHTML in the debug panel; SSIDs and interface
+    // descriptions are externally controlled strings, so every dynamic
+    // string is escaped individually (the output contains QR <img> tags)
     $lines = [];
     $lines[] = 'Operating system: ' . Environment::getOperatingSystem();
     $lines[] = 'PHP version:      ' . PHP_VERSION;
@@ -69,34 +137,57 @@ function getEnvironmentInfo(): string
     $lines[] = '';
     $lines[] = 'Network interfaces (addresses to reach this machine, e.g. via SSH/VNC):';
     $lines[] = '';
+    $html = htmlspecialchars(implode("\r\n", $lines), ENT_QUOTES) . "\r\n";
+
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $port = (string) ($_SERVER['SERVER_PORT'] ?? '');
+    $portSuffix = '';
+    if ($port !== '' && !($scheme === 'http' && $port === '80') && !($scheme === 'https' && $port === '443')) {
+        $portSuffix = ':' . $port;
+    }
+    $basePath = PathUtility::getBaseUrl();
 
     $interfaces = Environment::getNetworkInterfaces();
     if (empty($interfaces)) {
-        $lines[] = 'No network interface information available.';
+        $html .= 'No network interface information available.' . "\r\n";
     }
     foreach ($interfaces as $name => $interface) {
-        $lines[] = '################################';
+        $block = [];
+        $block[] = '################################';
         $title = 'Interface: ' . $name . ' (' . ($interface['up'] ? 'up' : 'down') . ')';
         if ($interface['description'] !== null && $interface['description'] !== $name) {
             $title .= ' - ' . $interface['description'];
         }
-        $lines[] = $title;
+        $block[] = $title;
         if ($interface['ssid'] !== null) {
-            $lines[] = 'Wi-Fi network (SSID): ' . $interface['ssid'];
+            $block[] = 'Wi-Fi network (SSID): ' . $interface['ssid'];
         }
+        $html .= htmlspecialchars(implode("\r\n", $block), ENT_QUOTES) . "\r\n";
+
         foreach ($interface['addresses'] as $address) {
             $line = str_pad($address['family'] . ':', 6) . '  ' . $address['address'];
             if ($address['network'] !== null) {
                 $line .= '   (network: ' . $address['network'] . ')';
             }
-            $lines[] = $line;
+            $html .= htmlspecialchars($line, ENT_QUOTES) . "\r\n";
+
+            // one QR code per IPv4 address: scan it from a device on the
+            // same network to open the photobooth from there
+            if ($address['family'] === 'IPv4') {
+                $url = $scheme . '://' . $address['address'] . $portSuffix . $basePath;
+                $html .= htmlspecialchars('Open from this network: ' . $url, ENT_QUOTES) . "\r\n";
+                try {
+                    $qr = QrCodeUtility::create($url, '', 200, 10);
+                    $html .= '<img src="data:' . htmlspecialchars($qr->getMimeType(), ENT_QUOTES) . ';base64,' . base64_encode($qr->getString()) . '" width="140" height="140" alt="' . htmlspecialchars($url, ENT_QUOTES) . '" style="margin: 4px 0 8px;" />' . "\r\n";
+                } catch (\Throwable $e) {
+                    $html .= htmlspecialchars('QR code generation failed: ' . $e->getMessage(), ENT_QUOTES) . "\r\n";
+                }
+            }
         }
-        $lines[] = '----------------';
+        $html .= '----------------' . "\r\n";
     }
 
-    // rendered via innerHTML in the debug panel; SSIDs and interface
-    // descriptions are externally controlled strings
-    return htmlspecialchars(implode("\r\n", $lines), ENT_QUOTES);
+    return $html;
 }
 
 function getLatestCommits(): string|false

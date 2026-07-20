@@ -957,6 +957,8 @@
   "remotebuzzer:remotebuzzer_userotary": "Abilita Codificatore Rotativo",
   "remotebuzzer:remotebuzzer_videobutton": "Pulsante Video",
   "remotebuzzerGetTrigger": "Attivatore della richiesta GET del buzzer remoto",
+  "remotestoragelog": "Log storage remoto",
+  "remotestoragequeue": "Coda upload storage remoto",
   "remoteStorageTemplate": "Test template di storage remoto",
   "reset": "Reset",
   "reset_lock": "Sblocca",

@@ -1014,6 +1014,8 @@
   "remotebuzzer:remotebuzzer_userotary": "Enable Rotary Encoder",
   "remotebuzzer:remotebuzzer_videobutton": "Video Button",
   "remotebuzzerGetTrigger": "Remotebuzzer GET request trigger",
+  "remotestoragelog": "Remote storage log",
+  "remotestoragequeue": "Remote storage queue",
   "remoteStorageTemplate": "Remote Storage Template test",
   "reset": "Reset",
   "reset_lock": "Unlock",
