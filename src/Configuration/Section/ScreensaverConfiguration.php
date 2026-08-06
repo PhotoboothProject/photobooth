@@ -17,6 +17,7 @@ final class ScreensaverConfiguration
                 ->enumNode('mode')->values(['image', 'video', 'folder', 'gallery'])->defaultValue('image')->end()
                 ->scalarNode('image_source')->defaultValue('')->end()
                 ->scalarNode('video_source')->defaultValue('')->end()
+                ->scalarNode('folder_source')->defaultValue('screensavers')->end()
                 ->scalarNode('text')->defaultValue('')->end()
                 ->scalarNode('text_color')->defaultValue('#ffffff')->end()
                 ->scalarNode('text_font')->defaultValue('')->end()

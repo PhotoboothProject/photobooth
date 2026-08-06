@@ -40,7 +40,7 @@
                 case 'image':
                     return config.screensaver.image_source;
                 case 'folder':
-                    return base + '/randomImg.php?dir=' + encodeURIComponent('screensavers') + '&t=' + Date.now();
+                    return base + '/randomImg.php?dir=' + encodeURIComponent(config.screensaver.folder_source || 'screensavers') + '&t=' + Date.now();
                 case 'gallery': {
                     const anchors = $('#galimages a');
                     if (anchors.length) {
