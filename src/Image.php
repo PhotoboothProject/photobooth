@@ -247,7 +247,7 @@ class Image
 
     /**
      *
-     * QR Difinitions
+     * QR Definitions
      *
      */
 
@@ -285,6 +285,35 @@ class Image
      * The URL to generate a QR code for.
      */
     public string $qrUrl = '';
+
+    /**
+     * Positioning mode for QR code.
+     * absolute = current behaviour
+     * relative = size and offset relative to print width
+     */
+    public string $qrPositionMode = 'absolute';
+
+    /**
+     * QR size relative to final print width.
+     * Example: 0.08 = 8%
+     */
+    public float $qrRelativeSize = 0.08;
+
+    /**
+     * QR offset relative to final print width.
+     * Example: 0.02 = 2%
+     */
+    public float $qrRelativeOffset = 0.02;
+
+    /**
+     * Final crop width used to map relative QR placement onto the pre-crop image.
+     */
+    public int $qrCropWidth = 0;
+
+    /**
+     * Final crop height used to map relative QR placement onto the pre-crop image.
+     */
+    public int $qrCropHeight = 0;
 
     /**
      *
@@ -1152,18 +1181,11 @@ class Image
                 throw new \Exception('No URL for QR-Code generation defined.');
             }
 
-            if (!is_numeric($this->qrSize)) {
-                throw new \Exception('QR-Size is not numeric.');
-            }
             if ($this->qrSize % 2 != 0) {
                 throw new \Exception('QR-Size is not even.');
             }
             if ($this->qrSize < 2 || $this->qrSize > 10) {
                 throw new \Exception('QR-Size must be 2, 4, 6, 8 or 10.');
-            }
-
-            if (!is_numeric($this->qrMargin)) {
-                throw new \Exception('QR-Margin is not numeric.');
             }
             if ($this->qrMargin < 0 || $this->qrMargin > 10) {
                 throw new \Exception('QR-Size must be in range between 0 and 10.');
@@ -1262,54 +1284,112 @@ class Image
     public function applyQr(GdImage $qrCode, GdImage $imageResource): GdImage
     {
         try {
-            if (!is_numeric($this->qrOffset)) {
-                throw new \Exception('QR-Offset is not numeric.');
-            }
             $offset = $this->qrOffset;
 
             $width = imagesx($imageResource);
             $height = imagesy($imageResource);
             $qrWidth = imagesx($qrCode);
             $qrHeight = imagesy($qrCode);
+            $placementWidth = $width;
+            $placementHeight = $height;
+            $placementOffsetX = 0;
+            $placementOffsetY = 0;
+
+            // For relative positioning, optionally map the desired final-crop placement
+            // back onto the current source image so the subsequent crop keeps the same
+            // visual result without changing overlay order.
+            if ($this->qrPositionMode === 'relative') {
+                $referenceWidth = $width;
+                $scale = 1.0;
+
+                if ($this->qrCropWidth > 0 && $this->qrCropHeight > 0) {
+                    $cropWidth = intval(($height * $this->qrCropWidth) / $this->qrCropHeight);
+                    $cropHeight = intval(($width * $this->qrCropHeight) / $this->qrCropWidth);
+
+                    if ($cropWidth > $width) {
+                        $placementHeight = $cropHeight;
+                        $placementOffsetY = intval(($height - $cropHeight) / 2);
+                    } else {
+                        $placementWidth = $cropWidth;
+                        $placementOffsetX = intval(($width - $cropWidth) / 2);
+                    }
+
+                    $referenceWidth = $this->qrCropWidth;
+                    $scale = $placementWidth / $this->qrCropWidth;
+                }
+
+                $targetSize = max(
+                    20,
+                    (int) round($referenceWidth * $this->qrRelativeSize)
+                );
+
+                $offset = max(
+                    0,
+                    (int) round($referenceWidth * $this->qrRelativeOffset)
+                );
+
+                if ($scale !== 1.0) {
+                    $targetSize = max(1, (int) round($targetSize * $scale));
+                    $offset = max(0, (int) round($offset * $scale));
+                }
+
+                $qrCode = $this->resizePngImage(
+                    $qrCode,
+                    $targetSize,
+                    $targetSize
+                );
+
+                if (!$qrCode instanceof GdImage) {
+                    throw new \Exception('Unable to resize QR code.');
+                }
+
+                $qrWidth = imagesx($qrCode);
+                $qrHeight = imagesy($qrCode);
+            } else {
+                $offset = $this->qrOffset;
+            }
 
             switch ($this->qrPosition) {
                 case 'topLeft':
-                    $x = $offset;
-                    $y = $offset;
+                    $x = $placementOffsetX + $offset;
+                    $y = $placementOffsetY + $offset;
                     break;
                 case 'top':
-                    $x = ($width - $qrWidth) / 2;
-                    $y = $offset;
+                    $x = $placementOffsetX + (($placementWidth - $qrWidth) / 2);
+                    $y = $placementOffsetY + $offset;
                     break;
                 case 'topRight':
-                    $x = $width - ($qrWidth + $offset);
-                    $y = $offset;
+                    $x = $placementOffsetX + $placementWidth - ($qrWidth + $offset);
+                    $y = $placementOffsetY + $offset;
                     break;
                 case 'right':
-                    $x = $width - $qrWidth - $offset;
-                    $y = ($height - $qrHeight) / 2;
+                    $x = $placementOffsetX + $placementWidth - $qrWidth - $offset;
+                    $y = $placementOffsetY + (($placementHeight - $qrHeight) / 2);
                     break;
                 case 'bottomRight':
-                    $x = $width - ($qrWidth + $offset);
-                    $y = $height - ($qrHeight + $offset);
+                    $x = $placementOffsetX + $placementWidth - ($qrWidth + $offset);
+                    $y = $placementOffsetY + $placementHeight - ($qrHeight + $offset);
                     break;
                 case 'bottom':
-                    $x = ($width - $qrWidth) / 2;
-                    $y = $height - $qrHeight - $offset;
+                    $x = $placementOffsetX + (($placementWidth - $qrWidth) / 2);
+                    $y = $placementOffsetY + $placementHeight - $qrHeight - $offset;
                     break;
                 case 'bottomLeft':
-                    $x = $offset;
-                    $y = $height - ($qrHeight + $offset);
+                    $x = $placementOffsetX + $offset;
+                    $y = $placementOffsetY + $placementHeight - ($qrHeight + $offset);
                     break;
                 case 'left':
-                    $x = $offset;
-                    $y = ($height - $qrHeight) / 2;
+                    $x = $placementOffsetX + $offset;
+                    $y = $placementOffsetY + (($placementHeight - $qrHeight) / 2);
                     break;
                 default:
-                    $x = $width - ($qrWidth + $offset);
-                    $y = $height - ($qrHeight + $offset);
+                    $x = $placementOffsetX + $placementWidth - ($qrWidth + $offset);
+                    $y = $placementOffsetY + $placementHeight - ($qrHeight + $offset);
                     break;
             }
+
+            $x = (int) round($x);
+            $y = (int) round($y);
 
             if (!imagecopy($imageResource, $qrCode, $x, $y, 0, 0, $qrWidth, $qrHeight)) {
                 throw new \Exception('Can not apply QR Code onto image.');
