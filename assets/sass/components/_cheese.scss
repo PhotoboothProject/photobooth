@@ -16,4 +16,21 @@
   backface-visibility: hidden;
   font-size: 3em;
   user-select: none;
+  pointer-events: none;
+
+  &--capture-handoff {
+    background: rgba(0, 0, 0, 0.22);
+    backdrop-filter: blur(14px);
+  }
+
+  &--capture-handoff .cheese-image img {
+    filter: drop-shadow(0 1rem 2rem rgba(0, 0, 0, 0.35));
+  }
+
+  &--capture-handoff .cheese-label {
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 0.4rem 1.4rem rgba(0, 0, 0, 0.2);
+  }
 }
