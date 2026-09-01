@@ -14,6 +14,97 @@ body {
   .navItem.isActive span.corner {
     @apply flex;
   }
+
+  .adminIconSelection-iconWrap {
+    @apply inline-flex items-center justify-center shrink-0 overflow-hidden align-middle;
+    line-height: 1;
+  }
+
+  .adminIconSelection-iconWrap--preview {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .adminIconSelection-iconWrap--grid {
+    width: 2.1rem;
+    height: 2.1rem;
+  }
+
+  .adminIconSelection-lucideIcon,
+  .adminIconSelection-iconWrap > svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .adminIconSelection-iconifyIcon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+    font-size: 2.45rem;
+  }
+
+  .adminIconSelection-iconWrap--grid .adminIconSelection-iconifyIcon {
+    font-size: 1.8rem;
+  }
+
+  .adminIconSelection-faIcon {
+    font-size: 2.45rem;
+    line-height: 1;
+    width: 1em;
+    text-align: center;
+  }
+
+  .adminIconSelection-iconWrap--grid .adminIconSelection-faIcon {
+    font-size: 1.7rem;
+  }
+
+  .adminIconSelection-imageIcon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .adminIconSelection-actionBtn {
+    @apply h-10 w-full rounded-md border-2 border-brand-1 px-4 text-sm font-semibold text-brand-1 transition hover:bg-brand-1 hover:text-white;
+  }
+
+  @media (min-width: 1024px) {
+    .adminIconSelection-actionBtn {
+      width: 11rem;
+      min-width: 11rem;
+    }
+  }
+
+  .adminIconSelection-directInputField {
+    @apply w-full h-10 border-2 border-solid border-gray-300 focus:border-brand-1 rounded-md px-3 text-sm font-mono;
+  }
+
+  .adminIconSelection-uploadField {
+    @apply w-full h-10 rounded-md border-2 border-brand-1 bg-blue-50/70 px-1 flex items-center gap-2 overflow-hidden;
+  }
+
+  .adminIconSelection-uploadTrigger {
+    @apply inline-flex h-8 shrink-0 items-center rounded-md bg-brand-1 px-3 text-xs font-bold text-white cursor-pointer transition hover:opacity-90;
+  }
+
+  .adminIconSelection-uploadFileName {
+    @apply min-w-0 flex-1 truncate text-sm text-gray-700 pr-2;
+  }
+
+  .adminIconSelection-uploadFileName.is-empty {
+    @apply text-gray-500;
+  }
+
+  .adminIconSelection-uploadInput:focus + .adminIconSelection-uploadTrigger {
+    @apply ring-2 ring-brand-1/30 ring-offset-1;
+  }
+
+  .adminIconSelection-itemDelete {
+    @apply mt-1 w-full rounded-md border border-rose-300 bg-rose-50 px-2 py-1 text-[10px] font-semibold text-rose-700 transition hover:bg-rose-100;
+  }
 }
 
 code {

@@ -54,6 +54,24 @@
     background: rgba(32, 32, 32, 0.55);
     backdrop-filter: blur(3px);
 
+    .lucide,
+    .screensaver-event-icon,
+    iconify-icon.screensaver-event-icon {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.1em;
+      display: inline-block;
+    }
+
+    .lucide,
+    .screensaver-event-icon svg {
+      stroke-width: 2.8;
+    }
+
+    .screensaver-event-image {
+      object-fit: contain;
+    }
+
     &--top {
       top: 3rem;
     }

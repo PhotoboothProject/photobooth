@@ -142,6 +142,14 @@ const photoBooth = (function () {
     api.init = function () {
         api.reset();
         startPage.addClass('stage--active');
+        if (window.lucide && window.lucide.createIcons && window.lucide.icons) {
+            window.lucide.createIcons({
+                icons: window.lucide.icons
+            });
+            document.querySelectorAll('[data-lucide] svg').forEach((svg) => {
+                svg.setAttribute('stroke-width', '2.8');
+            });
+        }
         if (usesBackgroundPreview) {
             photoboothPreview.startVideo(CameraDisplayMode.BACKGROUND);
             photoboothTools.console.logDev('Preview: core: start video (BACKGROUND) from api.init.');

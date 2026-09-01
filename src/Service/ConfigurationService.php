@@ -7,6 +7,7 @@ use Photobooth\Configuration\PhotoboothConfiguration;
 use Photobooth\Environment;
 use Photobooth\Helper;
 use Photobooth\Utility\ArrayUtility;
+use Photobooth\Utility\EventSymbolUtility;
 use Photobooth\Utility\PathUtility;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
@@ -316,6 +317,10 @@ class ConfigurationService
             if (array_key_exists('rental_pin', $config['login'])) {
                 $config['login']['rental_pin'] = $hashPinIfNeeded($config['login']['rental_pin']);
             }
+        }
+
+        if (isset($config['event']['symbol'])) {
+            $config['event']['symbol'] = EventSymbolUtility::normalize($config['event']['symbol']);
         }
 
         return $config;
