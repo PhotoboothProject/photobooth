@@ -130,6 +130,21 @@ final class CollageConfiguration
                     ->end()
                 ->scalarNode('placeholderpath')->defaultValue('')->end()
                 ->scalarNode('background')->defaultValue('')->end()
+                ->scalarNode('background_landscape')->defaultValue('')->end()
+                ->scalarNode('background_portrait')->defaultValue('')->end()
+                ->scalarNode('background_strip')->defaultValue('')->end()
+                ->enumNode('background_render_mode')
+                    ->values(['behind_images', 'overlay_frame'])
+                    ->beforeNormalization()
+                        ->ifTrue(static function ($value): bool {
+                            return is_bool($value) || in_array($value, ['true', 'false', '1', '0'], true);
+                        })
+                        ->then(static function ($value): string {
+                            return filter_var($value, FILTER_VALIDATE_BOOLEAN) ? 'overlay_frame' : 'behind_images';
+                        })
+                        ->end()
+                    ->defaultValue('behind_images')
+                    ->end()
                 ->integerNode('limit')
                     ->defaultValue(4)
                     ->beforeNormalization()
