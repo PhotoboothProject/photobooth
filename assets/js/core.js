@@ -124,6 +124,8 @@ const photoBooth = (function () {
         loaderButtonBar.empty();
         loaderMessage.empty();
         loaderMessage.removeClass('stage-message--error');
+        api.clearLoaderImage();
+        api.cheese.setCaptureHandoffActive(false);
         resultPage.removeAttr('style data-img');
         resultPage.removeClass('stage--active');
         gallery.removeClass('gallery--open');
@@ -205,12 +207,8 @@ const photoBooth = (function () {
     };
 
     api.stopPreviewAndCaptureFromVideo = () => {
-        if (config.preview.camTakesPic) {
-            if (photoboothPreview.stream) {
-                videoSensor.get(0).width = previewVideo.get(0).videoWidth;
-                videoSensor.get(0).height = previewVideo.get(0).videoHeight;
-                videoSensor.get(0).getContext('2d').drawImage(previewVideo.get(0), 0, 0);
-            }
+        if (api.capturePreviewFrame()) {
+            api.cheese.setCaptureHandoffActive(true);
         }
         if (!config.commands.preview_kill || config.preview.camTakesPic) {
             photoboothTools.console.logDev('Preview: core: stopping preview from stopPreviewAndCaptureFromVideo.');
@@ -373,6 +371,11 @@ const photoBooth = (function () {
                 api.cheese.element = null;
             }
         },
+        setCaptureHandoffActive: (active) => {
+            if (api.cheese.element !== null) {
+                api.cheese.element.classList.toggle('cheese--capture-handoff', active);
+            }
+        },
         start: () => {
             photoboothTools.console.log('Cheese: Start');
             api.cheese.create();
@@ -464,6 +467,49 @@ const photoBooth = (function () {
     api.clearLoaderImage = () => {
         loaderImage.css({ display: 'none', 'background-image': '' });
         loaderImage.removeAttr('data-img');
+        loader.removeClass('showBackgroundImage');
+        loader.css('background-image', '');
+    };
+
+    api.showLoaderImage = (imageUrl, cacheKey = Date.now().toString()) => {
+        if (!imageUrl) {
+            return false;
+        }
+
+        loaderImage.attr('data-img', cacheKey);
+        loaderImage.css('background-image', `url(${imageUrl})`);
+        loaderImage.show();
+        loader.addClass('showBackgroundImage');
+
+        return true;
+    };
+
+    api.showFrozenFrameFromSensor = () => {
+        const sensor = videoSensor.get(0);
+        if (!sensor || sensor.width === 0 || sensor.height === 0) {
+            return false;
+        }
+
+        try {
+            return api.showLoaderImage(sensor.toDataURL('image/jpeg'), `frozen-${Date.now()}`);
+        } catch (error) {
+            photoboothTools.console.log('Unable to create frozen frame from sensor:', error);
+            return false;
+        }
+    };
+
+    api.capturePreviewFrame = () => {
+        const sensor = videoSensor.get(0);
+        const videoElement = previewVideo.get(0);
+        if (!sensor || !videoElement || videoElement.videoWidth === 0 || videoElement.videoHeight === 0) {
+            return false;
+        }
+
+        sensor.width = videoElement.videoWidth;
+        sensor.height = videoElement.videoHeight;
+        sensor.getContext('2d').drawImage(videoElement, 0, 0);
+
+        return api.showFrozenFrameFromSensor();
     };
 
     api.shellCommand = function (cmd, file = '') {
@@ -620,6 +666,10 @@ const photoBooth = (function () {
 
     api.takeVideo = function (retry) {
         remoteBuzzerClient.inProgress('in-progress');
+        api.stopPreviewAndCaptureFromVideo();
+        if (config.ui.shutter_animation) {
+            api.shutter.start();
+        }
         const data = {
             style: api.photoStyle
         };
@@ -631,6 +681,9 @@ const photoBooth = (function () {
             remoteBuzzerClient.inProgress('in-progress');
 
             api.stopPreviewAndCaptureFromVideo();
+            if (config.ui.shutter_animation) {
+                api.shutter.start();
+            }
 
             const data = {
                 filter: imgFilter,
@@ -683,7 +736,6 @@ const photoBooth = (function () {
                 try {
                     api.cheese.destroy();
                     if (config.ui.shutter_animation) {
-                        await api.shutter.start();
                         await api.shutter.stop();
                     }
                     endTime = new Date().getTime();
@@ -715,12 +767,9 @@ const photoBooth = (function () {
                         const preloadImage = new Image();
                         const picdate = Date.now().toString();
                         preloadImage.onload = () => {
-                            loaderImage.attr('data-img', picdate);
-                            loaderImage.css('background-image', `url(${imageUrl}?filter=${imgFilter}&v=${picdate})`);
+                            api.showLoaderImage(`${imageUrl}?filter=${imgFilter}&v=${picdate}`, picdate);
                         };
                         preloadImage.src = imageUrl;
-
-                        loaderImage.show();
 
                         photoboothTools.console.logDev(
                             'Taken collage photo number: ' + (result.current + 1) + ' / ' + api.collageLimit
@@ -856,6 +905,9 @@ const photoBooth = (function () {
                     photoboothTools.console.log('Took ' + data.style, result);
                     photoboothTools.console.logDev('Failed after ' + totalTime + 'ms');
                     if (config.picture.retry_on_error > 0 && retry < config.picture.retry_on_error) {
+                        if (config.ui.shutter_animation) {
+                            await api.shutter.stop();
+                        }
                         photoboothTools.console.logDev(
                             'ERROR: Taking picture failed. Retrying. Retry: ' +
                                 retry +
@@ -888,6 +940,9 @@ const photoBooth = (function () {
             .done(async (result) => {
                 try {
                     api.cheese.destroy();
+                    if (config.ui.shutter_animation) {
+                        await api.shutter.stop();
+                    }
                     if (config.video.animation) {
                         videoAnimation.hide();
                     }
@@ -1003,8 +1058,7 @@ const photoBooth = (function () {
             const tempImageUrl = environment.publicFolders.tmp + '/' + result.file;
             const preloadImage = new Image();
             preloadImage.onload = () => {
-                loader.css('background-image', `url(${tempImageUrl})`);
-                loader.addClass('showBackgroundImage');
+                api.showLoaderImage(tempImageUrl);
             };
             preloadImage.src = tempImageUrl;
         }
@@ -1365,8 +1419,8 @@ const photoBooth = (function () {
             resultPage.attr('data-img', filename);
             resultPage.addClass('stage--active');
 
-            loader.removeClass('stage--active showBackgroundImage');
-            loader.css('background-image', '');
+            loader.removeClass('stage--active');
+            api.clearLoaderImage();
 
             if (config.qr.enabled && config.qr.result != 'hidden') {
                 if (document.getElementById('resultQR')) {

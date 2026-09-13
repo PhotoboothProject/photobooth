@@ -449,6 +449,15 @@ class Image
                     break;
             }
             if (!$resource) {
+                $contents = file_get_contents($image);
+                if ($contents === false) {
+                    throw new \Exception('Can\'t read image file: ' . $image);
+                }
+
+                $resource = @imagecreatefromstring((string)$contents);
+            }
+
+            if (!$resource) {
                 throw new \Exception('Can\'t create GD resource.');
             }
             return $resource;
