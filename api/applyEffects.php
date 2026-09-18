@@ -12,7 +12,7 @@ use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Processor\ImageProcessor;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
-use Photobooth\Service\RemoteStorageService;
+use Photobooth\Service\RemoteStorageQueueService;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
 
@@ -24,7 +24,8 @@ $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
 $database = DatabaseManagerService::getInstance();
-$remoteStorage = RemoteStorageService::getInstance();
+$remoteStorageQueue = RemoteStorageQueueService::getInstance();
+$uploadFiles = [];
 
 $processor = null;
 
@@ -336,13 +337,12 @@ try {
             }
         }
 
-        // Store images on remote storage
-        if ($config['ftp']['enabled']) {
-            $remoteStorage->write($remoteStorage->getStorageFolder() . '/images/' . $vars['singleImageFile'], (string) file_get_contents($vars['resultFile']));
-            $remoteStorage->write($remoteStorage->getStorageFolder() . '/thumbs/' . $vars['singleImageFile'], (string) file_get_contents($vars['thumbFile']));
-            if ($config['ftp']['create_webpage']) {
-                $remoteStorage->createWebpage();
-            }
+        // Queue images for asynchronous remote storage upload, drained by
+        // api/remoteStorageUpload.php after the response was sent. Chroma
+        // images that get deleted below are skipped: the remote gallery
+        // mirrors local visibility.
+        if ($config['ftp']['enabled'] && !($vars['isChroma'] && $config['keying']['show_all'] === false)) {
+            $uploadFiles[] = $vars['singleImageFile'];
         }
 
         // Change permissions
@@ -383,9 +383,20 @@ if (is_array($imageHandler->errorLog) && !empty($imageHandler->errorLog)) {
     $logger->error('Error', $imageHandler->errorLog);
 }
 
+if (!empty($uploadFiles)) {
+    try {
+        $remoteStorageQueue->enqueue($uploadFiles);
+    } catch (\Exception $e) {
+        // the photo was processed successfully, a tracking failure must not fail the response
+        $logger->error('Failed to queue remote storage upload', ['files' => $uploadFiles, 'error' => $e->getMessage()]);
+        $uploadFiles = [];
+    }
+}
+
 $data = [
     'file' => $vars['fileName'],
     'images' => $vars['srcImages'],
+    'remoteUploads' => $uploadFiles,
 ];
 $logger->debug('effects applied', $data);
 echo json_encode($data);

@@ -9,6 +9,7 @@ use Photobooth\FileDelete;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\ImageMetadataCacheService;
 use Photobooth\Service\LoggerService;
+use Photobooth\Service\RemoteStorageQueueService;
 use Photobooth\Service\RemoteStorageService;
 
 header('Content-Type: application/json');
@@ -80,9 +81,16 @@ foreach ($filesToDelete as $fileName) {
         $database->deleteContentFromDB($fileName);
     }
 
-    if ($config['ftp']['enabled'] && $config['ftp']['delete']) {
-        $remoteStorage->delete($remoteStorage->getStorageFolder() . '/images/' . $fileName);
-        $remoteStorage->delete($remoteStorage->getStorageFolder() . '/thumbs/' . $fileName);
+    if ($config['ftp']['enabled']) {
+        // Cancel a queued upload; if it already reached (or may reach) the
+        // remote storage, delete the remote copies as well. Entries removed
+        // while uploading are cleaned up by the drain worker itself.
+        $removed = RemoteStorageQueueService::getInstance()->remove($fileName);
+        $status = $removed['status'] ?? null;
+        if ($config['ftp']['delete'] && ($status === null || in_array($status, [RemoteStorageQueueService::STATUS_DONE, RemoteStorageQueueService::STATUS_UPLOADING], true))) {
+            $remoteStorage->delete($remoteStorage->getStorageFolder() . '/images/' . $fileName);
+            $remoteStorage->delete($remoteStorage->getStorageFolder() . '/thumbs/' . $fileName);
+        }
     }
 }
 
