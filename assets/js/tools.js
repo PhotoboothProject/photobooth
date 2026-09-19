@@ -629,6 +629,77 @@ const photoboothTools = (function () {
         }
     };
 
+    api.printPayment = function (imageSrc, copies, cb) {
+        const priceCents = Number(config.payments?.price_cents || 0);
+        const priceEuro = (priceCents / 100).toFixed(2).replace('.', ',');
+        const paymentMessage = (config.payments?.message || api.getTranslation('payments_message')).replace(
+            '%price%',
+            priceEuro
+        );
+        const paymentQrMsg = api.getTranslation('payments_qr_message');
+        const paymentTerminalMsg = api.getTranslation('payments_terminal_message');
+
+        api.overlay.show(paymentMessage);
+        api.isPrinting = true;
+        if (typeof remoteBuzzerClient !== 'undefined') {
+            remoteBuzzerClient.inProgress('print');
+        }
+
+        $.ajax({
+            method: 'POST',
+            url: environment.publicFolders.api + '/startPaymentPrint.php',
+            dataType: 'json',
+            data: api.addCsrfToPayload({ filename: imageSrc, copies: copies }),
+            success: (data) => {
+                if (data.status === 'disabled') {
+                    api.overlay.close();
+                    api.isPrinting = false;
+                    api.printImage(imageSrc, copies, cb);
+                } else if (data.status === 'success') {
+                    api.overlay.show(data.message || api.getTranslation('payments_success'));
+                    setTimeout(() => {
+                        api.overlay.close();
+                        api.isPrinting = false;
+                        api.printImage(imageSrc, copies, cb);
+                    }, 1200);
+                } else if (data.status === 'qr' || data.status === 'both') {
+                    if (!data.payment_url) {
+                        api.overlay.showError(api.getTranslation('payments_url_missing'));
+                        api.resetPrintErrorMessage(cb, notificationTimeout);
+                        return;
+                    }
+                    const qrUrl =
+                        'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' +
+                        encodeURIComponent(data.payment_url);
+                    const statusClass = {
+                        both: 'overlay-both',
+                        qr: 'overlay-qr'
+                    }[data.status];
+                    const overlay = document.querySelector('.overlay');
+
+                    api.overlay.show(`
+                        <div style="text-align:center;">
+                            <div style="font-size:1.4em; margin-bottom:12px;">${paymentMessage}</div>
+                            <div style="margin-bottom:10px;">${paymentQrMsg}</div>
+                            <img src="${qrUrl}" alt="QR Code" style="max-width:300px; width:80%; height:auto; background:#fff; padding:10px; border-radius:12px;">
+                            ${data.status === 'both' ? `<div style="margin-top:12px;">${paymentTerminalMsg}</div>` : ''}
+                        </div>
+                    `);
+                    api.isPrinting = false;
+                    overlay.classList.remove('overlay-both', 'overlay-qr');
+                    overlay.classList.add(statusClass);
+                } else {
+                    api.overlay.showError(data.error || api.getTranslation('payments_failed'));
+                    api.resetPrintErrorMessage(cb, notificationTimeout);
+                }
+            },
+            error: () => {
+                api.overlay.showError(api.getTranslation('payments_error'));
+                api.resetPrintErrorMessage(cb, notificationTimeout);
+            }
+        });
+    };
+
     $(document).on('keyup', function (ev) {
         if (config.reload.key && parseInt(config.reload.key, 10) === ev.keyCode) {
             api.reloadPage();
