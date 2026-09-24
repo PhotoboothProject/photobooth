@@ -638,6 +638,7 @@ class Collage
         }
 
         if ($c->textOnCollageEnabled === 'enabled') {
+            $imageHandler->textEnabled = true;
             $imageHandler->fontSize = $c->textOnCollageFontSize;
             $imageHandler->fontRotation = $c->textOnCollageRotation;
             $imageHandler->fontLocationX = $c->textOnCollageLocationX;
