@@ -1,6 +1,7 @@
 <?php
 
 use Photobooth\Environment;
+use Photobooth\Utility\EventSymbolUtility;
 
 require_once '../lib/boot.php';
 
@@ -63,6 +64,10 @@ if (!empty($config['fonts']['gallery_title'])) {
 }
 if (empty($config['screensaver']['text_position'])) {
     $config['screensaver']['text_position'] = 'center';
+}
+
+if (!empty($config['event']['symbol'])) {
+    $config['event']['symbol'] = EventSymbolUtility::normalize($config['event']['symbol']);
 }
 
 echo 'const config = ' . json_encode($config) . ';';

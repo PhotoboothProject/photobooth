@@ -1,6 +1,15 @@
 <?php
 use Photobooth\Utility\PathUtility;
+use Photobooth\Utility\EventSymbolUtility;
 use Photobooth\Utility\StartpageTextPosition;
+
+$eventSymbolType = EventSymbolUtility::getSymbolType($config['event']['symbol'] ?? '');
+$eventSymbolValue = match ($eventSymbolType) {
+    'fa' => EventSymbolUtility::getFontAwesomeClasses($config['event']['symbol'] ?? ''),
+    'iconify' => EventSymbolUtility::getIconifyName($config['event']['symbol'] ?? ''),
+    'image' => EventSymbolUtility::getCustomImagePublicPath($config['event']['symbol'] ?? ''),
+    default => EventSymbolUtility::getLucideFallback($config['event']['symbol'] ?? ''),
+};
 
 $startpageTextPosition = StartpageTextPosition::resolve(
     $config['ui']['startpage_text_position'] ?? null,
@@ -19,7 +28,15 @@ $startpageTextPosition = StartpageTextPosition::resolve(
                         <?php if ($config['event']['enabled']): ?>
                             <h1 class="event-text">
                                 <?= $config['event']['textLeft'] ?>
-                                <i class="fa <?= $config['event']['symbol'] ?>" aria-hidden="true"></i>
+                                <?php if ($eventSymbolType === 'fa'): ?>
+                                    <i class="event-symbol-icon <?= htmlspecialchars($eventSymbolValue, ENT_QUOTES) ?>" aria-hidden="true"></i>
+                                <?php elseif ($eventSymbolType === 'iconify'): ?>
+                                    <iconify-icon class="event-symbol-icon" icon="<?= htmlspecialchars($eventSymbolValue, ENT_QUOTES) ?>" aria-hidden="true"></iconify-icon>
+                                <?php elseif ($eventSymbolType === 'image' && $eventSymbolValue !== ''): ?>
+                                    <img class="event-symbol-icon event-symbol-image" src="<?= htmlspecialchars($eventSymbolValue, ENT_QUOTES) ?>" alt="" aria-hidden="true">
+                                <?php else: ?>
+                                    <i class="event-symbol-icon" data-lucide="<?= htmlspecialchars($eventSymbolValue, ENT_QUOTES) ?>" aria-hidden="true"></i>
+                                <?php endif; ?>
                                 <?= $config['event']['textRight'] ?>
                             </h1>
                         <?php endif; ?>

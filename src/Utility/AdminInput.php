@@ -176,6 +176,183 @@ class AdminInput
         ';
     }
 
+    public static function renderLucideIcon(array $setting, string $label): string
+    {
+        $languageService = LanguageService::getInstance();
+        $attributes = self::buildAttributes($setting);
+        $selectedIcon = EventSymbolUtility::normalize((string) ($setting['value'] ?? 'camera'));
+        $iconCatalog = EventIconCatalogUtility::getCatalog();
+        $categoryTranslationKeys = [
+            'all' => 'event_symbol:category_all',
+            'event' => 'event_symbol:category_event',
+            'photo' => 'event_symbol:category_photo',
+            'love' => 'event_symbol:category_love',
+            'food' => 'event_symbol:category_food',
+            'nature' => 'event_symbol:category_nature',
+            'music' => 'event_symbol:category_music',
+            'people' => 'event_symbol:category_people',
+            'time' => 'event_symbol:category_time',
+            'tools' => 'event_symbol:category_tools',
+            'legacy' => 'event_symbol:category_legacy',
+            'custom-images' => 'event_symbol:category_custom_images',
+        ];
+        foreach ($iconCatalog['categories'] as &$category) {
+            $categoryId = $category['id'];
+            if (isset($categoryTranslationKeys[$categoryId])) {
+                $category['title'] = $languageService->translate($categoryTranslationKeys[$categoryId]);
+            }
+        }
+        unset($category);
+        $catalogJson = (string) json_encode(
+            $iconCatalog,
+            JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT,
+        );
+        $legacyIconsJson = (string) json_encode(
+            EventSymbolUtility::getLegacyIconList(),
+            JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT,
+        );
+        $selectedIconEscaped = htmlspecialchars($selectedIcon, ENT_QUOTES);
+        $placeholder = htmlspecialchars((string) ($setting['placeholder'] ?? 'camera'), ENT_QUOTES);
+        $name = htmlspecialchars((string) $setting['name'], ENT_QUOTES);
+        $selectedType = EventSymbolUtility::getSymbolType($selectedIcon);
+        $selectedFaClasses = htmlspecialchars(EventSymbolUtility::getFontAwesomeClasses($selectedIcon), ENT_QUOTES);
+        $selectedLucideName = htmlspecialchars(EventSymbolUtility::getLucideFallback($selectedIcon), ENT_QUOTES);
+        $selectedIconifyName = htmlspecialchars(EventSymbolUtility::getIconifyName($selectedIcon), ENT_QUOTES);
+        $selectedImagePath = htmlspecialchars(EventSymbolUtility::getCustomImagePublicPath($selectedIcon), ENT_QUOTES);
+        if ($selectedType === 'fa') {
+            $previewIconMarkup = '<span class="adminIconSelection-iconWrap adminIconSelection-iconWrap--preview text-brand-1" aria-hidden="true"><i class="' . $selectedFaClasses . ' adminIconSelection-faIcon"></i></span>';
+        } elseif ($selectedType === 'iconify') {
+            $previewIconMarkup = '<span class="adminIconSelection-iconWrap adminIconSelection-iconWrap--preview text-brand-1" aria-hidden="true"><iconify-icon class="adminIconSelection-iconifyIcon" icon="' . $selectedIconifyName . '"></iconify-icon></span>';
+        } elseif ($selectedType === 'image' && $selectedImagePath !== '') {
+            $previewIconMarkup = '<span class="adminIconSelection-iconWrap adminIconSelection-iconWrap--preview" aria-hidden="true"><img class="adminIconSelection-imageIcon" src="' . $selectedImagePath . '" alt="" /></span>';
+        } else {
+            $previewIconMarkup = '<span class="adminIconSelection-iconWrap adminIconSelection-iconWrap--preview text-brand-1" aria-hidden="true"><i class="adminIconSelection-lucideIcon h-full w-full" data-lucide="' . $selectedLucideName . '"></i></span>';
+        }
+        $searchPlaceholder = $languageService->translate('event_symbol:search_placeholder');
+        $chooseLabel = $languageService->translate('event_symbol:choose_icon');
+        $directPlaceholder = $languageService->translate('event_symbol:direct_placeholder');
+        $applyDirectLabel = $languageService->translate('event_symbol:apply_direct');
+        $uploadLabel = $languageService->translate('event_symbol:upload_label');
+        $uploadSelectFileLabel = $languageService->translate('event_symbol:upload_select_file');
+        $uploadNoFileSelectedLabel = $languageService->translate('event_symbol:upload_no_file_selected');
+        $uploadButtonLabel = $languageService->translate('event_symbol:upload_button');
+        $deleteCustomImageLabel = $languageService->translate('event_symbol:delete_selected_image');
+        $searchPlaceholderEscaped = htmlspecialchars($searchPlaceholder, ENT_QUOTES);
+        $chooseLabelEscaped = htmlspecialchars($chooseLabel, ENT_QUOTES);
+        $directPlaceholderEscaped = htmlspecialchars($directPlaceholder, ENT_QUOTES);
+        $applyDirectLabelEscaped = htmlspecialchars($applyDirectLabel, ENT_QUOTES);
+        $uploadLabelEscaped = htmlspecialchars($uploadLabel, ENT_QUOTES);
+        $uploadButtonLabelEscaped = htmlspecialchars($uploadButtonLabel, ENT_QUOTES);
+        $deleteCustomImageLabelEscaped = htmlspecialchars($deleteCustomImageLabel, ENT_QUOTES);
+        $uploadSelectFileLabelEscaped = htmlspecialchars($uploadSelectFileLabel, ENT_QUOTES);
+        $uploadNoFileSelectedLabelEscaped = htmlspecialchars($uploadNoFileSelectedLabel, ENT_QUOTES);
+        $allowedExtensions = EventSymbolUtility::getAllowedCustomImageExtensions();
+        $acceptValues = array_map(static fn (string $extension): string => '.' . $extension, $allowedExtensions);
+        $uploadAcceptAttribute = htmlspecialchars(implode(',', $acceptValues), ENT_QUOTES);
+        $uploadInputIdBase = preg_replace('/[^a-z0-9]+/i', '-', (string) ($setting['name'] ?? 'event-symbol-image'));
+        $uploadInputId = 'event-symbol-upload-' . trim((string) $uploadInputIdBase, '-');
+        if ($uploadInputId === 'event-symbol-upload-') {
+            $uploadInputId = 'event-symbol-upload-image';
+        }
+        $uploadInputId = htmlspecialchars($uploadInputId, ENT_QUOTES);
+
+        $categoryMarkup = '';
+        $categoryList = $iconCatalog['categories'];
+        foreach ($categoryList as $category) {
+            $categoryMarkup .= '
+                <button
+                    type="button"
+                    data-icon-category="' . htmlspecialchars((string) $category['id'], ENT_QUOTES) . '"
+                    class="adminIconSelection-theme px-2 py-1 rounded-full text-xs border border-gray-300 bg-white hover:border-brand-1 hover:text-brand-1 transition"
+                >
+                    ' . htmlspecialchars((string) $category['title'], ENT_QUOTES) . '
+                </button>
+            ';
+        }
+
+        return '
+            <div class="adminIconSelection group flex flex-col gap-3" data-default-icon="' . $selectedIconEscaped . '">
+                ' . self::renderHeadline($label) . '
+                <div class="w-full flex items-start gap-3">
+                    <button type="button" class="adminIconSelection-open w-20 h-20 rounded-lg border-2 border-brand-1 bg-white hover:shadow-lg transition flex items-center justify-center shrink-0" onclick="openAdminIconSelect(this)">
+                        ' . $previewIconMarkup . '
+                    </button>
+                    <div class="w-full flex flex-col gap-2">
+                        <div class="adminIconSelection-current text-xs text-gray-700 break-all">' . $selectedIconEscaped . '</div>
+                        <button type="button" class="adminIconSelection-open w-full h-10 bg-brand-1 text-white rounded-full hover:opacity-90 transition font-semibold text-sm" onclick="openAdminIconSelect(this)">
+                            ' . $chooseLabelEscaped . '
+                        </button>
+                        <input
+                            type="text"
+                            class="adminIconSelection-input w-full h-9 border-2 border-solid border-gray-300 focus:border-brand-1 rounded-md px-2 text-sm font-mono"
+                            name="' . $name . '"
+                            value="' . $selectedIconEscaped . '"
+                            placeholder="' . $placeholder . '"
+                            autocomplete="off"
+                            ' . $attributes . '
+                        />
+                        <button type="button" class="adminIconSelection-deleteImage hidden w-full h-9 rounded-md border border-rose-400 text-rose-600 hover:bg-rose-50 transition text-sm font-semibold">
+                            ' . $deleteCustomImageLabelEscaped . '
+                        </button>
+                    </div>
+                </div>
+                <script type="application/json" class="adminIconSelection-catalog">' . $catalogJson . '</script>
+                <script type="application/json" class="adminIconSelection-legacy-icons">' . $legacyIconsJson . '</script>
+                <div class="hidden group-[&.isOpen]:grid w-full h-full fixed left-0 top-0 z-50 place-items-center">
+                    <div class="w-full h-full left-0 top-0 z-10 absolute bg-black/60 cursor-pointer" onclick="closeAdminIconSelect()"></div>
+                    <div class="w-[95%] h-[90%] max-w-6xl bg-white p-4 pt-2 rounded-sm relative z-20 flex flex-col overflow-hidden">
+                        <div class="w-full flex items-center mb-2">
+                            <h2 class="flex text-brand-1 font-bold">' . $chooseLabelEscaped . '</h2>
+                            <div class="ml-auto flex items-center justify-center p-3 text-xl fa fa-close cursor-pointer" onclick="closeAdminIconSelect()"></div>
+                        </div>
+                        <div class="w-full flex flex-col gap-2 mb-3">
+                            <input
+                                type="search"
+                                class="adminIconSelection-search w-full h-10 border-2 border-solid border-gray-300 focus:border-brand-1 rounded-md px-3"
+                                placeholder="' . $searchPlaceholderEscaped . '"
+                            />
+                            <div class="adminIconSelection-manual grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_11rem] gap-2 items-center">
+                                <input
+                                    type="text"
+                                    class="adminIconSelection-directInput adminIconSelection-directInputField"
+                                    value="' . $selectedIconEscaped . '"
+                                    placeholder="' . $directPlaceholderEscaped . '"
+                                    autocomplete="off"
+                                />
+                                <button type="button" class="adminIconSelection-directApply adminIconSelection-actionBtn">
+                                    ' . $applyDirectLabelEscaped . '
+                                </button>
+                            </div>
+                            <div class="adminIconSelection-customUpload grid grid-cols-1 lg:grid-cols-[auto_minmax(0,1fr)_11rem] gap-2 items-center">
+                                <span class="text-xs text-brand-1 font-semibold">' . $uploadLabelEscaped . '</span>
+                                <div class="adminIconSelection-uploadField">
+                                    <input
+                                        type="file"
+                                        id="' . $uploadInputId . '"
+                                        class="adminIconSelection-uploadInput sr-only"
+                                        accept="' . $uploadAcceptAttribute . '"
+                                    />
+                                    <label for="' . $uploadInputId . '" class="adminIconSelection-uploadTrigger">
+                                        ' . $uploadSelectFileLabelEscaped . '
+                                    </label>
+                                    <span class="adminIconSelection-uploadFileName" data-empty-label="' . $uploadNoFileSelectedLabelEscaped . '">' . $uploadNoFileSelectedLabelEscaped . '</span>
+                                </div>
+                                <button type="button" class="adminIconSelection-uploadBtn adminIconSelection-actionBtn">
+                                    ' . $uploadButtonLabelEscaped . '
+                                </button>
+                            </div>
+                            <div class="adminIconSelection-uploadStatus min-h-5 text-xs text-gray-600"></div>
+                            <div class="adminIconSelection-themes flex flex-wrap gap-2 overflow-y-auto max-h-24 pr-1">
+                                ' . $categoryMarkup . '
+                            </div>
+                        </div>
+                        <div class="adminIconSelection-grid grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2 overflow-y-auto pr-1"></div>
+                    </div>
+                </div>
+            </div>
+        ';
+    }
+
     public static function renderRange(array $setting, string $label): string
     {
         $languageService = LanguageService::getInstance();
