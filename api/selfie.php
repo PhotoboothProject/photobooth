@@ -8,6 +8,7 @@ use Photobooth\FileUploader;
 use Photobooth\Image;
 use Photobooth\Enum\FolderEnum;
 use Photobooth\Service\DatabaseManagerService;
+use Photobooth\Service\LanguageService;
 use Photobooth\Service\LoggerService;
 
 header('Content-Type: application/json');
@@ -16,6 +17,7 @@ $logger = LoggerService::getInstance()->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
 
 $imageHandler = new Image();
+$languageService = LanguageService::getInstance();
 
 $database = DatabaseManagerService::getInstance();
 
@@ -35,14 +37,18 @@ if (isset($_FILES['images'])) {
 
     try {
         if (count($errors) > 0) {
-            throw new \Exception('Failed to upload selfie.');
+            throw new \Exception($languageService->translate('selfie_upload_error'));
         }
 
         foreach ($uploadedFiles as $imageName) {
             $tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $imageName;
             $imageNewName = Image::createNewFilename($config['picture']['naming']);
+            $sourceExtension = strtolower(pathinfo($imageName, PATHINFO_EXTENSION));
+            $isJpegSource = in_array($sourceExtension, ['jpg', 'jpeg'], true);
+            $tempSourceName = pathinfo($imageNewName, PATHINFO_FILENAME) .
+                ($sourceExtension !== '' ? '.' . $sourceExtension : '');
             $filename_photo = FolderEnum::IMAGES->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
-            $filename_tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
+            $filename_tmp = FolderEnum::TEMP->absolute() . DIRECTORY_SEPARATOR . $tempSourceName;
             $filename_thumb = FolderEnum::THUMBS->absolute() . DIRECTORY_SEPARATOR . $imageNewName;
             $imageHandler->imageModified = false;
 
@@ -59,24 +65,27 @@ if (isset($_FILES['images'])) {
                 throw new \Exception('Error creating image resource.');
             }
 
-            $exif = exif_read_data($filename_tmp);
-            if (!empty($exif['Orientation'])) {
-                switch ($exif['Orientation']) {
-                    case 3:  //180°
-                        $imageResource = imagerotate($imageResource, 180, 0);
-                        $imageHandler->imageModified = true;
-                        break;
-                    case 6:  //-90°
-                        $imageResource = imagerotate($imageResource, -90, 0);
-                        $imageHandler->imageModified = true;
-                        break;
-                    case 8:  //+90°
-                        $imageResource = imagerotate($imageResource, 90, 0);
-                        $imageHandler->imageModified = true;
-                        break;
-                }
-                if (!$imageResource instanceof \GdImage) {
-                    throw new \Exception('Error rotating image resource.');
+            if (function_exists('exif_read_data')) {
+                $exif = @exif_read_data($filename_tmp);
+                $orientation = is_array($exif) ? intval($exif['Orientation'] ?? 1) : 1;
+                if ($orientation > 1) {
+                    switch ($orientation) {
+                        case 3:  //180°
+                            $imageResource = imagerotate($imageResource, 180, 0);
+                            $imageHandler->imageModified = true;
+                            break;
+                        case 6:  //-90°
+                            $imageResource = imagerotate($imageResource, -90, 0);
+                            $imageHandler->imageModified = true;
+                            break;
+                        case 8:  //+90°
+                            $imageResource = imagerotate($imageResource, 90, 0);
+                            $imageHandler->imageModified = true;
+                            break;
+                    }
+                    if (!$imageResource instanceof \GdImage) {
+                        throw new \Exception('Error rotating image resource.');
+                    }
                 }
             }
             $thumb_size = intval(substr($config['picture']['thumb_size'], 0, -2));
@@ -88,8 +97,13 @@ if (isset($_FILES['images'])) {
             if (!$imageHandler->saveJpeg($thumbResource, $filename_thumb)) {
                 $imageHandler->addErrorData('Warning: Failed to create thumbnail.');
             }
-            if ($imageHandler->imageModified || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_quality']['image'] < 100)) {
-                $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
+
+            $imageHandler->jpegQuality = $config['jpeg_quality']['image'];
+            if (
+                !$isJpegSource
+                || $imageHandler->imageModified
+                || ($config['jpeg_quality']['image'] >= 0 && $config['jpeg_quality']['image'] < 100)
+            ) {
                 if (!$imageHandler->saveJpeg($imageResource, $filename_photo)) {
                     throw new \Exception('Failed to create image.');
                 }
@@ -130,7 +144,7 @@ if (isset($_FILES['images'])) {
     }
     echo json_encode([
             'success' => true,
-            'message' => 'File(s) successfully uploaded and proceeded.'
+            'message' => $languageService->translate('selfie_upload_success')
         ]);
     exit();
 }

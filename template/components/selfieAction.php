@@ -6,37 +6,46 @@ use Photobooth\Utility\ComponentUtility;
 
 $languageService = LanguageService::getInstance();
 $printManager = PrintManagerService::getInstance();
+?>
+<div class="buttonbar">
+    <form id="selfieForm" enctype="multipart/form-data" style="display: none;">
+        <input type="file" name="images[]" id="images" accept="image/*" capture="camera" required>
+    </form>
 
-echo '<div class="buttonbar">';
+    <label class="button take-selfie-btn" for="images" data-command="take-selfie">
+        <span class="button--icon"><i class="<?= $config['icons']['take_picture'] ?>"></i></span>
+        <span class="button--label"><?= $languageService->translate('takeSelfie') ?></span>
+    </label>
 
-echo '<div class="container" id="form-container">';
-echo '    <form id="selfieForm" enctype="multipart/form-data">';
-echo '       <label class="button take-selfie-btn" for="images" data-command="take-selfie">';
-echo '            <span class="button--icon"><i class="' . $config['icons']['take_picture'] . '"></i></span>';
-echo '            <span class="button--label">' . $languageService->translate('takeSelfie') . '</span>';
-echo '        </label>';
-echo '        <button type="button" class="button" id="selfieSubmitBtn" style="display: none;">';
-echo '            <span class="button--icon"><i class="fa fa-upload"></i></span>';
-echo '            <span class="button--label">' . $languageService->translate('upload') . '</span>';
-echo '        </button>';
-echo '        <button type="button" class="button" id="selfieAbortBtn" data-command="selfie-abort" style="display: none;">';
-echo '            <span class="button--icon"><i class="fa fa-xmark"></i></span>';
-echo '            <span class="button--label">' . $languageService->translate('abort') . '</span>';
-echo '        </button>';
-echo '        <input type="file" name="images[]" id="images" accept="image/*" capture="camera" style="display: none;" required>';
-echo '    </form>';
-echo '</div>';
+    <?= ComponentUtility::renderButton('upload', 'fa fa-upload', 'selfie-submit', true, [
+        'id' => 'selfieSubmitBtn',
+        'style' => 'display: none;'
+    ]) ?>
 
-if ($config['button']['reload']) {
-    echo ComponentUtility::renderButton('reload', $config['icons']['refresh'], 'reload');
-}
-if ($config['gallery']['enabled']) {
-    echo ComponentUtility::renderButton('gallery', $config['icons']['gallery'], 'gallery-button');
-}
-if ($config['button']['show_cups']) {
-    echo ComponentUtility::renderButton('cups', $config['icons']['cups'], 'cups-button');
-}
-if ($config['button']['show_printUnlock']) {
-    echo ComponentUtility::renderButton('reset_lock', $config['icons']['print'], 'print-unlock-button', true, $printManager->isPrintLocked() ? [] : ['class' => 'hidden']);
-}
-echo '</div>';
+    <?= ComponentUtility::renderButton('abort', 'fa fa-xmark', 'selfie-abort', true, [
+        'id' => 'selfieAbortBtn',
+        'style' => 'display: none;'
+    ]) ?>
+
+    <?php if ($config['button']['reload']): ?>
+        <?= ComponentUtility::renderButton('reload', $config['icons']['refresh'], 'reload') ?>
+    <?php endif; ?>
+
+    <?php if ($config['gallery']['enabled']): ?>
+        <?= ComponentUtility::renderButton('gallery', $config['icons']['gallery'], 'gallery-button') ?>
+    <?php endif; ?>
+
+    <?php if ($config['button']['show_cups']): ?>
+        <?= ComponentUtility::renderButton('cups', $config['icons']['cups'], 'cups-button') ?>
+    <?php endif; ?>
+
+    <?php if ($config['button']['show_printUnlock']): ?>
+        <?= ComponentUtility::renderButton(
+            'reset_lock',
+            $config['icons']['print'],
+            'print-unlock-button',
+            true,
+            $printManager->isPrintLocked() ? [] : ['class' => 'hidden']
+        ) ?>
+    <?php endif; ?>
+</div>
