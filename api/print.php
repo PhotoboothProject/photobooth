@@ -150,6 +150,24 @@ if (!file_exists($vars['printFile'])) {
             }
         }
 
+        if ($config['textonprint']['enabled']) {
+            $imageHandler->fontSize = $config['textonprint']['font_size'];
+            $imageHandler->fontRotation = $config['textonprint']['rotation'];
+            $imageHandler->fontLocationX = $config['textonprint']['locationx'];
+            $imageHandler->fontLocationY = $config['textonprint']['locationy'];
+            $imageHandler->fontColor = $config['textonprint']['font_color'];
+            $imageHandler->fontPath = $config['textonprint']['font'];
+            $imageHandler->textLine1 = $config['textonprint']['line1'];
+            $imageHandler->textLine2 = $config['textonprint']['line2'];
+            $imageHandler->textLine3 = $config['textonprint']['line3'];
+            $imageHandler->textLineSpacing = $config['textonprint']['linespace'];
+
+            $source = $imageHandler->applyText($source);
+            if (!$source instanceof \GdImage) {
+                throw new \Exception('Failed to apply text to image resource.');
+            }
+        }
+
         if ($config['print']['qrcode']) {
             $url = $config['qr']['url'];
             if ($config['ftp']['enabled'] && $config['ftp']['useForQr']) {
@@ -168,6 +186,20 @@ if (!file_exists($vars['printFile'])) {
             $imageHandler->qrColor = $config['print']['qrBgColor'];
             $imageHandler->qrOffset = $config['print']['qrOffset'];
             $imageHandler->qrPosition = $config['print']['qrPosition'];
+            $imageHandler->qrPositionMode =
+                $config['print']['qrPositionMode'] ?? 'absolute';
+
+            $imageHandler->qrRelativeSize =
+                (float)($config['print']['qrRelativeSize'] ?? 0.08);
+
+            $imageHandler->qrRelativeOffset =
+                (float)($config['print']['qrRelativeOffset'] ?? 0.02);
+            $imageHandler->qrCropWidth = $config['print']['crop']
+                ? $config['print']['crop_width']
+                : 0;
+            $imageHandler->qrCropHeight = $config['print']['crop']
+                ? $config['print']['crop_height']
+                : 0;
 
             $qrCode = $imageHandler->createQr();
             if (!$qrCode instanceof \GdImage) {
@@ -178,24 +210,6 @@ if (!file_exists($vars['printFile'])) {
                 throw new \Exception('Cannot apply QR Code to image resource.');
             }
             unset($qrCode);
-        }
-
-        if ($config['textonprint']['enabled']) {
-            $imageHandler->fontSize = $config['textonprint']['font_size'];
-            $imageHandler->fontRotation = $config['textonprint']['rotation'];
-            $imageHandler->fontLocationX = $config['textonprint']['locationx'];
-            $imageHandler->fontLocationY = $config['textonprint']['locationy'];
-            $imageHandler->fontColor = $config['textonprint']['font_color'];
-            $imageHandler->fontPath = $config['textonprint']['font'];
-            $imageHandler->textLine1 = $config['textonprint']['line1'];
-            $imageHandler->textLine2 = $config['textonprint']['line2'];
-            $imageHandler->textLine3 = $config['textonprint']['line3'];
-            $imageHandler->textLineSpacing = $config['textonprint']['linespace'];
-
-            $source = $imageHandler->applyText($source);
-            if (!$source instanceof \GdImage) {
-                throw new \Exception('Failed to apply text to image resource.');
-            }
         }
 
         if ($config['print']['crop']) {
