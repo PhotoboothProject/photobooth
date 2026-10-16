@@ -40,5 +40,20 @@ $templateConfig = [
     ]
 ];
 
+// apply the same developer overrides used by RemoteStorageService::createWebpage()
+$templateConfigOverride = PathUtility::getAbsolutePath($config['ftp']['template_config_location']);
+if (is_file($templateConfigOverride)) {
+    $overrides = include $templateConfigOverride;
+    if (is_array($overrides)) {
+        $templateConfig = array_replace_recursive($templateConfig, $overrides);
+    }
+}
+
+// the preview always reads from the local folders
+$templateConfig['paths'] = [
+    'images' => '../' . FolderEnum::IMAGES->value,
+    'thumbs' => '../' . FolderEnum::THUMBS->value,
+];
+
 unset($config);
 require_once $templateLocation;

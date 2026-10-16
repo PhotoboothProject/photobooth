@@ -33,7 +33,7 @@ class RemoteStorageService
 
     public function createWebpage(): void
     {
-        if ($this->fileExists($this->getStorageFolder() . '/index.php') && $this->fileExists($this->getStorageFolder() . '/config.php')) {
+        if ($this->fileExists($this->getStorageFolder() . '/index.php') && $this->fileExists($this->getStorageFolder() . '/config.inc.php')) {
             return;
         }
 
@@ -72,6 +72,19 @@ class RemoteStorageService
                 '--font-color' => $config['colors']['font'],
             ]
         ];
+
+        // Allow developers to customize the generated webpage configuration
+        // (e.g. for a custom template set via template_location): the file
+        // must return an array which is merged over the defaults above.
+        $overrideLocation = PathUtility::getAbsolutePath((string) $this->config['template_config_location']);
+        if (is_file($overrideLocation)) {
+            $overrides = include $overrideLocation;
+            if (is_array($overrides)) {
+                $parameters = array_replace_recursive($parameters, $overrides);
+            } else {
+                $this->logger->warning('Template config override did not return an array, ignoring.', [$overrideLocation]);
+            }
+        }
 
         $this->write($this->getStorageFolder() . '/config.inc.php', "<?php\n\nreturn " . ArrayUtility::export($parameters) . ";\n");
         $this->write($this->getStorageFolder() . '/index.php', (string) file_get_contents($templateLocation));
