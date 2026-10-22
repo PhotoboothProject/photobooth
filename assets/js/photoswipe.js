@@ -160,11 +160,19 @@ function initPhotoSwipeFromDOM(gallerySelector) {
                             const copies = config.print.max_multi === 1 ? 1 : await photoboothTools.askCopies();
 
                             if (copies && !isNaN(copies)) {
-                                photoboothTools.printImage(img, copies, () => {
-                                    if (typeof remoteBuzzerClient !== 'undefined') {
-                                        remoteBuzzerClient.inProgress(false);
-                                    }
-                                });
+                                if (config.payments.enabled) {
+                                    photoboothTools.printPayment(img, copies, () => {
+                                        if (typeof remoteBuzzerClient !== 'undefined') {
+                                            remoteBuzzerClient.inProgress(false);
+                                        }
+                                    });
+                                } else {
+                                    photoboothTools.printImage(img, copies, () => {
+                                        if (typeof remoteBuzzerClient !== 'undefined') {
+                                            remoteBuzzerClient.inProgress(false);
+                                        }
+                                    });
+                                }
                             }
                         }
                     }

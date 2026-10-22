@@ -12,6 +12,8 @@ SKIP_WEBSERVER=false
 SKIP_PHP=false
 SKIP_NODE=false
 SKIP_PYTHON=false
+SKIP_GUNICORN=true
+SKIP_NGROK=true
 PHOTOBOOTH_FOUND=false
 INSTALLFOLDERPATH=""
 PHOTOBOOTH_SUBFOLDER=""
@@ -114,6 +116,16 @@ REMBG_PIP_PACKAGES=(
     "filetype"
     "watchdog"
     "aiohttp"
+)
+
+# SumUp / Webhook
+SUMUP_WEBHOOK_PACKAGES=(
+    "python3-flask"
+    "python3-requests"
+)
+
+SUMUP_GUNICORN_PACKAGES=(
+    "gunicorn"
 )
 
 # ==================================================
@@ -219,6 +231,10 @@ function show_help() {
     echo "                              (if already installed as required)."
     echo "  --skip-python               Skip python3 installation"
     echo "                              (if already installed as required)."
+    echo "  --skip-gunicorn             Skip Gunicorn installation"
+    echo "                              (for SumUp webhook service)."
+    echo "  --skip-ngrok                Skip ngrok installation"
+    echo "                              (for SumUp webhook tunnel)."
     echo "  --skip-auto-update          Skip automatic updates for Photobooth Setup Wizard."
     echo ""
     echo "Examples:"
@@ -381,6 +397,293 @@ function install_packages() {
         fi
     done
     return 0
+}
+
+function install_sumup_webhook_dependencies() {
+    info "SumUp Setup" "Installing SumUp webhook dependencies (Flask/Requests)..."
+    if ! apt-get update -qq >/dev/null 2>&1; then
+        error "Failed to update package lists."
+    fi
+
+    if ! install_packages "${SUMUP_WEBHOOK_PACKAGES=[@]}"; then
+        error "Failed to install SumUp webhook dependencies via apt."
+        return 1
+    fi
+    info "SumUp Setup" "SumUp webhook dependencies installed successfully."
+    return 0
+}
+
+function install_sumup_gunicorn() {
+    if [ "$SKIP_GUNICORN" = true ]; then
+        info "Gunicorn Setup" "Skipping Gunicorn installation."
+        return 0
+    fi
+
+    info "Gunicorn Setup" "Installing Gunicorn..."
+    if ! apt-get update -qq >/dev/null 2>&1; then
+        error "Failed to update package lists."
+    fi
+
+    if ! install_packages "${SUMUP_GUNICORN_PACKAGES[@]}"; then
+        error "Failed to install Gunicorn."
+        return 1
+    fi
+
+    info "Gunicorn Setup" "Gunicorn installed successfully."
+    return 0
+}
+
+function install_ngrok() {
+    if [ "$SKIP_NGROK" = true ]; then
+        info "ngrok Setup" "Skipping ngrok installation."
+        return 0
+    fi
+
+    if command -v ngrok >/dev/null 2>&1; then
+        info "ngrok Setup" "ngrok is already installed."
+        return 0
+    fi
+
+    info "ngrok Setup" "Installing ngrok from official repository..."
+
+    if ! curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null; then
+        error "Failed to install ngrok signing key."
+        return 1
+    fi
+
+    if ! echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | tee /etc/apt/sources.list.d/ngrok.list >/dev/null; then
+        error "Failed to add ngrok apt repository."
+        return 1
+    fi
+
+    if ! apt-get -qq update >/dev/null 2>&1; then
+        error "Failed to update package lists for ngrok."
+        return 1
+    fi
+
+    if ! install_package "ngrok"; then
+        error "Failed to install ngrok."
+        return 1
+    fi
+
+    info "ngrok Setup" "ngrok installed successfully."
+    info "ngrok Setup" "Please run 'ngrok config add-authtoken <YOUR_TOKEN>' once if not done already."
+    return 0
+}
+
+function create_sumup_token_file() {
+    if ! check_installfolderpath; then
+        return 1
+    fi
+
+    local token_file="$INSTALLFOLDERPATH/config/sumup_token.txt"
+
+    if [[ ! -f "$token_file" ]]; then
+        : > "$token_file" || return 1
+        info "SumUp Setup" "Created empty SumUp token file at $token_file"
+    else
+        info "SumUp Setup" "SumUp token file already exists at $token_file"
+    fi
+
+    chown www-data:www-data "$token_file" >/dev/null 2>&1 || warn "Failed to set ownership on $token_file"
+    chmod 660 "$token_file" >/dev/null 2>&1 || warn "Failed to set permissions on $token_file"
+    return 0
+}
+
+function create_sumup_gunicorn_service() {
+    if ! check_installfolderpath; then
+        return 1
+    fi
+
+    if [ "$SKIP_GUNICORN" = true ]; then
+        info "Gunicorn Service" "Skipping Gunicorn service setup."
+        return 0
+    fi
+
+    if [[ ! -f "$INSTALLFOLDERPATH/api/webhook_sumup.py" ]]; then
+        warn "Gunicorn Service" "webhook_sumup.py not found. Skipping Gunicorn service setup."
+        return 1
+    fi
+
+    cat >/etc/systemd/system/photobooth-sumup-gunicorn.service <<EOF
+[Unit]
+Description=Photobooth SumUp Webhook (Gunicorn)
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=$INSTALLFOLDERPATH/api
+ExecStart=/usr/bin/gunicorn -w 2 -b 127.0.0.1:5000 webhook_sumup:app
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    if [[ "$HAS_SYSTEMD" == true ]]; then
+        systemctl daemon-reload >/dev/null 2>&1 || return 2
+        if ! systemctl enable photobooth-sumup-gunicorn.service >/dev/null 2>&1; then
+            return 3
+        fi
+        info "Gunicorn Service" "photobooth-sumup-gunicorn.service installed."
+    else
+        mkdir -p /etc/systemd/system/multi-user.target.wants
+        ln -sf /etc/systemd/system/photobooth-sumup-gunicorn.service /etc/systemd/system/multi-user.target.wants/photobooth-sumup-gunicorn.service || return 4
+    fi
+
+    return 0
+}
+
+function create_ngrok_service() {
+    local ngrok_url
+    local env_file="/etc/default/photobooth-sumup-ngrok"
+
+    if [ "$SKIP_NGROK" = true ]; then
+        info "ngrok Service" "Skipping ngrok service setup."
+        return 0
+    fi
+
+    if ! command -v ngrok >/dev/null 2>&1; then
+        warn "ngrok Service" "ngrok is not installed. Skipping ngrok service setup."
+        return 1
+    fi
+
+    if [[ -z "$ngrok_url" && "$SILENT" = false ]]; then
+        ngrok_url=$(whiptail --title "ngrok URL" \
+            --inputbox "Enter your reserved ngrok URL without https://\nExample: myurl.ngrok-free.app" \
+            10 70 "" 3>&1 1>&2 2>&3)
+    fi
+
+    if [[ -z "$ngrok_url" ]]; then
+        if [[ -f "$env_file" ]]; then
+            ngrok_url=$(grep -E '^NGROK_URL=' "$env_file" | cut -d= -f2-)
+        fi
+    fi
+
+    if [[ -z "$ngrok_url" ]]; then
+        warn "ngrok Service" "No ngrok URL configured. Service file will not be created."
+        return 1
+    fi
+
+    cat >"$env_file" <<EOF
+NGROK_URL=$ngrok_url
+EOF
+    chmod 600 "$env_file"
+
+    cat >/etc/systemd/system/photobooth-sumup-ngrok.service <<'EOF'
+[Unit]
+Description=Photobooth SumUp ngrok Tunnel
+After=network.target photobooth-sumup-gunicorn.service
+Wants=photobooth-sumup-gunicorn.service
+
+[Service]
+EnvironmentFile=/etc/default/photobooth-sumup-ngrok
+ExecStart=/usr/local/bin/ngrok http 5000 --url=https://${NGROK_URL}
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    if [[ "$HAS_SYSTEMD" == true ]]; then
+        systemctl daemon-reload >/dev/null 2>&1 || return 2
+        if ! systemctl enable photobooth-sumup-ngrok.service >/dev/null 2>&1; then
+            return 3
+        fi
+        info "ngrok Service" "photobooth-sumup-ngrok.service installed."
+    else
+        mkdir -p /etc/systemd/system/multi-user.target.wants
+        ln -sf /etc/systemd/system/photobooth-sumup-ngrok.service /etc/systemd/system/multi-user.target.wants/photobooth-sumup-ngrok.service || return 4
+    fi
+
+    return 0
+}
+
+function manage_ngrok_gunicorn() {
+    local gunicorn_service="photobooth-sumup-gunicorn.service"
+    local ngrok_service="photobooth-sumup-ngrok.service"
+
+    while true; do
+        MENU_OPTIONS=(
+            "1" "Install / configure Gunicorn service"
+            "2" "Install / configure ngrok service"
+            "3" "Start both services"
+            "4" "Stop both services"
+            "5" "Restart both services"
+            "6" "Show both services status"
+        )
+
+        if ! CHOICE=$(whiptail --title "Ngrok / Gunicorn" \
+            --menu "Choose an option:" 20 70 10 \
+            --cancel-button Back --ok-button Select \
+            "${MENU_OPTIONS[@]}" 3>&1 1>&2 2>&3); then
+            break
+        fi
+
+        case $CHOICE in
+            1)
+                create_sumup_gunicorn_service
+                case $? in
+                    0) confirm "Gunicorn Service" "Gunicorn service configured successfully." ;;
+                    1) confirm "Gunicorn Service" "Failed because webhook_sumup.py or installation path is missing." ;;
+                    2) confirm "Gunicorn Service" "Failed to reload systemd daemon." ;;
+                    3) confirm "Gunicorn Service" "Failed to enable Gunicorn service." ;;
+                    4) confirm "Gunicorn Service" "Failed to create Gunicorn service symlink." ;;
+                    *) confirm "Gunicorn Service" "An unknown error occurred." ;;
+                esac
+                ;;
+            2)
+                create_ngrok_service
+                case $? in
+                    0) confirm "ngrok Service" "ngrok service configured successfully." ;;
+                    1) confirm "ngrok Service" "Failed because ngrok is missing or no URL was provided." ;;
+                    2) confirm "ngrok Service" "Failed to reload systemd daemon." ;;
+                    3) confirm "ngrok Service" "Failed to enable ngrok service." ;;
+                    4) confirm "ngrok Service" "Failed to create ngrok service symlink." ;;
+                    *) confirm "ngrok Service" "An unknown error occurred." ;;
+                esac
+                ;;
+            3)
+                if [[ "$HAS_SYSTEMD" == true ]]; then
+                    systemctl start "$gunicorn_service" "$ngrok_service" >/dev/null 2>&1
+                    confirm "Ngrok / Gunicorn" "Start command sent."
+                else
+                    confirm "Ngrok / Gunicorn" "systemd is not available on this system."
+                fi
+                ;;
+            4)
+                if [[ "$HAS_SYSTEMD" == true ]]; then
+                    systemctl stop "$ngrok_service" "$gunicorn_service" >/dev/null 2>&1
+                    confirm "Ngrok / Gunicorn" "Stop command sent."
+                else
+                    confirm "Ngrok / Gunicorn" "systemd is not available on this system."
+                fi
+                ;;
+            5)
+                if [[ "$HAS_SYSTEMD" == true ]]; then
+                    systemctl restart "$gunicorn_service" "$ngrok_service" >/dev/null 2>&1
+                    confirm "Ngrok / Gunicorn" "Restart command sent."
+                else
+                    confirm "Ngrok / Gunicorn" "systemd is not available on this system."
+                fi
+                ;;
+            6)
+                if [[ "$HAS_SYSTEMD" == true ]]; then
+                    local status_text
+                    status_text="Gunicorn: $(systemctl is-active "$gunicorn_service" 2>/dev/null || echo unknown)\nngrok: $(systemctl is-active "$ngrok_service" 2>/dev/null || echo unknown)"
+                    confirm "Ngrok / Gunicorn" "$status_text" 12 70
+                else
+                    confirm "Ngrok / Gunicorn" "systemd is not available on this system."
+                fi
+                ;;
+            *)
+                confirm "Invalid Option" "Please select a valid option."
+                ;;
+        esac
+    done
 }
 
 function remove_package() {
@@ -862,6 +1165,27 @@ function toggle_skip_python() {
         info "Python3 Setup" "Skip Python3 setup toggled to $SKIP_PYTHON"
     else
         info "Python3 Setup" "No changes made."
+    fi
+}
+
+
+function toggle_skip_gunicorn() {
+    if whiptail --title "Gunicorn Setup" \
+        --yesno "Current value: Skip Gunicorn setup = $SKIP_GUNICORN\n\nToggle this option?" 10 50; then
+        SKIP_GUNICORN=$([ "$SKIP_GUNICORN" = true ] && echo false || echo true)
+        info "Gunicorn Setup" "Skip Gunicorn setup toggled to $SKIP_GUNICORN"
+    else
+        info "Gunicorn Setup" "No changes made."
+    fi
+}
+
+function toggle_skip_ngrok() {
+    if whiptail --title "ngrok Setup" \
+        --yesno "Current value: Skip ngrok setup = $SKIP_NGROK\n\nToggle this option?" 10 50; then
+        SKIP_NGROK=$([ "$SKIP_NGROK" = true ] && echo false || echo true)
+        info "ngrok Setup" "Skip ngrok setup toggled to $SKIP_NGROK"
+    else
+        info "ngrok Setup" "No changes made."
     fi
 }
 
@@ -3108,6 +3432,27 @@ function install_or_update_photobooth() {
         fi
     fi
 
+    # Hier werden nun die SumUp/Zahlungskomponenten in den Hauptablauf integriert
+    # 1. Flask & Requests installieren
+    if ! install_sumup_webhook_dependencies; then
+        warn "SumUp Setup" "Webhook dependencies (Flask/Requests) installation failed."
+    fi
+
+    # 2. Gunicorn installieren (falls nicht übersprungen)
+    if [ "$SKIP_GUNICORN" = false ]; then
+        if ! install_sumup_gunicorn; then
+            warn "SumUp Setup" "Gunicorn installation failed."
+        fi
+    fi
+
+    # 3. ngrok installieren (falls nicht übersprungen)
+    if [ "$SKIP_NGROK" = false ]; then
+        if ! install_ngrok; then
+            warn "SumUp Setup" "ngrok installation failed."
+        fi
+    fi
+
+    # Fortsetzen mit der eigentlichen Git-Installation und Build-Prozess
     start_git_install
     case $? in
         0)
@@ -3132,6 +3477,10 @@ function install_or_update_photobooth() {
     esac
 
     general_permissions
+
+    if ! create_sumup_token_file; then
+        warn "SumUp Setup" "Failed to create empty sumup_token.txt"
+    fi
 
     if [ "$update" = true ]; then
         fix_git_modules
@@ -3826,6 +4175,8 @@ function show_install_configuration() {
             "4" "Skip PHP setup (current: $SKIP_PHP)" \
             "5" "Skip Node.js and npm setup (current: $SKIP_NODE)" \
             "6" "Skip Python3 setup (current: $SKIP_PYTHON)" \
+            "7" "Skip Gunicorn setup (current: $SKIP_GUNICORN)" \
+            "8" "Skip ngrok setup (current: $SKIP_NGROK)" \
         )
 
         if ! CHOICE=$(whiptail --title "Installation configuration" \
@@ -3854,6 +4205,12 @@ function show_install_configuration() {
             6)
                 toggle_skip_python
                 ;;
+            7)
+                toggle_skip_gunicorn
+                ;;
+            8)
+                toggle_skip_ngrok
+                ;;
             *)
                 info "Installation configuration" "Invalid choice, please try again."
                 ;;
@@ -3867,6 +4224,7 @@ function misc_menu() {
             "1" "Autostart and shortcut"
             "2" "Mouse cursor"
             "3" "Printer Setup"
+            "4" "Ngrok / Gunicorn"
         )
 
         if ! CHOICE=$(whiptail --title "Photobooth Misc" \
@@ -3889,6 +4247,9 @@ function misc_menu() {
                 else
                     confirm "Printer Setup" "CUPS must be installed first."
                 fi
+                ;;
+            4)
+                manage_ngrok_gunicorn
                 ;;
             *)
                 confirm "Invalid Option" "Please select a valid option."
@@ -3992,6 +4353,7 @@ function start_page() {
                     check_git_install
                 fi
                 check_photobooth_version
+                install_system_icon || warn "Failed to install Photobooth system icon"
                 ;;
             3)
                 check_photobooth_version
@@ -4067,6 +4429,12 @@ for arg in "$@"; do
             ;;
         --skip-python)
             SKIP_PYTHON=true
+            ;;
+        --skip-gunicorn)
+            SKIP_GUNICORN=true
+            ;;
+        --skip-ngrok)
+            SKIP_NGROK=true
             ;;
         --skip-auto-update)
             SKIP_AUTO_UPDATE=true

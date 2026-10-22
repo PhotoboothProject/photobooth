@@ -2279,6 +2279,101 @@ return [
             'value' => 'soundtest-btn',
         ],
     ],
+    'payments' => [
+        'view' => 'basic',
+        'payments_enabled' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'payments[enabled]',
+            'value' => $config['payments']['enabled'] ?? false,
+        ],
+        'payments_provider' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'payments[provider]',
+            'options' => [
+                'none' => 'None',
+                'sumup' => 'SumUp',
+            ],
+            'value' => $config['payments']['provider'] ?? 'none',
+        ],
+        'payments_display_mode' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'payments[display_mode]',
+            'options' => [
+                'solo' => 'Nur Terminal',
+                'qr' => 'Nur QR-Code',
+                'both' => 'Terminal + QR-Code',
+            ],
+            'value' => $config['payments']['display_mode'] ?? 'solo',
+        ],
+        'payments_webhook_url' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'name' => 'payments[webhook_url]',
+            'placeholder' => 'https://myurl.ngrok-free.app',
+            'value' => $config['payments']['webhook_url'] ?? '',
+        ],
+        'payments_price' => [
+            'view' => 'basic',
+            'type' => 'number',
+            'name' => 'payments[price_cents]',
+            'placeholder' => '100',
+            'value' => $config['payments']['price_cents'] ?? 100,
+        ],
+        'payments_message' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'name' => 'payments[message]',
+            'placeholder' => 'Bitte zahlen Sie %price% €',
+            'value' => $config['payments']['message'] ?? '',
+        ],
+        'payments_background' => [
+            'view' => 'basic',
+            'type' => 'image',
+            'name' => 'payments[background]',
+            'value' => htmlentities($config['payments']['background'] ?? ''),
+            'paths' => [
+                PathUtility::getAbsolutePath('private/images/background'),
+            ]
+        ],
+        'payments_timeout' => [
+            'view' => 'basic',
+            'type' => 'number',
+            'name' => 'payments[timeout]',
+            'placeholder' => '60',
+            'value' => $config['payments']['timeout'] ?? 60,
+        ],
+        'payments_sumup_merchant' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'name' => 'payments[sumup][merchant_code]',
+            'placeholder' => 'ABCDEF12',
+            'value' => $config['payments']['sumup']['merchant_code'] ?? '',
+        ],
+        'payments_sumup_reader' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'name' => 'payments[sumup][reader_id]',
+            'placeholder' => 'rdr_123ABCDEFGHI987',
+            'value' => $config['payments']['sumup']['reader_id'] ?? '',
+        ],
+        'payments_sumup_affiliate' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'name' => 'payments[sumup][affiliate_key]',
+            'placeholder' => 'sup_afk_123ABCDEFGHI987',
+            'value' => $config['payments']['sumup']['affiliate_key'] ?? '',
+        ],
+        'payments_sumup_token_file' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'name' => 'payments[sumup][token_file]',
+            'placeholder' => '/var/www/html/config/sumup_token.txt',
+            'value' => $config['payments']['sumup']['token_file'] ?? '',
+        ],
+    ],
     'qr' => [
         'view' => 'basic',
         'qr_enabled' => [
@@ -2819,7 +2914,7 @@ return [
         ],
         'login_pin' => [
             'view' => 'basic',
-            'type'       => 'input',
+            'type'        => 'input',
             'placeholder' => '5555',
             'name' => 'login[pin]',
             'value'      => '',

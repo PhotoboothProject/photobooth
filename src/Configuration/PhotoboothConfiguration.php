@@ -26,6 +26,7 @@ use Photobooth\Configuration\Section\KeyingConfiguration;
 use Photobooth\Configuration\Section\LoginConfiguration;
 use Photobooth\Configuration\Section\LogoConfiguration;
 use Photobooth\Configuration\Section\MailConfiguration;
+use Photobooth\Configuration\Section\PaymentsConfiguration;
 use Photobooth\Configuration\Section\PhotoSwipeConfiguration;
 use Photobooth\Configuration\Section\PictureConfiguration;
 use Photobooth\Configuration\Section\PreviewConfiguration;
@@ -104,6 +105,7 @@ class PhotoboothConfiguration implements ConfigurationInterface
                 ->append(PrintConfiguration::getNode())
                 ->append(CommandsConfiguration::getNode())
                 ->append(MailConfiguration::getNode())
+                ->append(PaymentsConfiguration::getNode())
                 ->append(SoundConfiguration::getNode())
                 ->append(RembgConfiguration::getNode())
                 ->append(ThemeConfiguration::getNode())
