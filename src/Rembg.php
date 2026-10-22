@@ -26,54 +26,59 @@ class Rembg
 
         $logger->debug('Starting background removal process via service');
 
-        // Prepare temporary files
-        $tempInput = tempnam(sys_get_temp_dir(), 'rembg_input_') . '.png';
-        $tempOutput = tempnam(sys_get_temp_dir(), 'rembg_output_') . '.png';
+        $tempInput = false;
 
         try {
-            // Save image for upload
-            if (!imagepng($imageResource, $tempInput)) {
+            // Prepare temporary file. Use the file created by tempnam() itself, so
+            // no empty placeholder is left behind in the temp folder.
+            $tempInput = tempnam(sys_get_temp_dir(), 'rembg_input_');
+            if ($tempInput === false) {
+                throw new \Exception('Failed to create temporary input file');
+            }
+
+            // Save image for upload. Use the lowest zlib compression level: the
+            // file only travels to the local rembg service, and the default level
+            // takes several seconds for a full-size photo on a Raspberry Pi.
+            if (!imagepng($imageResource, $tempInput, 1)) {
                 throw new \Exception('Failed to save input image');
             }
 
             // Prepare API URL and parameters
+            // The rembg server reads the options of a POST request from the form
+            // fields only: query parameters are silently ignored and the server
+            // falls back to its default model (bria-rmbg), which is far slower.
             $apiUrl = 'http://localhost:7000/api/remove';
-            $queryParams = [];
+            $formParams = [];
             if (!empty($rembgConfig['model'])) {
-                $queryParams['model'] = $rembgConfig['model'];
+                $formParams['model'] = $rembgConfig['model'];
             }
             if (!empty($rembgConfig['alpha_matting'])) {
-                $queryParams['a'] = 'true';
+                $formParams['a'] = 'true';
                 if (!empty($rembgConfig['alpha_matting_background_threshold'])) {
-                    $queryParams['ab'] = $rembgConfig['alpha_matting_background_threshold'];
+                    $formParams['ab'] = (string) $rembgConfig['alpha_matting_background_threshold'];
                 }
                 if (!empty($rembgConfig['alpha_matting_erode_size'])) {
-                    $queryParams['ae'] = $rembgConfig['alpha_matting_erode_size'];
+                    $formParams['ae'] = (string) $rembgConfig['alpha_matting_erode_size'];
                 }
                 if (!empty($rembgConfig['alpha_matting_foreground_threshold'])) {
-                    $queryParams['af'] = $rembgConfig['alpha_matting_foreground_threshold'];
+                    $formParams['af'] = (string) $rembgConfig['alpha_matting_foreground_threshold'];
                 }
             }
             if (!empty($rembgConfig['post_processing'])) {
-                $queryParams['ppm'] = 'true';
-            }
-
-            // Build query string
-            if (!empty($queryParams)) {
-                $apiUrl .= '?' . http_build_query($queryParams);
+                $formParams['ppm'] = 'true';
             }
 
             // Log: Image sent to API + parameters
-            $paramString = json_encode($queryParams);
+            $paramString = json_encode($formParams);
             $logger->debug("Image sent to API: $apiUrl with parameters: $paramString");
 
             // cURL request
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $apiUrl);
             curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, [
+            curl_setopt($ch, CURLOPT_POSTFIELDS, array_merge([
                 'file' => new \CURLFile($tempInput, 'image/png', 'input.png')
-            ]);
+            ], $formParams));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_TIMEOUT, 60);
             $response = curl_exec($ch);
@@ -110,13 +115,8 @@ class Rembg
 
             $logger->debug("Image successfully processed and returned from API (HTTP 200, MIME: $mimeType)");
 
-            // Save response as image
-            if (file_put_contents($tempOutput, $response) === false) {
-                throw new \Exception('Failed to save output image');
-            }
-
             // Load processed image
-            $processedImage = imagecreatefrompng($tempOutput);
+            $processedImage = imagecreatefromstring($response);
             if ($processedImage === false) {
                 throw new \Exception('Failed to load processed image');
             }
@@ -129,7 +129,6 @@ class Rembg
                     if ($backgroundContent === false) {
                         $logger->error('Failed to read background image file');
                     } else {
-                        $backgroundImage = imagecreatefromstring($backgroundContent);
                         $backgroundImage = imagecreatefromstring($backgroundContent);
                         if ($backgroundImage !== false) {
                             $backgroundMode = $rembgConfig['backgroundMode'] ?? 'scale-fill';
@@ -150,21 +149,15 @@ class Rembg
 
             $logger->debug('Background removal applied successfully via service');
 
-            // Cleanup
-            unlink($tempInput);
-            unlink($tempOutput);
-
             return [$imageHandler, $processedImage];
 
         } catch (\Exception $e) {
             $logger->error('Processing failed: ' . $e->getMessage());
-            if (file_exists($tempInput)) {
+            return [$imageHandler, $imageResource]; // Fallback to original image
+        } finally {
+            if ($tempInput !== false && file_exists($tempInput)) {
                 unlink($tempInput);
             }
-            if (file_exists($tempOutput)) {
-                unlink($tempOutput);
-            }
-            return [$imageHandler, $imageResource]; // Fallback to original image
         }
     }
 
