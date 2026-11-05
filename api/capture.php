@@ -101,6 +101,8 @@ try {
     if ($_POST['style'] === 'video') {
         $captureHandler->captureCmd = $config['commands']['take_video'];
         $captureHandler->captureWithCmd();
+    } elseif ($_POST['style'] === 'collagevideo') {
+        $captureHandler->capturePreviewStream();
     } elseif ($config['dev']['demo_images']) {
         $captureHandler->captureDemo();
     } elseif ($config['preview']['mode'] === 'device_cam' && $config['preview']['camTakesPic']) {
@@ -114,8 +116,6 @@ try {
             $captureHandler->captureCmd = $config['commands']['take_custom'];
         } elseif ($_POST['style'] === 'collage' && !empty($config['commands']['take_collage'])) {
             $captureHandler->captureCmd = $config['commands']['take_collage'];
-        }  elseif ($_POST['style'] === 'collagevideo') {
-            $captureHandler->captureCmd = $config['commands']['pre_collage'];
         } else {
             $captureHandler->captureCmd = $config['commands']['take_picture'];
         }

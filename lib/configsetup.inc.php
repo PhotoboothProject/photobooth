@@ -3862,13 +3862,6 @@ return [
             'name' => 'preview[bsm]',
             'value' => $config['preview']['bsm'],
         ],
-        'pre_collage_cmd' => [
-            'view' => 'expert',
-            'type' => 'input',
-            'placeholder' => $defaultConfig['commands']['pre_collage'],
-            'name' => 'commands[pre_collage]',
-            'value' => htmlentities($config['commands']['pre_collage'] ?? ''),
-        ],
         'take_video_cmd' => [
             'view' => 'experimental',
             'type' => 'input',

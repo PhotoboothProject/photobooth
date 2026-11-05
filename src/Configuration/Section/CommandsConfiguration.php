@@ -25,7 +25,6 @@ final class CommandsConfiguration
                 'preview_kill'  => '',
                 'pre_photo'     => '',
                 'post_photo'    => '',
-                'pre_collage'    => '',
             ],
             'linux' => [
                 'take_picture'  => 'gphoto2 --capture-image-and-download --filename=%s',
@@ -41,7 +40,6 @@ final class CommandsConfiguration
                 'preview_kill'  => '',
                 'pre_photo'     => '',
                 'post_photo'    => '',
-                'pre_collage'    => '',
             ],
         ];
 
@@ -69,7 +67,6 @@ final class CommandsConfiguration
                 ->scalarNode('nodebin')->defaultValue($defaults['nodebin'])->end()
                 ->scalarNode('pre_photo')->defaultValue($defaults['pre_photo'])->end()
                 ->scalarNode('post_photo')->defaultValue($defaults['post_photo'])->end()
-                ->scalarNode('pre_collage')->defaultValue($defaults['pre_collage'])->end()
                 ->scalarNode('reboot')->defaultValue($defaults['reboot'])->end()
                 ->scalarNode('shutdown')->defaultValue($defaults['shutdown'])->end()
             ->end();
