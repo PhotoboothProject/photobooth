@@ -906,7 +906,7 @@ class Collage
             $backgroundPath = $tmpPath . Image::createNewFilename('random');
             $tmpFiles[] = $backgroundPath;
             $imageHandler->saveJpeg($backgroundImage, $backgroundPath);
-            $inputs[] = "-i $backgroundPath";
+            $inputs[] = "-i " . escapeshellarg($backgroundPath);
             $inputArgs[] = "[0:v] scale=" . self::$collageWidth . "x" . self::$collageHeight . " [vid0];";
             $inputOffset = true;
         } else {
@@ -920,7 +920,7 @@ class Collage
             if (!isset($srcPaths[$srcIndex]) || !file_exists($srcPaths[$srcIndex])) {
                 throw new \Exception('The file ' . ($srcPaths[$srcIndex] ?? 'undefined') . ' does not exist.');
             }
-            $inputs[] = "-i " . $srcPaths[$srcIndex];
+            $inputs[] = "-i " . escapeshellarg($srcPaths[$srcIndex]);
             $tmpFiles[] = $srcPaths[$srcIndex];
         }
 
@@ -966,8 +966,8 @@ class Collage
             $lastOutput = "";
         }
 
-        $collageCommand = "ffmpeg " . implode(" ", $inputs) . " -filter_complex \"" . implode(" ", $inputArgs) . " " . implode(" ", $overlayArgs) . "\" -c:v libx264 -an -pix_fmt yuv420p " . $destPath;
-
+        $collageCommand = "ffmpeg " . implode(" ", $inputs) . " -filter_complex '" . implode(" ", $inputArgs) . " " . implode(" ", $overlayArgs) . "' -c:v libx264 -an -pix_fmt yuv420p " . escapeshellarg($destPath);
+        $logger->debug('collageCommand: ' . $collageCommand);
         return [$collageCommand, $tmpFiles];
     }
 

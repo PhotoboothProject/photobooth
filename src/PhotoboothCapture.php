@@ -124,17 +124,9 @@ class PhotoboothCapture
         if (substr($this->captureCmd, 0, strlen('gphoto')) === 'gphoto') {
             chdir(dirname($this->tmpFile));
         }
-
-
-        if($this->style === 'collagevideo') {
-            // Redirect stderr and run in background
-            $cmd = "ffmpeg -y -f mjpeg -use_wallclock_as_timestamps 1 -i %s -vf setpts=PTS-STARTPTS -vsync 0 -c:v libx264 -an %s  > /dev/null 2>&1 &";
-            $cmd = sprintf($cmd ,  $this->previewUrl, $this->tmpFile);
-        }
-        else {
-            $cmd = sprintf($this->captureCmd, $this->tmpFile);
-            $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
-        }
+        
+        $cmd = sprintf($this->captureCmd, $this->tmpFile);
+        $cmd .= ' 2>&1'; //Redirect stderr to stdout, otherwise error messages get lost.
 
         exec($cmd, $output, $returnValue);
 
@@ -194,8 +186,8 @@ class PhotoboothCapture
         ]);
 
         // Redirect stderr and run in background
-        $cmd = "ffmpeg -y -f mjpeg -use_wallclock_as_timestamps 1 -i %s -vf setpts=PTS-STARTPTS -vsync 0 -c:v libx264 -an %s  > /dev/null 2>&1 &";
-        $cmd = sprintf($cmd ,  $this->previewUrl, $this->tmpFile);
+        $cmd = "ffmpeg -y -f mjpeg -use_wallclock_as_timestamps 1 -i %s -vf setpts=PTS-STARTPTS -vsync 0 -c:v libx264 -an %s > /dev/null 2>&1 &";
+        $cmd = sprintf($cmd,  $this->previewUrl, $this->tmpFile);
         
         exec($cmd, $output, $returnValue);
 
@@ -207,18 +199,6 @@ class PhotoboothCapture
                 'output' => $output,
             ];
             $this->logger->error('error', $data);
-            die();
-        }
-
-        if (!file_exists($this->tmpFile)) {
-            $data = [
-                'error' => 'File was not created',
-                'cmd' => $cmd,
-                'returnValue' => $returnValue,
-                'output' => $output,
-            ];
-            $this->logger->error('error', $data);
-            echo json_encode($data);
             die();
         }
     }
