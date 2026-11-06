@@ -190,7 +190,7 @@
 
         api.stepScreensaver = function stepScreensaver() {
             const mode = overlay.data('mode') || screensaverMode;
-            photoboothTools.console.logDev("Screensaver: step in mode '" + mode + "'");
+            photoboothTools.console.logDev(`Screensaver: step in mode '${mode}'`);
 
             let nextSource = api.resolveSource();
             if (!nextSource && mode === 'gallery') {
@@ -206,10 +206,10 @@
                 screensaverLastGallerySource = nextSource;
             }
 
-            photoboothTools.console.logDev("Screensaver: next source '" + nextSource + "'");
+            photoboothTools.console.logDev(`Screensaver: next source '${nextSource}'`);
             if (nextSource) {
                 if (mode === 'folder') {
-                    overlay.css('background-image', nextSource ? `url(${urlSafe(nextSource)})` : 'none');
+                    overlay.css('background-image', nextSource ? `url(${nextSource})` : 'none');
                 } else if (mode === 'gallery') {
                     imageEl
                         .one('error', function () {
@@ -285,7 +285,10 @@
                 videoEl.hide();
                 imageEl.hide();
                 api.toggleGalleryText();
-                overlay.css('background-image', finalSource ? `url(${urlSafe(finalSource)})` : 'none');
+                overlay.css(
+                    'background-image',
+                    finalSource ? `url(${mode === 'folder' ? finalSource : urlSafe(finalSource)})` : 'none'
+                );
                 overlay.css('background-size', 'cover');
             }
 
