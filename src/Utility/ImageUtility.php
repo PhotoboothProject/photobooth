@@ -58,7 +58,7 @@ class ImageUtility
             $path = 'resources/img/frames';
         }
 
-        if (!in_array($path, self::resourcePaths)) {
+        if (!in_array($path, self::resourcePaths) && !str_starts_with($path, 'private/')) {
             $path = 'private/' . $path;
         }
 

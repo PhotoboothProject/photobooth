@@ -40,7 +40,13 @@
                 case 'image':
                     return config.screensaver.image_source;
                 case 'folder':
-                    return base + '/randomImg.php?dir=' + encodeURIComponent(config.screensaver.folder_source || 'screensavers') + '&t=' + Date.now();
+                    return (
+                        base +
+                        '/randomImg.php?dir=' +
+                        encodeURIComponent(config.screensaver.folder_source || 'private/screensavers') +
+                        '&t=' +
+                        Date.now()
+                    );
                 case 'gallery': {
                     const anchors = $('#galimages a');
                     if (anchors.length) {
@@ -184,7 +190,7 @@
 
         api.stepScreensaver = function stepScreensaver() {
             const mode = overlay.data('mode') || screensaverMode;
-            photoboothTools.console.logDev('Screensaver: step in mode \'' + mode + '\'');
+            photoboothTools.console.logDev("Screensaver: step in mode '" + mode + "'");
 
             let nextSource = api.resolveSource();
             if (!nextSource && mode === 'gallery') {
@@ -200,7 +206,7 @@
                 screensaverLastGallerySource = nextSource;
             }
 
-            photoboothTools.console.logDev('Screensaver: next source \'' + nextSource + '\'');
+            photoboothTools.console.logDev("Screensaver: next source '" + nextSource + "'");
             if (nextSource) {
                 if (mode === 'folder') {
                     overlay.css('background-image', nextSource ? `url(${urlSafe(nextSource)})` : 'none');
