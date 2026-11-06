@@ -34,6 +34,7 @@ Please read the license notice [here](https://github.com/PhotoboothProject/photo
 
 **Bug fixes**
 
+- Screensaver folder mode: add a configurable folder path in the admin panel, default to `private/screensavers`, preserve already-prefixed private paths and avoid double URL encoding so custom folders, including names with spaces, load correctly by @alifakbxr and @reloxx13 ([#1615](https://github.com/PhotoboothProject/photobooth/pull/1615)).
 - Selfie rename robustness; chroma preview visibility; loader clearing; hide video background during capture.
 - Installer fixes: PHP PPA validation, permissions/source lists/Wayland flag, unavailable PPA removal, software-properties-common fallback.
 - Printing: copy casting and deprecations, rotate error surfacing, stop-second timing, iOS preview fixes, admin tooltip/label fixes, default path corrections.
