@@ -28,6 +28,15 @@ if (!empty($config['picture']['frame'])) {
 if (!empty($config['collage']['background'])) {
     $config['collage']['background'] = PathUtility::getPublicPath($config['collage']['background']);
 }
+if (!empty($config['collage']['background_landscape'])) {
+    $config['collage']['background_landscape'] = PathUtility::getPublicPath($config['collage']['background_landscape']);
+}
+if (!empty($config['collage']['background_portrait'])) {
+    $config['collage']['background_portrait'] = PathUtility::getPublicPath($config['collage']['background_portrait']);
+}
+if (!empty($config['collage']['background_strip'])) {
+    $config['collage']['background_strip'] = PathUtility::getPublicPath($config['collage']['background_strip']);
+}
 if (!empty($config['collage']['frame'])) {
     $config['collage']['frame'] = PathUtility::getPublicPath($config['collage']['frame']);
 }
