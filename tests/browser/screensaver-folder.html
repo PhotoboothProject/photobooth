@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+    <meta charset="utf-8" />
+    <title>Screensaver folder regression check</title>
+    <pre id="result">Running…</pre>
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../assets/js/screensaver.js"></script>
+    <script>
+        const result = document.getElementById('result');
+        try {
+            let checks = 0;
+            for (const folder of [
+                'private/screensavers',
+                'private/screensavers/My Event',
+                'private/screensavers/Test (1)',
+                "private/screensavers/Nils' Bilder",
+                'private/screensavers/Test "quoted"',
+                'private/screensavers/Blüten & 50%'
+            ]) {
+                const overlay = jQuery('<div>');
+                const screensaver = createScreensaver({
+                    config: { screensaver: { folder_source: folder }, event: {} },
+                    environment: { publicFolders: { api: '/__screensaver-test__' } },
+                    startPage: jQuery('<div class="stage--active">'),
+                    overlay,
+                    videoEl: jQuery('<video>'),
+                    imageEl: jQuery('<img>'),
+                    textTop: jQuery('<div>'),
+                    textCenter: jQuery('<div>'),
+                    textBottom: jQuery('<div>'),
+                    screensaverEnabled: true,
+                    screensaverMode: 'folder',
+                    screensaverSwitchMs: 0,
+                    urlSafe: encodeURI,
+                    photoboothTools: { console: { logDev() {} } }
+                });
+                for (const action of ['show', 'stepScreensaver']) {
+                    // Clear the previous background so an invalid assignment cannot pass.
+                    overlay[0].style.backgroundImage = '';
+                    screensaver[action]();
+                    const background = overlay[0].style.backgroundImage;
+                    if (!background || background === 'none') {
+                        throw new Error(action + ' rejects folder: ' + folder);
+                    }
+                    const url = background.slice(4, -1).replace(/^["']|["']$/g, '');
+                    if (new URL(url, location.href).searchParams.get('dir') !== folder) {
+                        throw new Error(action + ' changes folder encoding: ' + folder);
+                    }
+                    checks++;
+                }
+            }
+            result.textContent = 'PASS: ' + checks + ' initial-display and image-switch checks';
+        } catch (error) {
+            result.textContent = 'FAIL: ' + error.message;
+            throw error;
+        }
+    </script>
+</html>
