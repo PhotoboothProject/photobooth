@@ -291,15 +291,29 @@ function photoboothAction(type) {
 
 /* CONFIGURE HTTP ENDPOINTS */
 const requestListener = function (req, res) {
-    function sendText(content, contentType) {
+    function sendText(content, contentType, statusCode = 200) {
         res.setHeader('Content-Type', contentType || 'text/plain');
         res.setHeader('Access-Control-Allow-Origin', '*');
-        res.writeHead(200);
+        res.writeHead(statusCode);
         res.end(content);
     }
 
     const urlObj = new URL(req.url, 'http://' + config.webserver.ip);
     const queryParams = urlObj.searchParams;
+
+    if (
+        [
+            '/commands/start-picture',
+            '/commands/start-collage',
+            '/commands/start-custom',
+            '/commands/start-video',
+            '/commands/start-print'
+        ].includes(urlObj.pathname) &&
+        ioServer.engine.clientsCount === 0
+    ) {
+        sendText('No Photobooth client connected. Please retry when the Photobooth is ready.', 'text/plain', 503);
+        return;
+    }
 
     switch (urlObj.pathname) {
         case '/':
