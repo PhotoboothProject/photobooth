@@ -209,7 +209,7 @@
             photoboothTools.console.logDev(`Screensaver: next source '${nextSource}'`);
             if (nextSource) {
                 if (mode === 'folder') {
-                    overlay.css('background-image', nextSource ? `url(${nextSource})` : 'none');
+                    overlay.css('background-image', nextSource ? `url("${nextSource}")` : 'none');
                 } else if (mode === 'gallery') {
                     imageEl
                         .one('error', function () {
@@ -287,7 +287,7 @@
                 api.toggleGalleryText();
                 overlay.css(
                     'background-image',
-                    finalSource ? `url(${mode === 'folder' ? finalSource : urlSafe(finalSource)})` : 'none'
+                    finalSource ? `url("${mode === 'folder' ? finalSource : urlSafe(finalSource)}")` : 'none'
                 );
                 overlay.css('background-size', 'cover');
             }

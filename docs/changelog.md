@@ -34,6 +34,7 @@ Please read the license notice [here](https://github.com/PhotoboothProject/photo
 
 **Bug fixes**
 
+- Screensaver folder mode: support folder names containing parentheses or apostrophes on initial display and image changes (@reloxx13).
 - GPhoto2 webcam setup: install the required `ffmpeg` dependency (@reloxx13).
 - Remote buzzer: return HTTP 503 for capture and print requests when no client is connected, leaving the trigger armed for retries (@reloxx13).
 - Screensaver folder mode: add a configurable folder path in the admin panel, default to `private/screensavers`, preserve already-prefixed private paths and avoid double URL encoding so custom folders, including names with spaces, load correctly (@alifakbxr, @reloxx13).
