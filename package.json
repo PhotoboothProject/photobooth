@@ -55,8 +55,8 @@
   ],
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.3.1",
-    "@tailwindcss/postcss": "^4.3.2",
-    "autoprefixer": "^10.5.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "autoprefixer": "^10.5.4",
     "github-markdown-css": "^5.9.0",
     "gulp": "^5.0.1",
     "gulp-concat": "^2.6.1",
@@ -73,7 +73,7 @@
     "postcss": "^8.5.25",
     "sass": "^1.101.0",
     "socket.io": "^4.8.3",
-    "socket.io-client": "^4.8.3",
+    "socket.io-client": "^4.8.4",
     "tailwindcss": "^4.3.2"
   },
   "devDependencies": {
@@ -85,9 +85,9 @@
     "colors": "^1.4.0",
     "eslint-plugin-n": "^18.2.2",
     "git-tag-version": "^1.4.0",
-    "globals": "^17.6.0",
+    "globals": "^17.13.0",
     "gulp-babel": "^8.0.0",
-    "prettier": "^3.8.3",
+    "prettier": "^3.9.10",
     "rimraf": "^6.1.3"
   }
 }
