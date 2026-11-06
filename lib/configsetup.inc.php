@@ -2782,6 +2782,13 @@ return [
             'name' => 'ftp[template_location]',
             'value' => $config['ftp']['template_location'],
         ],
+        'template_config_location' => [
+            'view' => 'advanced',
+            'type' => 'input',
+            'placeholder' => 'private/template/config.inc.php',
+            'name' => 'ftp[template_config_location]',
+            'value' => $config['ftp']['template_config_location'],
+        ],
         'delete' => [
             'view' => 'basic',
             'type' => 'checkbox',
