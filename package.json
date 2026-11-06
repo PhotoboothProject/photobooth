@@ -55,7 +55,7 @@
   ],
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.3.1",
-    "@tailwindcss/postcss": "^4.3.2",
+    "@tailwindcss/postcss": "^4.3.3",
     "autoprefixer": "^10.5.4",
     "github-markdown-css": "^5.9.0",
     "gulp": "^5.0.1",
@@ -85,9 +85,9 @@
     "colors": "^1.4.0",
     "eslint-plugin-n": "^18.2.2",
     "git-tag-version": "^1.4.0",
-    "globals": "^17.11.0",
+    "globals": "^17.13.0",
     "gulp-babel": "^8.0.0",
-    "prettier": "^3.8.3",
+    "prettier": "^3.9.10",
     "rimraf": "^6.1.3"
   }
 }
