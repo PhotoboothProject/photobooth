@@ -20,14 +20,18 @@ final class TextOnPictureConfiguration
                     ->defaultValue(80)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('locationy')
                     ->defaultValue(80)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('rotation')
@@ -36,7 +40,9 @@ final class TextOnPictureConfiguration
                     ->max(359)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->scalarNode('font')->defaultValue('')->end()
@@ -45,14 +51,18 @@ final class TextOnPictureConfiguration
                     ->defaultValue(80)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('linespace')
                     ->defaultValue(90)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
             ->end();

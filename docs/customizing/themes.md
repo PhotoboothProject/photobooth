@@ -16,6 +16,7 @@ Typical examples include:
 - Background images and frames
 - Event text and icon
 - Logo visibility, path and position
+- Startpage text placement such as `ui.startpage_text_position`
 - Picture/collage specific appearance options (polaroid effect, text overlays, placeholders, …)
 
 ## How themes are stored
@@ -27,6 +28,12 @@ Themes are stored as JSON files in `private/themes`.
 
 ```json
 {
+  "ui": {
+    "startpage_text_position": "left-center"
+  },
+  "logo": {
+    "position": "top_right"
+  },
   "event": {
     "symbol": "fa-birthday-cake",
     "textLeft": "Lisa & Tom",
@@ -51,6 +58,7 @@ Themes are stored as JSON files in `private/themes`.
 
 - Keys correspond to the configuration categories (for example `event`, `colors`, `picture`, `collage`).
 - Inside each category, the keys match the setting names (for example `symbol`, `frame`, `background_color`).
+- Startpage text positions support centered, left, and right placements across top, middle, and bottom. If the logo is enabled and centered, the runtime falls back to bottom center so both elements do not overlap.
 
 ## Using themes
 

@@ -4,6 +4,7 @@ namespace Photobooth;
 
 use Photobooth\Logger\NamedLogger;
 use Photobooth\Service\LoggerService;
+use Photobooth\Utility\ImageUtility;
 
 /**
  * Class PhotoboothCapture
@@ -16,7 +17,6 @@ class PhotoboothCapture
     public string $collageSubFile;
     public int $collageNumber;
     public int $collageLimit;
-    public string $demoFolder = __DIR__ . '/../resources/img/demo/';
     public string $flipImage = 'off';
     public string $captureCmd;
     public NamedLogger $logger;
@@ -36,17 +36,30 @@ class PhotoboothCapture
      */
     public function captureDemo(): void
     {
-        $this->logger->debug('Capture Demo', [
-            'demoFolder' => $this->demoFolder
-        ]);
-        $demoFolder = $this->demoFolder;
-        $scannedFiles = scandir($demoFolder);
-        if ($scannedFiles !== false) {
-            $devImg = array_diff($scannedFiles, ['.', '..']);
-            copy($demoFolder . $devImg[array_rand($devImg)], $this->tmpFile);
-        } else {
-            $this->logger->error('Failed to scan demo folder for images!');
-            echo json_encode(['error' => 'Failed to scan demo folder for images!']);
+        $this->logger->debug('Capture Demo');
+
+        try {
+            $demoImages = ImageUtility::getDemoImages();
+            $demoImage = $demoImages[array_rand($demoImages)];
+
+            $extension = strtolower(pathinfo($demoImage, PATHINFO_EXTENSION));
+            if (in_array($extension, ['jpg', 'jpeg'], true)) {
+                copy($demoImage, $this->tmpFile);
+                return;
+            }
+
+            $imageHandler = new Image();
+            $imageHandler->debugLevel = $this->debugLevel;
+            $imageHandler->jpegQuality = 100;
+            $imageResource = $imageHandler->createFromImage($demoImage);
+            if (!$imageResource instanceof \GdImage) {
+                throw new \Exception('Failed to create image resource from demo image.');
+            }
+            $imageHandler->saveJpeg($imageResource, $this->tmpFile);
+            unset($imageResource);
+        } catch (\Exception $e) {
+            $this->logger->error('Failed to load demo image!', ['error' => $e->getMessage()]);
+            echo json_encode(['error' => 'Failed to load demo image!']);
             die();
         }
     }

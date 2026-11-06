@@ -112,6 +112,8 @@
     </li>
     </ul>
                   </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../usb-sync/">USB Sync & Move2USB</a>
+                  </li>
                   <li class="toctree-l1"><a class="reference internal" href="../printer-troubleshooting/">Printer Troubleshooting</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../gphoto2-troubleshooting/">gphoto2 Troubleshooting</a>
@@ -235,8 +237,9 @@
 <h2 id="3-remote-trigger-via-socketio">3) Remote trigger via Socket.io</h2>
 <ul>
 <li>Channel: <code>photobooth-socket</code></li>
-<li>Commands: <code>start-picture</code>, <code>start-collage</code>, <code>collage-next</code>, <code>start-custom</code>, <code>start-video</code>, <code>print</code>, <code>rotary-cw</code>, <code>rotary-ccw</code>, <code>rotary-btn-press</code>, <code>move2usb</code></li>
+<li>Commands: <code>start-picture</code>, <code>start-collage</code>, <code>collage-next</code>, <code>collage-wait-for-next</code>, <code>start-custom</code>, <code>start-video</code>, <code>start-move2usb</code>, <code>print</code>, <code>rotary-cw</code>, <code>rotary-ccw</code>, <code>rotary-btn-press</code>, <code>completed</code>, <code>in-progress</code></li>
 <li>Response: <code>completed</code> after the workflow finishes.</li>
+<li><code>start-move2usb</code> copies (or moves) all photos/videos to the configured USB stick — see <a href="../usb-sync/">USB Sync &amp; Move2USB</a> for setup and permissions.</li>
 </ul>
 <h2 id="4-remote-trigger-via-simple-web-requests-http">4) Remote trigger via simple web requests (HTTP)</h2>
 <ul>
@@ -251,7 +254,7 @@
 <li><code>[Base URL]/commands/start-custom</code></li>
 <li><code>[Base URL]/commands/start-print</code></li>
 <li><code>[Base URL]/commands/start-video</code></li>
-<li><code>[Base URL]/commands/start-move2usb</code></li>
+<li><code>[Base URL]/commands/start-move2usb</code> (see <a href="../usb-sync/">USB Sync &amp; Move2USB</a>)</li>
 <li><code>[Base URL]/commands/reboot-now</code></li>
 <li><code>[Base URL]/commands/shutdown-now</code></li>
 <li><code>[Base URL]/commands/rotary-cw</code></li>
@@ -288,7 +291,7 @@
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
         <a href="../tutorials/" class="btn btn-neutral float-left" title="Tutorials"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../printer-troubleshooting/" class="btn btn-neutral float-right" title="Printer Troubleshooting">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../usb-sync/" class="btn btn-neutral float-right" title="USB Sync & Move2USB">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -318,7 +321,7 @@
       <span><a href="../tutorials/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../printer-troubleshooting/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../usb-sync/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

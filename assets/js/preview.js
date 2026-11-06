@@ -1,6 +1,6 @@
 /* eslint n/no-unsupported-features/node-builtins: "off" */
 
-/* globals photoBooth photoboothTools csrf */
+/* globals photoBooth photoboothTools */
 
 function getPreviewUrlWithCacheBusting() {
     const url = getBasePreviewUrl();
@@ -147,18 +147,25 @@ const photoboothPreview = (function () {
     api.runCmd = function (mode) {
         const dataVideo = {
             play: mode,
-            pid: pid,
-            [csrf.key]: csrf.token
+            pid: pid
         };
 
-        jQuery
-            .post('api/previewCamera.php', dataVideo)
+        photoboothTools
+            .ajaxWithCsrf({
+                url: 'api/previewCamera.php',
+                method: 'POST',
+                data: dataVideo
+            })
             .done(function (result) {
                 photoboothTools.console.log('Preview: ' + dataVideo.play + ' webcam successfully.');
                 pid = result.pid;
             })
             // eslint-disable-next-line no-unused-vars
             .fail(function (xhr, status, result) {
+                if (photoboothTools.isCsrfErrorResponse(xhr)) {
+                    photoboothTools.handleCsrfMismatch('api/previewCamera.php');
+                    return;
+                }
                 photoboothTools.console.log('ERROR: Preview: Failed to ' + dataVideo.play + ' webcam!');
             });
     };

@@ -19,9 +19,9 @@ final class EventConfiguration
                     ->values([
                         'fa-camera', 'fa-camera-retro', 'fa-birthday-cake', 'fa-gift', 'fa-tree', 'fa-snowflake',
                         'fa-regular fa-heart', 'fa-solid fa-heart', 'fa-solid fa-heart-pulse', 'fa-brands fa-apple',
-                        'fa-anchor', 'fa-light fa-champagne-glasses', 'fa-gears', 'fa-users'
+                        'fa-anchor', 'fa-light fa-champagne-glasses', 'fa-gears', 'fa-users', 'fa-solid fa-sun'
                     ])
-                    ->defaultValue('fa-heart-o')
+                    ->defaultValue('fa-regular fa-heart')
                     ->end()
             ->end();
     }

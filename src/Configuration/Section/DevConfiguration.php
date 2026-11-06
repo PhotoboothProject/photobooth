@@ -18,7 +18,9 @@ final class DevConfiguration
                     ->max(2)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->booleanNode('demo_images')

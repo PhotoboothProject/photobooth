@@ -14,7 +14,7 @@ jobs:
     steps:
 
       - name: Checkout repository and submodules
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           submodules: true
 
@@ -24,7 +24,7 @@ jobs:
           php-version: 8.4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 20
 
@@ -38,7 +38,7 @@ jobs:
         run: npm run pack:build
 
       - name: Publish zip
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: photobooth
           path: archives/photobooth-*.zip

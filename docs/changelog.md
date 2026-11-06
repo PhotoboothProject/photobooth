@@ -15,6 +15,7 @@ Please read the license notice [here](https://github.com/PhotoboothProject/photo
 
 - Virtual keyboard for email (layouts/colors, toggle), multi-recipient email, and configurable email fields.
 - Uploadable/optional private keying backgrounds; configurable rotation ranges; CollageLayoutEnum; adjustable collage video previews; collage color presets; auto-enable background/frame and preview toggles; placeholder limits.
+- Startpage text positioning with centered, left, and right placements across top, middle, and bottom, including centered-logo fallback handling.
 - Tailwind CSS v4 migration and dependency bumps; Turkish language option; JPEG quality floor raised.
 - Printing: copy prompt, new print-limit endpoint, longer print timeout, multi-print fixes, queued message timing, hardware button photo support, hardware keyboard for admin PIN, Remotebuzzer on chroma capture.
 - Rembg as built-in service with advanced options, logging, compositing fixes, and install script.

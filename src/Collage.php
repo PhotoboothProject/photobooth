@@ -19,6 +19,61 @@ class Collage
     public static bool $rotateAfterCreation = false;
     public static string $layoutPath = '';
 
+    private static function normalizeLayoutId(string $layoutId): ?string
+    {
+        $layoutId = trim($layoutId);
+        if ($layoutId === '') {
+            return null;
+        }
+
+        if (str_contains($layoutId, "\0")) {
+            return null;
+        }
+
+        if (str_contains($layoutId, '/') || str_contains($layoutId, '\\')) {
+            return null;
+        }
+
+        return $layoutId;
+    }
+
+    private static function isLayoutsPath(string $path): bool
+    {
+        $layoutsDir = PathUtility::getAbsolutePath('private/collage/layouts');
+        $layoutsRoot = rtrim($layoutsDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+
+        return str_starts_with($path, $layoutsRoot);
+    }
+
+    private static function getLegacyCollageConfigPath(string $layoutId, string $pictureOrientation): ?string
+    {
+        $layoutId = self::normalizeLayoutId($layoutId);
+        if ($layoutId === null) {
+            return null;
+        }
+
+        $layoutFile = str_ends_with($layoutId, '.json') ? $layoutId : $layoutId . '.json';
+
+        $relativePaths = [
+            'private/collage/' . $pictureOrientation . '/' . $layoutFile,
+            'private/collage/' . $layoutFile,
+            'private/' . $layoutFile,
+            'template/collage/' . $pictureOrientation . '/' . $layoutFile,
+            'template/collage/' . $layoutFile,
+        ];
+
+        foreach ($relativePaths as $relativePath) {
+            $absolutePath = PathUtility::getAbsolutePath($relativePath);
+
+            if (file_exists($absolutePath)) {
+                self::$layoutPath = $absolutePath;
+                return $absolutePath;
+            }
+        }
+
+        return null;
+    }
+
     public static function reset(): void
     {
         self::$collageHeight = 0;
@@ -38,7 +93,12 @@ class Collage
         array $collageConfig,
         ?LoggerInterface $logger = null
     ): array {
-        $layout = (string) ($collageConfig['layout'] ?? '');
+        $layout = $collageConfig['layout'] ?? '';
+        if ($layout instanceof \BackedEnum) {
+            $layout = (string) $layout->value;
+        } else {
+            $layout = (string) $layout;
+        }
         $orientation = (string) ($collageConfig['orientation'] ?? 'landscape');
         $placeholderEnabled = (bool) ($collageConfig['placeholder'] ?? false);
         $placeholderPosition = (int) ($collageConfig['placeholderposition'] ?? 0);
@@ -55,6 +115,13 @@ class Collage
 
         if ($collageConfigFilePath !== null) {
             $collageJson = json_decode((string) file_get_contents($collageConfigFilePath), true);
+            if (!is_array($collageJson) && self::isLayoutsPath($collageConfigFilePath)) {
+                $legacyPath = self::getLegacyCollageConfigPath($layout, $orientation);
+                if ($legacyPath !== null && $legacyPath !== $collageConfigFilePath) {
+                    $collageJson = json_decode((string) file_get_contents($legacyPath), true);
+                }
+            }
+
             if (is_array($collageJson)) {
                 $layoutConfigArray = !empty($collageJson['layout'])
                     ? $collageJson['layout']
@@ -98,33 +165,37 @@ class Collage
 
     public static function getCollageConfigPath(string $collageLayout, string $pictureOrientation): ?string
     {
-        self::$drawDashedLine =
-            $collageLayout === '2x4-2' ||
-            $collageLayout === '2x4-3' ||
-            $collageLayout === '2x3-1';
-
-        if (!str_ends_with($collageLayout, '.json')) {
-            $collageLayout .= '.json';
+        $layoutId = self::normalizeLayoutId($collageLayout);
+        if ($layoutId === null) {
+            return null;
         }
 
-        $relativePaths = [
-            'private/collage/' . $pictureOrientation . '/' . $collageLayout,
-            'private/collage/' . $collageLayout,
-            'private/' . $collageLayout,
-            'template/collage/' . $pictureOrientation . '/' . $collageLayout,
-            'template/collage/' . $collageLayout,
+        $layoutName = str_ends_with($layoutId, '.json') ? substr($layoutId, 0, -5) : $layoutId;
+
+        self::$drawDashedLine = str_starts_with($layoutName, '2x');
+
+        $layoutFile = str_ends_with($layoutId, '.json') ? $layoutId : $layoutId . '.json';
+
+        $layoutsDir = PathUtility::getAbsolutePath('private/collage/layouts');
+        $orientationLayoutsDir = $layoutsDir . DIRECTORY_SEPARATOR . $pictureOrientation;
+        $layoutCandidates = [
+            $orientationLayoutsDir . DIRECTORY_SEPARATOR . $layoutFile,
+            $layoutsDir . DIRECTORY_SEPARATOR . $layoutFile,
         ];
 
-        foreach ($relativePaths as $relativePath) {
-            $absolutePath = PathUtility::getAbsolutePath($relativePath);
-
-            if (file_exists($absolutePath)) {
-                self::$layoutPath = $absolutePath;
-                return $absolutePath;
+        foreach ($layoutCandidates as $layoutCandidate) {
+            if (!is_file($layoutCandidate)) {
+                continue;
+            }
+            $realLayoutCandidate = realpath($layoutCandidate);
+            $layoutsRoot = rtrim($layoutsDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            if ($realLayoutCandidate !== false && str_starts_with($realLayoutCandidate, $layoutsRoot)) {
+                self::$layoutPath = $realLayoutCandidate;
+                return $realLayoutCandidate;
             }
         }
 
-        return null;
+        return self::getLegacyCollageConfigPath($layoutId, $pictureOrientation);
     }
 
     public static function createCollage(array $config, array $srcImagePaths, string $destImagePath, ?ImageFilterEnum $filter = null, ?CollageConfig $c = null): bool
@@ -147,6 +218,12 @@ class Collage
 
         if ($collageConfigFilePath !== null) {
             $collageJson = json_decode((string)file_get_contents($collageConfigFilePath), true);
+            if (!is_array($collageJson) && self::isLayoutsPath($collageConfigFilePath)) {
+                $legacyPath = self::getLegacyCollageConfigPath($c->collageLayout, self::$pictureOrientation);
+                if ($legacyPath !== null && $legacyPath !== $collageConfigFilePath) {
+                    $collageJson = json_decode((string)file_get_contents($legacyPath), true);
+                }
+            }
 
             if (is_array($collageJson)) {
                 if (isset($collageJson['layout']) && !empty($collageJson['layout'])) {
@@ -488,15 +565,66 @@ class Collage
             self::$collageWidth = (int) imagesx($my_collage);
             self::$collageHeight = (int) imagesy($my_collage);
             $imageHandler->dashedLineColor = (string)imagecolorallocate($my_collage, (int)$dashed_r, (int)$dashed_g, (int)$dashed_b);
+            $replace = ['x' => self::$collageWidth, 'y' => self::$collageHeight];
             if (self::$pictureOrientation === 'portrait') {
+                $midY = self::$collageHeight / 2;
+                if (isset($layoutConfigArray) && is_array($layoutConfigArray)) {
+                    $layoutCount = count($layoutConfigArray);
+                    $uniquePhotoCount = (int) ($layoutCount / 2);
+                    $topMax = null;
+                    $bottomMin = null;
+
+                    for ($i = 0; $i < $layoutCount; $i++) {
+                        $entry = $layoutConfigArray[$i];
+                        if (!is_array($entry) || count($entry) < 4) {
+                            continue;
+                        }
+                        $y = (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $entry[1]));
+                        $h = (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $entry[3]));
+                        if ($i < $uniquePhotoCount) {
+                            $topMax = $topMax === null ? ($y + $h) : max($topMax, $y + $h);
+                        } else {
+                            $bottomMin = $bottomMin === null ? $y : min($bottomMin, $y);
+                        }
+                    }
+
+                    if ($topMax !== null && $bottomMin !== null) {
+                        $midY = ($topMax + $bottomMin) / 2;
+                    }
+                }
                 $imageHandler->dashedLineStartX = intval(self::$collageWidth * 0.03);
-                $imageHandler->dashedLineStartY = intval(self::$collageHeight / 2);
+                $imageHandler->dashedLineStartY = (int) round($midY);
                 $imageHandler->dashedLineEndX = intval(self::$collageWidth * 0.97);
-                $imageHandler->dashedLineEndY = intval(self::$collageHeight / 2);
+                $imageHandler->dashedLineEndY = (int) round($midY);
             } else {
-                $imageHandler->dashedLineStartX = intval(self::$collageWidth / 2);
+                $midX = self::$collageWidth / 2;
+                if (isset($layoutConfigArray) && is_array($layoutConfigArray)) {
+                    $layoutCount = count($layoutConfigArray);
+                    $uniquePhotoCount = (int) ($layoutCount / 2);
+                    $leftMax = null;
+                    $rightMin = null;
+
+                    for ($i = 0; $i < $layoutCount; $i++) {
+                        $entry = $layoutConfigArray[$i];
+                        if (!is_array($entry) || count($entry) < 4) {
+                            continue;
+                        }
+                        $x = (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $entry[0]));
+                        $w = (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $entry[2]));
+                        if ($i < $uniquePhotoCount) {
+                            $leftMax = $leftMax === null ? ($x + $w) : max($leftMax, $x + $w);
+                        } else {
+                            $rightMin = $rightMin === null ? $x : min($rightMin, $x);
+                        }
+                    }
+
+                    if ($leftMax !== null && $rightMin !== null) {
+                        $midX = ($leftMax + $rightMin) / 2;
+                    }
+                }
+                $imageHandler->dashedLineStartX = (int) round($midX);
                 $imageHandler->dashedLineStartY = 0;
-                $imageHandler->dashedLineEndX = intval(self::$collageWidth / 2);
+                $imageHandler->dashedLineEndX = (int) round($midX);
                 $imageHandler->dashedLineEndY = intval(self::$collageHeight);
             }
             $imageHandler->drawDashedLine($my_collage);
@@ -546,6 +674,30 @@ class Collage
                     // Landscape: duplicate horizontally (shift X to right half)
                     $origX = $imageHandler->fontLocationX;
                     $shift = (int) (self::$collageWidth / 2);
+                    if (isset($layoutConfigArray) && is_array($layoutConfigArray)) {
+                        $layoutCount = count($layoutConfigArray);
+                        $uniquePhotoCount = (int) ($layoutCount / 2);
+                        $firstX = null;
+                        $secondX = null;
+                        $replace = ['x' => self::$collageWidth, 'y' => self::$collageHeight];
+
+                        for ($i = 0; $i < $layoutCount; $i++) {
+                            $entry = $layoutConfigArray[$i];
+                            if (!is_array($entry) || count($entry) < 2) {
+                                continue;
+                            }
+                            $x = (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $entry[0]));
+                            if ($i < $uniquePhotoCount) {
+                                $firstX = $firstX === null ? $x : min($firstX, $x);
+                            } else {
+                                $secondX = $secondX === null ? $x : min($secondX, $x);
+                            }
+                        }
+
+                        if ($firstX !== null && $secondX !== null) {
+                            $shift = (int) round($secondX - $firstX);
+                        }
+                    }
                     $imageHandler->fontLocationX = $origX + $shift;
 
                     // Apply text again with zone mode support
@@ -566,6 +718,30 @@ class Collage
                     // Portrait: duplicate vertically (shift Y to bottom half)
                     $origY = $imageHandler->fontLocationY;
                     $shift = (int) (self::$collageHeight / 2);
+                    if (isset($layoutConfigArray) && is_array($layoutConfigArray)) {
+                        $layoutCount = count($layoutConfigArray);
+                        $uniquePhotoCount = (int) ($layoutCount / 2);
+                        $firstY = null;
+                        $secondY = null;
+                        $replace = ['x' => self::$collageWidth, 'y' => self::$collageHeight];
+
+                        for ($i = 0; $i < $layoutCount; $i++) {
+                            $entry = $layoutConfigArray[$i];
+                            if (!is_array($entry) || count($entry) < 2) {
+                                continue;
+                            }
+                            $y = (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $entry[1]));
+                            if ($i < $uniquePhotoCount) {
+                                $firstY = $firstY === null ? $y : min($firstY, $y);
+                            } else {
+                                $secondY = $secondY === null ? $y : min($secondY, $y);
+                            }
+                        }
+
+                        if ($firstY !== null && $secondY !== null) {
+                            $shift = (int) round($secondY - $firstY);
+                        }
+                    }
                     $imageHandler->fontLocationY = $origY + $shift;
 
                     // Apply text again with zone mode support

@@ -18,7 +18,9 @@ final class LoginConfiguration
                     ->defaultNull()
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): ?string { return strlen(trim($value)) === 0 ? null : $value; })
+                        ->then(function (string $value): ?string {
+                            return strlen(trim($value)) === 0 ? null : $value;
+                        })
                         ->end()
                     ->end()
                 ->booleanNode('keypad')->defaultValue(false)->end()
@@ -26,7 +28,9 @@ final class LoginConfiguration
                     ->defaultNull()
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): ?string { return strlen(trim($value)) === 0 ? null : $value; })
+                        ->then(function (string $value): ?string {
+                            return strlen(trim($value)) === 0 ? null : $value;
+                        })
                         ->end()
                     ->end()
                 ->booleanNode('rental_keypad')->defaultValue(false)->end()
@@ -34,7 +38,9 @@ final class LoginConfiguration
                     ->defaultNull()
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): ?string { return strlen(trim($value)) === 0 ? null : $value; })
+                        ->then(function (string $value): ?string {
+                            return strlen(trim($value)) === 0 ? null : $value;
+                        })
                         ->end()
                     ->end()
             ->end();

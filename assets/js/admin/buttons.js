@@ -277,7 +277,7 @@ $(function () {
             document.body.append(audioElement);
         }
 
-        let soundfile = null;
+        let soundfile;
         if ($('[name="sound[voice]"]').val() === 'custom') {
             soundfile =
                 '/private/sounds/' +

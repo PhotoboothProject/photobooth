@@ -33,7 +33,9 @@ final class UiConfiguration
                     ->defaultValue(5)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->booleanNode('show_fork')->defaultValue(true)->end()
@@ -42,6 +44,10 @@ final class UiConfiguration
                 ->enumNode('admin_shortcut_position')
                     ->values(['top-left', 'top-right', 'bottom-left', 'bottom-right'])
                     ->defaultValue('bottom-right')
+                    ->end()
+                ->enumNode('startpage_text_position')
+                    ->values(['top', 'center', 'bottom', 'left-top', 'left-center', 'left-bottom', 'right-top', 'right-center', 'right-bottom'])
+                    ->defaultValue('bottom')
                     ->end()
                 ->booleanNode('selfie_mode')->defaultValue(false)->end()
                 ->enumNode('style')
@@ -58,7 +64,9 @@ final class UiConfiguration
                     ->max(200)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('scale_resultImage')
@@ -67,7 +75,9 @@ final class UiConfiguration
                     ->max(100)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->booleanNode('shutter_animation')->defaultValue(true)->end()

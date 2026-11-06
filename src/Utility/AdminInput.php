@@ -824,7 +824,7 @@ class AdminInput
                         </div>
 
                         <div class="flex w-full h-full flex-col overflow-y-auto">
-                            <div id="' . $gridId . '" class="' . $gridClass . '" style="grid-template-columns:repeat(auto-fill,minmax(192px,1fr));">
+                            <div id="' . $gridId . '" class="' . $gridClass . '" data-setting-name="' . htmlspecialchars($settingName, ENT_QUOTES) . '" style="grid-template-columns:repeat(auto-fill,minmax(192px,1fr));">
                                 ' . $buttons . '
                             </div>
                         </div>
@@ -987,7 +987,7 @@ class AdminInput
             : 'grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mt-2';
 
         return self::renderHeadline($label) . '
-            <div id="' . $uniqueId . '" class="' . $gridClass . '">
+            <div id="' . $uniqueId . '" class="' . $gridClass . '" data-setting-name="' . htmlspecialchars($settingName, ENT_QUOTES) . '">
                 ' . $buttons . '
             </div>
             <script>

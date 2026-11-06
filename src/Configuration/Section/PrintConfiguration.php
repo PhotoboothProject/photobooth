@@ -22,7 +22,9 @@ final class PrintConfiguration
                     ->defaultValue(1000)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('time')
@@ -31,7 +33,9 @@ final class PrintConfiguration
                     ->defaultValue(5000)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('max_multi')
@@ -40,14 +44,18 @@ final class PrintConfiguration
                     ->defaultValue(1)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('limit')
                     ->defaultValue(0)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->scalarNode('locking_msg')->defaultValue('Printing... Print limit reached, print will be locked.')->end()
@@ -61,7 +69,9 @@ final class PrintConfiguration
                     ->max(10)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->enumNode('qrPosition')
@@ -72,7 +82,9 @@ final class PrintConfiguration
                     ->defaultValue(10)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('qrMargin')
@@ -81,7 +93,9 @@ final class PrintConfiguration
                     ->max(10)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->scalarNode('qrBgColor')->defaultValue('#ffffff')->end()
@@ -92,14 +106,18 @@ final class PrintConfiguration
                     ->defaultValue(1000)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('crop_height')
                     ->defaultValue(500)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
             ->end();

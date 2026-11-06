@@ -18,7 +18,9 @@ final class RemoteBuzzerConfiguration
                     ->defaultValue(14711)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->booleanNode('usebuttons')->defaultValue(false)->end()

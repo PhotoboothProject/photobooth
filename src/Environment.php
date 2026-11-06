@@ -35,8 +35,8 @@ class Environment implements \JsonSerializable
         }
 
         if (self::isLinux()) {
-            $ip = shell_exec('hostname -I | cut -d \" \" -f 1') ?: '';
-            $cachedIp = trim((string) $ip);
+            $ip = trim((string) (shell_exec('hostname -I') ?: ''));
+            $cachedIp = $ip === '' ? '' : (preg_split('/\s+/', $ip)[0] ?? '');
         } else {
             $cachedIp = isset($_SERVER['HTTP_HOST']) ? (string) $_SERVER['HTTP_HOST'] : '';
         }

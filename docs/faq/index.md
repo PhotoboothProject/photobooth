@@ -259,19 +259,13 @@ Take a look for "Loaded Configuration File" to get the path of your php.ini, you
 
 ---
 
-## Automatic picture syncing to USB stick
+## USB Sync & Move2USB — syncing pictures to a USB stick
 
-This feature will automatically and in regular intervals copy (sync) new pictures to a plugged-in USB stick
+Photobooth can **automatically sync** new pictures and videos to a USB stick at regular intervals (**USB Sync**), or you can trigger a **one-time copy or move** of all media via HTTP/socket.io/hardware button (**Move2USB**).
 
-Use the [Photobooth Setup Wizard](https://photoboothproject.github.io/install/setup_wizard) to get the operating system setup in place.
+Both features require mount permissions for `www-data` (Polkit + sudoers). Use the [Photobooth Setup Wizard](https://photoboothproject.github.io/install/setup_wizard) → **Permissions → USB Sync policy** to set them up.
 
-- 6. Permissions -> USB Sync policy
-
-The target USB device is selected through the admin panel.
-
-A USB drive / stick can be identified either by the USB stick label (e.g. `photobooth`), the operating system specific USB device name (e.g. `/dev/sda1`) or the USB device system subsystem name (e.g. `sda`). The preferred method would be the USB stick label (for use of a single USB stick) or the very specific USB device name, for different USB stick use. The default config will look for a drive with the label photobooth. The script only supports one single USB stick connected at a time
-
-Pictures will be synced to the USB stick matched by the pattern, as long as it is mounted (aka USB stick is plugged in)
+See the full guide: **[USB Sync & Move2USB](usb-sync.md)** — setup, configuration, mount strategy, and troubleshooting.
 
 Debugging: Check the server logs for errors at the Debug panel: [http://localhost/admin/debugpanel](http://localhost/admin/debugpanel) (
 or [http://localhost/photobooth/admin/debugpanel](http://localhost/photobooth/admin/debugpanel)).

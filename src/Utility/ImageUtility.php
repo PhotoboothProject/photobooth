@@ -72,19 +72,23 @@ class ImageUtility
 
     public static function getDemoImages(int $filecount = 0): array
     {
-        $primaryFolder = 'private/images/demo';
-        $secondaryFolder = 'data/tmp';
-        $tertiaryFolder = 'resources/img/demo';
+        $folders = [
+            'private/images/demo',
+            'data/tmp',
+            'resources/img/demo',
+        ];
         $demoImages = [];
 
-        $demoImages = self::getImagesFromPath($primaryFolder);
+        foreach ($folders as $folder) {
+            try {
+                $demoImages = self::getImagesFromPath($folder);
+            } catch (Exception) {
+                $demoImages = [];
+            }
 
-        if (empty($demoImages)) {
-            $demoImages = self::getImagesFromPath($secondaryFolder);
-        }
-
-        if (empty($demoImages)) {
-            $demoImages = self::getImagesFromPath($tertiaryFolder);
+            if (!empty($demoImages)) {
+                break;
+            }
         }
 
         if (empty($demoImages)) {

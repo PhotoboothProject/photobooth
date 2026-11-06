@@ -60,8 +60,9 @@ Notes
 ## 3) Remote trigger via Socket.io
 
 - Channel: `photobooth-socket`
-- Commands: `start-picture`, `start-collage`, `collage-next`, `start-custom`, `start-video`, `print`, `rotary-cw`, `rotary-ccw`, `rotary-btn-press`, `move2usb`
+- Commands: `start-picture`, `start-collage`, `collage-next`, `collage-wait-for-next`, `start-custom`, `start-video`, `start-move2usb`, `print`, `rotary-cw`, `rotary-ccw`, `rotary-btn-press`, `completed`, `in-progress`
 - Response: `completed` after the workflow finishes.
+- `start-move2usb` copies (or moves) all photos/videos to the configured USB stick — see [USB Sync & Move2USB](usb-sync.md) for setup and permissions.
 
 ## 4) Remote trigger via simple web requests (HTTP)
 
@@ -76,7 +77,7 @@ Notes
   - `[Base URL]/commands/start-custom`
   - `[Base URL]/commands/start-print`
   - `[Base URL]/commands/start-video`
-  - `[Base URL]/commands/start-move2usb`
+  - `[Base URL]/commands/start-move2usb` (see [USB Sync & Move2USB](usb-sync.md))
   - `[Base URL]/commands/reboot-now`
   - `[Base URL]/commands/shutdown-now`
   - `[Base URL]/commands/rotary-cw`

@@ -1,6 +1,8 @@
-/* globals photoBooth */
+/* globals photoBooth standaloneReturnUrl */
 $(function () {
-    document.querySelector('.gallery__refresh').classList.remove('hidden');
-    document.querySelector('.gallery__close').classList.add('hidden');
+    if (typeof standaloneReturnUrl === 'undefined' || !standaloneReturnUrl) {
+        document.querySelector('.gallery__refresh').classList.remove('hidden');
+        document.querySelector('.gallery__close').classList.add('hidden');
+    }
     photoBooth.openGallery();
 });

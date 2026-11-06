@@ -21,7 +21,9 @@ final class CustomConfiguration
                     ->max(10)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->scalarNode('key')

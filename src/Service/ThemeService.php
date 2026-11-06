@@ -268,7 +268,16 @@ class ThemeService
         }
 
         $themeName = basename($themeFilename, '.theme.config.json');
-        $safeName = $this->getSafeName($themeName);
+        $requestedName = is_string($targetName) ? trim($targetName) : '';
+        $effectiveName = $requestedName !== '' ? $requestedName : $themeName;
+        $safeName = $this->getSafeName($effectiveName);
+        $originalSafeName = $this->getSafeName($themeName);
+        $originalAssetsPrefix = 'private/themes/' . $originalSafeName . '/assets/';
+        $renamedAssetsPrefix = 'private/themes/' . $safeName . '/assets/';
+
+        if ($originalAssetsPrefix !== $renamedAssetsPrefix) {
+            $themeData = $this->rewriteThemeAssetPaths($themeData, $originalAssetsPrefix, $renamedAssetsPrefix);
+        }
 
         // extract allowed files preserving structure
         $allowedPrefixes = ['private/'];
@@ -283,6 +292,10 @@ class ThemeService
             // Normalize
             $entryName = PathUtility::fixFilePath($entryName);
 
+            if ($entryName === PathUtility::fixFilePath($themeFilename)) {
+                continue;
+            }
+
             $isAllowed = false;
             foreach ($allowedPrefixes as $prefix) {
                 if (str_starts_with($entryName, $prefix)) {
@@ -293,6 +306,10 @@ class ThemeService
 
             if (!$isAllowed) {
                 continue;
+            }
+
+            if (str_starts_with($entryName, $originalAssetsPrefix)) {
+                $entryName = $renamedAssetsPrefix . substr($entryName, strlen($originalAssetsPrefix));
             }
 
             $targetPath = $root . ltrim($entryName, '/');
@@ -463,5 +480,25 @@ class ThemeService
                 $callback($value);
             }
         }
+    }
+
+    /**
+     * @param array<string,mixed> $data
+     * @return array<string,mixed>
+     */
+    private function rewriteThemeAssetPaths(array $data, string $fromPrefix, string $toPrefix): array
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = $this->rewriteThemeAssetPaths($value, $fromPrefix, $toPrefix);
+                continue;
+            }
+
+            if (is_string($value) && str_starts_with($value, $fromPrefix)) {
+                $data[$key] = $toPrefix . substr($value, strlen($fromPrefix));
+            }
+        }
+
+        return $data;
     }
 }

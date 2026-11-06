@@ -1,6 +1,5 @@
 <?php
 
-use Photobooth\Enum\CollageLayoutEnum;
 use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Enum\MailSecurityTypeEnum;
 use Photobooth\Enum\RemoteStorageTypeEnum;
@@ -10,6 +9,7 @@ use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Service\PrintManagerService;
 use Photobooth\Utility\PathUtility;
+use Photobooth\Utility\StartpageTextPosition;
 
 /*
  ** This file defines the admin panel of photobooth. The admin panel definition is done in a JSON variable and structured as follows
@@ -105,6 +105,33 @@ if (is_file($mailDb)) {
 $printManager = PrintManagerService::getInstance();
 $printDbCount = $printManager->getPrintCountFromDB() ?? 0;
 $languageService = LanguageService::getInstance();
+
+$normalizeLayoutValue = static function ($value): string {
+    return $value instanceof \BackedEnum ? (string) $value->value : (string) $value;
+};
+
+$layoutSelectOptions = [];
+$currentLayoutValue = $normalizeLayoutValue($config['collage']['layout'] ?? '');
+if ($currentLayoutValue !== '') {
+    $layoutSelectOptions[$currentLayoutValue] = $currentLayoutValue;
+}
+
+$layoutsEnabledOptions = [];
+$layoutsEnabledValues = $config['collage']['layouts_enabled'] ?? [];
+$layoutsEnabledValues = is_array($layoutsEnabledValues) ? $layoutsEnabledValues : [];
+foreach ($layoutsEnabledValues as $layoutValue) {
+    $layoutValue = trim($normalizeLayoutValue($layoutValue));
+    if ($layoutValue === '') {
+        continue;
+    }
+    $layoutsEnabledOptions[$layoutValue] = $layoutValue;
+}
+
+$startpageTextPosition = StartpageTextPosition::resolve(
+    $config['ui']['startpage_text_position'] ?? null,
+    $config['logo']['position'] ?? null,
+    $config['logo']['enabled'] ?? null
+);
 
 return [
     'general' => [
@@ -437,6 +464,7 @@ return [
                 'fa-light fa-champagne-glasses' => 'Champagne glasses',
                 'fa-gears' => 'Gears',
                 'fa-users' => 'People',
+                'fa-solid fa-sun' => 'Sun',
             ],
             'data-theme-field' => 'true',
             'value' => $config['event']['symbol'],
@@ -486,6 +514,7 @@ return [
             'view' => 'advanced',
             'type' => 'select',
             'name' => 'logo[position]',
+            'data-logo-position' => 'true',
             'options' => [
                 'center' => 'center',
                 'top_right' => 'Top Right',
@@ -495,6 +524,25 @@ return [
             ],
             'data-theme-field' => 'true',
             'value' => $config['logo']['position'],
+        ],
+        'ui_startpage_text_position' => [
+            'view' => 'advanced',
+            'type' => 'select',
+            'name' => 'ui[startpage_text_position]',
+            'data-theme-field' => 'true',
+            'data-startpage-text-position' => 'true',
+            'options' => [
+                'top' => 'Top Center',
+                'center' => 'Center',
+                'bottom' => 'Bottom Center',
+                'left-top' => 'Left Top',
+                'left-center' => 'Left Center',
+                'left-bottom' => 'Left Bottom',
+                'right-top' => 'Right Top',
+                'right-center' => 'Right Center',
+                'right-bottom' => 'Right Bottom',
+            ],
+            'value' => $startpageTextPosition,
         ],
     ],
     'screensaver' => [
@@ -986,7 +1034,7 @@ return [
             'name' => 'collage[layout]',
             'data-theme-field' => 'true',
             'placeholder' => $defaultConfig['collage']['layout'],
-            'options' => CollageLayoutEnum::cases(),
+            'options' => $layoutSelectOptions,
             'value' => $config['collage']['layout'],
         ],
         'collage_allow_selection' => [
@@ -1001,7 +1049,7 @@ return [
             'name' => 'collage[layouts_enabled]',
             'button_label' => 'choose_layouts',
             'placeholder' => $defaultConfig['collage']['layouts_enabled'],
-            'options' => CollageLayoutEnum::cases(),
+            'options' => $layoutsEnabledOptions,
             'preview_orientation' => $config['collage']['orientation'] ?? 'landscape',
             'value' => $config['collage']['layouts_enabled'],
         ],

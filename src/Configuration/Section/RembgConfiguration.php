@@ -29,7 +29,9 @@ final class RembgConfiguration
                     ->max(255)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('alpha_matting_background_threshold')
@@ -38,7 +40,9 @@ final class RembgConfiguration
                     ->max(255)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->integerNode('alpha_matting_erode_size')
@@ -47,7 +51,9 @@ final class RembgConfiguration
                     ->max(255)
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function (string $value): int { return intval($value); })
+                        ->then(function (string $value): int {
+                            return intval($value);
+                        })
                         ->end()
                     ->end()
                 ->booleanNode('post_processing')->defaultValue(false)->end()

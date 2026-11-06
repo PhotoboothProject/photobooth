@@ -392,6 +392,9 @@ $(function () {
                 return;
             }
 
+            $('.pageLoader').addClass('isActive');
+            $('.pageLoader').find('label').html(photoboothTools.getTranslation('busy'));
+
             const formData = new FormData();
             formData.append('action', 'import');
             formData.append('theme_zip', file);
@@ -436,6 +439,7 @@ $(function () {
                     photoboothTools.overlay.showError(photoboothTools.getTranslation('error'));
                 })
                 .always(() => {
+                    $('.pageLoader').removeClass('isActive');
                     $importInput.val('');
                 });
         });
