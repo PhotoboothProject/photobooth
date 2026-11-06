@@ -198,6 +198,11 @@ class Collage
         return self::getLegacyCollageConfigPath($layoutId, $pictureOrientation);
     }
 
+    private static function isPrivateCollageConfigPath(string $absolutePath): bool
+    {
+        return str_starts_with(PathUtility::toProjectRelative($absolutePath), 'private/');
+    }
+
     public static function createCollage(array $config, array $srcImagePaths, string $destImagePath, ?ImageFilterEnum $filter = null, ?CollageConfig $c = null): bool
     {
         if ($c === null) {
@@ -212,6 +217,8 @@ class Collage
         self::$pictureOrientation = $c->collageOrientation;
 
         $collageConfigFilePath = self::getCollageConfigPath($c->collageLayout, self::$pictureOrientation);
+        $collageConfigIsPrivate = $collageConfigFilePath !== null
+            && self::isPrivateCollageConfigPath($collageConfigFilePath);
 
         // Save the original admin setting for text on collage
         $adminTextOnCollageEnabled = $c->textOnCollageEnabled;
@@ -274,11 +281,15 @@ class Collage
                         $c->textOnCollageLinespace = isset($collageJson['text_linespace']) ? $collageJson['text_linespace'] : $c->textOnCollageLinespace;
                     }
 
-                    // JSON layout can only disable or customize text if admin has enabled it
+                    // JSON layout can only disable or customize text if admin has enabled it.
+                    // Layouts from private/ always respect their JSON text config,
+                    // other layouts require allow_selection.
                     if ($adminTextOnCollageEnabled === 'enabled') {
-                        if ($c->collageAllowSelection && isset($collageJson['text_disabled']) && $collageJson['text_disabled'] === true) {
+                        $allowJsonTextOverrides = $c->collageAllowSelection || $collageConfigIsPrivate;
+
+                        if ($allowJsonTextOverrides && isset($collageJson['text_disabled']) && $collageJson['text_disabled'] === true) {
                             $c->textOnCollageEnabled = 'disabled';
-                        } elseif (isset($collageJson['text_alignment']) && is_array($collageJson['text_alignment'])) {
+                        } elseif ($allowJsonTextOverrides && isset($collageJson['text_alignment']) && is_array($collageJson['text_alignment'])) {
                             $ta = $collageJson['text_alignment'];
                             $c->textOnCollageEnabled = 'enabled';
 
@@ -295,9 +306,12 @@ class Collage
                                 $c->textZonePadding = isset($ta['padding']) ? (float) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['padding'])) : 0;
                                 $c->textZoneAlign = $ta['align'] ?? 'center';
                                 $c->textZoneValign = $ta['valign'] ?? 'middle';
-                                $c->textZoneRotation = isset($ta['rotation']) ? (int) $ta['rotation'] : 0;
+                                $c->textZoneRotation = $c->textOnCollageRotation;
+                                if ($collageConfigIsPrivate && isset($ta['rotation'])) {
+                                    $c->textZoneRotation = (int) $ta['rotation'];
+                                }
 
-                                // In zone mode: ignore admin X/Y/Rotation values
+                                // In zone mode: ignore admin X/Y values
                                 // Keep admin font, color, text lines, fontSize (as start), lineHeight (as factor)
                             } else {
                                 // Legacy mode: calculate X/Y position based on alignment
@@ -310,7 +324,7 @@ class Collage
                                     $c->textOnCollageFontSize = (int) Helper::doMath(str_replace(array_keys($replace), array_values($replace), $ta['fontSize']));
                                 }
 
-                                if (isset($ta['rotation'])) {
+                                if ($collageConfigIsPrivate && isset($ta['rotation'])) {
                                     $c->textOnCollageRotation = (int) $ta['rotation'];
                                 }
 

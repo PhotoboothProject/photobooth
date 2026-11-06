@@ -138,7 +138,7 @@ class Image
     public string $textZoneValign = 'middle';
 
     /**
-     * Rotation angle for zone text (currently only 0 supported)
+     * Rotation angle for zone text
      */
     public int $textZoneRotation = 0;
 
@@ -986,8 +986,8 @@ class Image
             $fontSize = $minFontSize;
         }
 
-        // Recalculate with final font size
-        $lineHeight = (int)($fontSize * $lineHeightFactor);
+        // Recalculate with final font size, but ensure admin linespace is respected as minimum
+        $lineHeight = max((int)($fontSize * $lineHeightFactor), $this->textLineSpacing);
         $blockHeight = (count($lines) - 1) * $lineHeight + $fontSize;
 
         // Get ascent for baseline correction
@@ -1009,34 +1009,130 @@ class Image
                 break;
         }
 
-        // Draw each line with individual horizontal alignment
-        foreach ($lines as $index => $line) {
-            // Measure this specific line
-            $bbox = @imagettfbbox($fontSize, 0, $fontPath, $line);
-            $lineWidth = $bbox !== false ? abs($bbox[2] - $bbox[0]) : 0;
+        // Calculate base X position for the text block
+        $rotation = $this->textZoneRotation;
+        $radians = deg2rad($rotation);
 
-            // Calculate X position based on align
+        if ($rotation != 0) {
+            // Measure all lines and collect widths
+            $maxLineWidth = 0;
+            $lineWidths = [];
+            foreach ($lines as $line) {
+                $bbox = @imagettfbbox($fontSize, 0, $fontPath, $line);
+                $w = $bbox !== false ? abs($bbox[2] - $bbox[0]) : 0;
+                $lineWidths[] = $w;
+                if ($w > $maxLineWidth) {
+                    $maxLineWidth = $w;
+                }
+            }
+
+            $cosR = cos($radians);
+            $sinR = sin($radians);
+            $lineCount = count($lines);
+
+            // Calculate all draw positions (before zone centering) relative to origin (0,0)
+            // Each line is stacked perpendicular to text direction and centered along it
+            $positions = [];
+            foreach ($lines as $index => $line) {
+                $lineWidth = $lineWidths[$index];
+                $centerShift = ($maxLineWidth - $lineWidth) / 2;
+
+                // Perpendicular offset (stacking): direction (sin(θ), cos(θ))
+                $perpX = $index * $lineHeight * $sinR;
+                $perpY = $index * $lineHeight * $cosR;
+
+                // Parallel offset (centering): direction (cos(θ), -sin(θ))
+                $paraX = $centerShift * $cosR;
+                $paraY = -$centerShift * $sinR;
+
+                $positions[] = ['x' => $perpX + $paraX, 'y' => $perpY + $paraY];
+            }
+
+            // Calculate actual bounding box of all rendered text using imagettfbbox with rotation
+            $minBx = PHP_INT_MAX;
+            $minBy = PHP_INT_MAX;
+            $maxBx = PHP_INT_MIN;
+            $maxBy = PHP_INT_MIN;
+            foreach ($lines as $index => $line) {
+                $bbox = @imagettfbbox($fontSize, $rotation, $fontPath, $line);
+                if ($bbox !== false) {
+                    $px = $positions[$index]['x'];
+                    $py = $positions[$index]['y'];
+                    // imagettfbbox returns 4 corners: ll, lr, ur, ul
+                    for ($i = 0; $i < 8; $i += 2) {
+                        $bx = $px + $bbox[$i];
+                        $by = $py + $bbox[$i + 1];
+                        $minBx = min($minBx, $bx);
+                        $minBy = min($minBy, $by);
+                        $maxBx = max($maxBx, $bx);
+                        $maxBy = max($maxBy, $by);
+                    }
+                }
+            }
+
+            $totalW = $maxBx - $minBx;
+            $totalH = $maxBy - $minBy;
+
+            // Calculate zone center offset for the text block
             switch ($this->textZoneAlign) {
                 case 'right':
-                    $drawX = (int)($zoneX + $zoneW - $lineWidth);
+                    $offsetX = $zoneX + $zoneW - $totalW - $minBx;
                     break;
                 case 'center':
-                    $drawX = (int)($zoneX + ($zoneW - $lineWidth) / 2);
+                    $offsetX = $zoneX + ($zoneW - $totalW) / 2 - $minBx;
                     break;
                 case 'left':
                 default:
-                    $drawX = (int)$zoneX;
+                    $offsetX = $zoneX - $minBx;
                     break;
             }
 
-            // Calculate Y position (baseline position)
-            // First line: startTopY + ascent (to position top of text at startTopY)
-            // Subsequent lines: add lineHeight for each
-            $drawY = (int)($startTopY + $ascent + ($index * $lineHeight));
+            switch ($this->textZoneValign) {
+                case 'bottom':
+                    $offsetY = $zoneY + $zoneH - $totalH - $minBy;
+                    break;
+                case 'middle':
+                    $offsetY = $zoneY + ($zoneH - $totalH) / 2 - $minBy;
+                    break;
+                case 'top':
+                default:
+                    $offsetY = $zoneY - $minBy;
+                    break;
+            }
 
-            // Draw the text (rotation is 0 for zone mode)
-            if (!imagettftext($sourceResource, $fontSize, 0, $drawX, $drawY, $color, $fontPath, $line)) {
-                throw new \Exception('Could not add line ' . ($index + 1) . ' of text to resource.');
+            // Draw each line at calculated position + zone offset
+            foreach ($lines as $index => $line) {
+                $drawX = (int)($positions[$index]['x'] + $offsetX);
+                $drawY = (int)($positions[$index]['y'] + $offsetY);
+
+                if (!imagettftext($sourceResource, $fontSize, $rotation, $drawX, $drawY, $color, $fontPath, $line)) {
+                    throw new \Exception('Could not add line ' . ($index + 1) . ' of text to resource.');
+                }
+            }
+        } else {
+            // No rotation: per-line horizontal alignment
+            foreach ($lines as $index => $line) {
+                $bbox = @imagettfbbox($fontSize, 0, $fontPath, $line);
+                $lineWidth = $bbox !== false ? abs($bbox[2] - $bbox[0]) : 0;
+
+                switch ($this->textZoneAlign) {
+                    case 'right':
+                        $drawX = (int)($zoneX + $zoneW - $lineWidth);
+                        break;
+                    case 'center':
+                        $drawX = (int)($zoneX + ($zoneW - $lineWidth) / 2);
+                        break;
+                    case 'left':
+                    default:
+                        $drawX = (int)$zoneX;
+                        break;
+                }
+
+                $drawY = (int)($startTopY + $ascent + ($index * $lineHeight));
+
+                if (!imagettftext($sourceResource, $fontSize, 0, $drawX, $drawY, $color, $fontPath, $line)) {
+                    throw new \Exception('Could not add line ' . ($index + 1) . ' of text to resource.');
+                }
             }
         }
     }
