@@ -53,7 +53,8 @@ class FileUploader
             'private/images/cheese' => ImageUtility::supportedMimeTypesSelect,
             'private/images/demo' => ImageUtility::supportedMimeTypesSelect,
             'private/fonts' => FontUtility::supportedMimeTypesSelect,
-            'private/videos/background' => VideoUtility::supportedMimeTypesSelect
+            'private/videos/background' => VideoUtility::supportedMimeTypesSelect,
+            'private/screensavers' => array_merge(ImageUtility::supportedMimeTypesSelect, VideoUtility::supportedMimeTypesSelect),
         ];
     }
 
