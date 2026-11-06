@@ -109,21 +109,10 @@ try {
         [$imageHandler, $vars, $config, $imageResource] = $processor->postImageProcessing($imageHandler, $vars, $config, $imageResource);
     }
 
-    if ($config['textonpicture']['enabled']) {
-        $imageHandler->fontSize = $config['textonpicture']['font_size'];
-        $imageHandler->fontRotation = $config['textonpicture']['rotation'];
-        $imageHandler->fontLocationX = $config['textonpicture']['locationx'];
-        $imageHandler->fontLocationY = $config['textonpicture']['locationy'];
-        $imageHandler->fontColor = $config['textonpicture']['font_color'];
-        $imageHandler->fontPath = $config['textonpicture']['font'];
-        $imageHandler->textLine1 = $config['textonpicture']['line1'];
-        $imageHandler->textLine2 = $config['textonpicture']['line2'];
-        $imageHandler->textLine3 = $config['textonpicture']['line3'];
-        $imageHandler->textLineSpacing = $config['textonpicture']['linespace'];
-        $imageResource = $imageHandler->applyText($imageResource);
-        if (!$imageResource) {
-            throw new \Exception('Error applying text to image resource.');
-        }
+    $imageHandler->setTextConfig($config, 'picture');
+    $imageResource = $imageHandler->applyText($imageResource);
+    if (!$imageResource) {
+        throw new \Exception('Error applying text to image resource.');
     }
 
     if (!$imageHandler->saveJpeg($imageResource, $vars['tmpFile'])) {

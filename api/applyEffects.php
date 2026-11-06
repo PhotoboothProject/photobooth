@@ -255,25 +255,14 @@ try {
             }
         }
 
-        if ($config['textonpicture']['enabled'] && (!$vars['isCollage'] && !$vars['isChroma'] || $vars['editSingleCollage'])) {
+        if (!$vars['isCollage'] && !$vars['isChroma'] || $vars['editSingleCollage']) {
             // calculate and apply text on picture if image got downscaled before
             $scale = 1.0;
             if (isset($originalWidth) && isset($originalHeight)) {
                 $currentWidth = imagesx($imageResource);
                 $scale        = $currentWidth / $originalWidth;
             }
-
-            // Cast after scaling to avoid implicit float-to-int deprecation warnings in PHP 8.4
-            $imageHandler->fontSize        = (int) round($config['textonpicture']['font_size'] * $scale);
-            $imageHandler->textLineSpacing = (int) round($config['textonpicture']['linespace'] * $scale);
-            $imageHandler->fontLocationX   = (int) round($config['textonpicture']['locationx'] * $scale);
-            $imageHandler->fontLocationY   = (int) round($config['textonpicture']['locationy'] * $scale);
-            $imageHandler->fontRotation = $config['textonpicture']['rotation'];
-            $imageHandler->fontColor = $config['textonpicture']['font_color'];
-            $imageHandler->fontPath = $config['textonpicture']['font'];
-            $imageHandler->textLine1 = $config['textonpicture']['line1'];
-            $imageHandler->textLine2 = $config['textonpicture']['line2'];
-            $imageHandler->textLine3 = $config['textonpicture']['line3'];
+            $imageHandler->setTextConfig($config, 'picture', $scale);
             $imageResource = $imageHandler->applyText($imageResource);
             if (!$imageResource instanceof \GdImage) {
                 throw new \Exception('Error applying text to image resource.');

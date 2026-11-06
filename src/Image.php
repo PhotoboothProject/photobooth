@@ -48,6 +48,11 @@ class Image
      */
 
     /**
+     * Enable text on image
+     */
+    public bool $textEnabled = false;
+
+    /**
      * Font size for the text
      */
     public int $fontSize = 80;
@@ -813,11 +818,39 @@ class Image
     }
 
     /**
+     * Helper function to define vars for applyText
+     */
+    public function setTextConfig(array $config, string $style = 'picture', float $scale = 1.0): void
+    {
+        $key = 'texton' . $style;
+        if (!isset($config[$key])) {
+            $key = 'textonpicture';
+        }
+        $textConfig = $config[$key];
+
+        // apply config if defined, fallback to defaults
+        $this->textEnabled = $textConfig['enabled'] ?? false;
+        $this->fontPath = $textConfig['font'] ?? '';
+        $this->fontSize = (int) round(($textConfig['font_size'] ?? 80) * $scale);
+        $this->fontRotation = $textConfig['rotation'] ?? 0;
+        $this->fontLocationX = (int) round(($textConfig['locationx'] ?? 80) * $scale);
+        $this->fontLocationY = (int) round(($textConfig['locationy'] ?? 80) * $scale);
+        $this->fontColor = $textConfig['font_color'] ?? '#ffffff';
+        $this->textLine1 = $textConfig['line1'] ?? '';
+        $this->textLine2 = $textConfig['line2'] ?? '';
+        $this->textLine3 = $textConfig['line3'] ?? '';
+        $this->textLineSpacing = (int) round(($textConfig['linespace'] ?? 90) * $scale);
+    }
+
+    /**
      * Apply text to the source image resource
      */
     public function applyText(GdImage $sourceResource): GdImage
     {
         try {
+            if (!$this->textEnabled) {
+                return $sourceResource;
+            }
             $fontPath = PathUtility::getAbsolutePath($this->fontPath);
             $tempFontPath = $_SERVER['DOCUMENT_ROOT'] . '/tempfont.ttf';
             $isTempFont = false;
