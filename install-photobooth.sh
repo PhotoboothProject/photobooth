@@ -2634,7 +2634,7 @@ function do_git_clone() {
     chown www-data:www-data "$INSTALLFOLDERPATH"
 
     info "GitHub clone" "Cloning the Photobooth repository..."
-    if ! sudo -u www-data git clone https://github.com/PhotoboothProject/photobooth "$INSTALLFOLDERPATH" >/dev/null 2>&1; then
+    if ! sudo -u www-data git -C "$INSTALLFOLDERPATH" clone --quiet https://github.com/PhotoboothProject/photobooth "$INSTALLFOLDERPATH" >/dev/null; then
         error "Failed to clone the Photobooth repository."
         confirm "Error: git clone failed" "Failed to clone the Photobooth repository.\nPlease check your network connection and permissions, then retry."
         return 1
@@ -4132,7 +4132,7 @@ if [ "$SILENT" = true ]; then
         fi
     fi
 
-    install_or_update_photobooth "$UPDATE"
+    install_or_update_photobooth "$UPDATE" || exit 1
     photobooth_installed
     check_photobooth_version
     install_system_icon || warn "Failed to install Photobooth system icon"
