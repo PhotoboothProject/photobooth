@@ -1043,6 +1043,8 @@
   "seconds": "second(s)",
   "selectCollageLayout": "Select collage layout:",
   "selectFilter": "Image filter",
+  "selfie_upload_error": "An error occurred while uploading the selfie!",
+  "selfie_upload_success": "Selfie uploaded and processed successfully!",
   "send": "Send",
   "serverprocesses": "Processes",
   "share": "Share",
