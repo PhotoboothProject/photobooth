@@ -586,6 +586,14 @@ return [
                 PathUtility::getAbsolutePath('private/screensavers'),
             ],
         ],
+        'screensaver_folder_source'    => [
+            'view'             => 'basic',
+            'type'             => 'input',
+            'name'        => 'screensaver[folder_source]',
+            'data-theme-field' => 'true',
+            'placeholder' => $defaultConfig['screensaver']['folder_source'],
+            'value'       => htmlentities($config['screensaver']['folder_source'] ?? ''),
+        ],
         'screensaver_video_source'    => [
             'view'             => 'basic',
             'type'             => 'video',

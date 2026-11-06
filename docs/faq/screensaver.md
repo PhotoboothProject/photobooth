@@ -6,7 +6,7 @@ The screensaver keeps the start screen fresh and prevents burn‑in when guests 
 
 - **Image**: Display a single image. Use `Screensaver image path`.
 - **Video**: Loop a single video. Use `Screensaver video path`.
-- **Folder**: Cycle through files in `private/screensavers/`. Supported: `.jpg`, `.png`, `.gif`, `.mp4`, `.webm`.
+- **Folder**: Cycle through images in the configured folder. Set **Folder path** to a directory relative to the Photobooth root, for example `private/screensavers/` (the default) or `private/event/screensavers/`. Supported: `.jpg`, `.jpeg`, `.png`, `.gif`.
 - **Gallery**: Cycle through gallery photos guests already took; falls back to the image path if the gallery is empty.
 
 ## Text overlay and styling
