@@ -13,7 +13,7 @@ Please read the license notice [here](https://github.com/PhotoboothProject/photo
 
 **Requirements**
 
-- Minimum PHP version is now 8.4.1 by @dependabot and @reloxx13 ([#1660](https://github.com/PhotoboothProject/photobooth/pull/1660)).
+- Minimum PHP version is now 8.4.1 (@dependabot, @reloxx13).
 
 **Features**
 
@@ -29,31 +29,33 @@ Please read the license notice [here](https://github.com/PhotoboothProject/photo
 - Introduced a new Screensaver feature with image/video/folder/gallery modes, configurable start timeout and slide interval.
 - Added a font configuration section for UI texts so fonts/colors can be set centrally ( fixes #986 )
 - Configurable fixed size for gallery detail images and add toogle to use thumbs in gallery for better loading times
-- Screensaver images and videos can be uploaded to `private/screensavers` through the admin upload page by @reloxx13 ([#1597](https://github.com/PhotoboothProject/photobooth/pull/1597)).
-- Added edge and alignment guides to the photo and collage test pages by @reloxx13 ([#1598](https://github.com/PhotoboothProject/photobooth/pull/1598)).
+- Screensaver images and videos can be uploaded to `private/screensavers` through the admin upload page (@reloxx13).
+- Added edge and alignment guides to the photo and collage test pages (@reloxx13).
 
 **Bug fixes**
 
-- Screensaver folder mode: add a configurable folder path in the admin panel, default to `private/screensavers`, preserve already-prefixed private paths and avoid double URL encoding so custom folders, including names with spaces, load correctly by @alifakbxr and @reloxx13 ([#1615](https://github.com/PhotoboothProject/photobooth/pull/1615)).
+- GPhoto2 webcam setup: install the required `ffmpeg` dependency (@reloxx13).
+- Remote buzzer: return HTTP 503 for capture and print requests when no client is connected, leaving the trigger armed for retries (@reloxx13).
+- Screensaver folder mode: add a configurable folder path in the admin panel, default to `private/screensavers`, preserve already-prefixed private paths and avoid double URL encoding so custom folders, including names with spaces, load correctly (@alifakbxr, @reloxx13).
 - Selfie rename robustness; chroma preview visibility; loader clearing; hide video background during capture.
 - Installer fixes: PHP PPA validation, permissions/source lists/Wayland flag, unavailable PPA removal, software-properties-common fallback.
 - Printing: copy casting and deprecations, rotate error surfacing, stop-second timing, iOS preview fixes, admin tooltip/label fixes, default path corrections.
 - Rembg typing/logging/error handling; collage/theme path fixes; preview caching; safer uploads/video background handling; collage defaults tightening.
-- Rembg: send model, alpha-matting and post-processing options as multipart form fields so the service applies the configured settings; speed up lossless PNG preparation, clean up temporary files on success and failure, decode responses in memory and avoid decoding the background twice by @fmiccolis ([#1647](https://github.com/PhotoboothProject/photobooth/pull/1647)).
+- Rembg: send model, alpha-matting and post-processing options as multipart form fields so the service applies the configured settings; speed up lossless PNG preparation, clean up temporary files on success and failure, decode responses in memory and avoid decoding the background twice (@fmiccolis).
 - Docs/link cleanups and various deprecation warnings addressed.
-- Printing works again after unlocking a reached print limit; the next lock is set to the following limit boundary by @reloxx13 ([#1667](https://github.com/PhotoboothProject/photobooth/pull/1667)).
-- Reboot and shutdown work when login is disabled; admin/rental authorization is still required when login is enabled by @nbosb ([#1599](https://github.com/PhotoboothProject/photobooth/pull/1599)).
-- Installer: clone from an accessible working directory when running Git as `www-data`, expose clone errors, and stop silent installation on failure by @reloxx13 ([#1668](https://github.com/PhotoboothProject/photobooth/pull/1668)).
-- Remote buzzer: retry connections when the server is unavailable and update connection state after disconnecting and reconnecting by @reloxx13 ([#1582](https://github.com/PhotoboothProject/photobooth/pull/1582)).
-- Public QR viewer: make the page self-contained and serve previews through the download endpoint so shared asset and image directories do not need to be publicly exposed by @reloxx13 ([#1586](https://github.com/PhotoboothProject/photobooth/pull/1586)).
-- Prevent sticky button hover states on iPad Safari while preserving keyboard focus highlighting by @reloxx13 ([#1581](https://github.com/PhotoboothProject/photobooth/pull/1581)).
-- Correct Linux IP detection when `hostname -I` returns multiple addresses or extra whitespace by @reloxx13 ([#1585](https://github.com/PhotoboothProject/photobooth/pull/1585)).
-- DDEV: keep the npm version bundled with Node.js 20 instead of installing an incompatible latest npm release by @reloxx13 ([#1596](https://github.com/PhotoboothProject/photobooth/pull/1596)).
-- Setup Wizard: correct the PHP upload-limit menu label from 20 MB to 64 MB by @andi34 ([commit](https://github.com/PhotoboothProject/photobooth/commit/cf2a9c0dcc28de276f52de068e230c8f308e46d8)).
+- Printing works again after unlocking a reached print limit; the next lock is set to the following limit boundary (@reloxx13).
+- Reboot and shutdown work when login is disabled; admin/rental authorization is still required when login is enabled (@nbosb).
+- Installer: clone from an accessible working directory when running Git as `www-data`, expose clone errors, and stop silent installation on failure (@reloxx13).
+- Remote buzzer: retry connections when the server is unavailable and update connection state after disconnecting and reconnecting (@reloxx13).
+- Public QR viewer: make the page self-contained and serve previews through the download endpoint so shared asset and image directories do not need to be publicly exposed (@reloxx13).
+- Prevent sticky button hover states on iPad Safari while preserving keyboard focus highlighting (@reloxx13).
+- Correct Linux IP detection when `hostname -I` returns multiple addresses or extra whitespace (@reloxx13).
+- DDEV: keep the npm version bundled with Node.js 20 instead of installing an incompatible latest npm release (@reloxx13).
+- Setup Wizard: correct the PHP upload-limit menu label from 20 MB to 64 MB (@andi34).
 
 **Maintenance**
 
-- Updated PHP/frontend dependencies, development tools and GitHub Actions, including Symfony Config 8.1 and Tailwind CSS/PostCSS updates by @dependabot, with compatibility fixes by @reloxx13 ([#1660](https://github.com/PhotoboothProject/photobooth/pull/1660), [#1611](https://github.com/PhotoboothProject/photobooth/pull/1611)).
+- Updated PHP/frontend dependencies, development tools and GitHub Actions, including Symfony Config 8.1 and Tailwind CSS/PostCSS updates (@dependabot), with compatibility fixes (@reloxx13).
 
 <hr>
 

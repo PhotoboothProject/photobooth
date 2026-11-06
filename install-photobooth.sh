@@ -92,6 +92,7 @@ GO2RTC_EXTRA_PACKAGES=(
 
 # gphoto2 webcam
 GPHOTO2_WEBCAM_EXTRA_PACKAGES=(
+    "ffmpeg"
     "v4l2loopback-dkms"
     "v4l-utils"
     "python3"
