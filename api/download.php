@@ -7,6 +7,7 @@ use Photobooth\Enum\FolderEnum;
 require_once '../lib/boot.php';
 
 $image = (isset($_GET['image']) && $_GET['image']) != '' ? $_GET['image'] : false;
+$forceDownload = !isset($_GET['inline']) || $_GET['inline'] !== '1';
 if ($image) {
     $basename = basename($image);
     if ($basename === '' || !preg_match('/^[A-Za-z0-9._-]+$/', $basename)) {
@@ -37,9 +38,18 @@ if ($image) {
             }
         }
 
-        header('Content-Type: application/octet-stream');
+        $contentType = match (strtolower((string) $extension)) {
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'webm' => 'video/webm',
+            'mov' => 'video/quicktime',
+            'mp4' => 'video/mp4',
+            default => 'image/jpeg',
+        };
+
+        header('Content-Type: ' . $contentType);
         header('Content-Length: ' . filesize($path));
-        header('Content-Disposition: attachment; filename="photobooth-' . $image . '"');
+        header('Content-Disposition: ' . ($forceDownload ? 'attachment' : 'inline') . '; filename="photobooth-' . $image . '"');
         echo file_get_contents($path);
     } catch (\Exception $e) {
         http_response_code(500);
