@@ -92,11 +92,252 @@
             const g = parseInt(fullHex.substring(2, 4), 16) || 0;
             const b = parseInt(fullHex.substring(4, 6), 16) || 0;
             const screensaverBackdrop = `rgba(${r}, ${g}, ${b}, ${safeAlpha})`;
+            const customImagePrefix = 'image:';
+            const customImageDirectory = 'private/images/event-symbols/';
+            const legacyMap = {
+                'fa-camera': 'camera',
+                'fa-camera-retro': 'camera',
+                'fa-birthday-cake': 'cake',
+                'fa-gift': 'gift',
+                'fa-tree': 'tree-pine',
+                'fa-snowflake': 'snowflake',
+                'fa-heart-o': 'heart',
+                'fa-regular fa-heart': 'heart',
+                'fa-solid fa-heart': 'heart',
+                'fa-solid fa-heart-pulse': 'heart-pulse',
+                'fa-solid fa-sun': 'sun',
+                'fa-brands fa-apple': 'apple',
+                'fa-anchor': 'anchor',
+                'fa-light fa-champagne-glasses': 'party-popper',
+                'fa-champagne-glasses': 'party-popper',
+                'fa-gears': 'cog',
+                'fa-cogs': 'cog',
+                'fa-users': 'users'
+            };
+            const isFontAwesomeValue = (iconName) => {
+                const value = String(iconName || '')
+                    .trim()
+                    .toLowerCase();
+                if (!value) {
+                    return false;
+                }
+                if (legacyMap[value]) {
+                    return true;
+                }
+                return /(^|\s)fa($|\s)|fa-[a-z0-9-]+/.test(value);
+            };
+            const looksLikeCustomImagePath = (iconName) => {
+                const normalized = String(iconName || '')
+                    .trim()
+                    .replace(/\\/g, '/')
+                    .replace(/^\/+/, '')
+                    .toLowerCase();
+                return normalized.indexOf(customImageDirectory) === 0;
+            };
+            const normalizeCustomImageValue = (iconName) => {
+                let raw = String(iconName || '').trim();
+                if (!raw) {
+                    return '';
+                }
+
+                if (raw.toLowerCase().startsWith(customImagePrefix)) {
+                    raw = raw.slice(customImagePrefix.length);
+                }
+
+                raw = raw
+                    .replace(/\\/g, '/')
+                    .replace(/^\/+/, '')
+                    .replace(/\/{2,}/g, '/');
+                if (!raw || raw.indexOf('..') !== -1 || raw.indexOf('\0') !== -1) {
+                    return '';
+                }
+
+                if (!/^[A-Za-z0-9._/-]+$/.test(raw)) {
+                    return '';
+                }
+
+                if (raw.toLowerCase().indexOf(customImageDirectory) !== 0) {
+                    return '';
+                }
+
+                if (!/\.(svg|png|jpe?g|webp|gif|avif)$/i.test(raw)) {
+                    return '';
+                }
+
+                return `${customImagePrefix}${raw}`;
+            };
+            const isCustomImageValue = (iconName) => normalizeCustomImageValue(iconName) !== '';
+            const sanitizeFontAwesomeClasses = (iconName) => {
+                const raw = String(iconName || '')
+                    .trim()
+                    .toLowerCase()
+                    .replace(/^fa:/, '');
+                if (!raw) {
+                    return '';
+                }
+                const styleClasses = [
+                    'fa-solid',
+                    'fa-regular',
+                    'fa-brands',
+                    'fa-light',
+                    'fa-thin',
+                    'fa-sharp',
+                    'fa-classic'
+                ];
+                const unique = {};
+                const classes = [];
+                let hasIconClass = false;
+                raw.split(/\s+/).forEach((token) => {
+                    const t = token.trim();
+                    if (!t || (!t.startsWith('fa-') && t !== 'fa') || unique[t]) {
+                        return;
+                    }
+                    unique[t] = true;
+                    classes.push(t);
+                    if (t.startsWith('fa-') && styleClasses.indexOf(t) === -1) {
+                        hasIconClass = true;
+                    }
+                });
+                if (!hasIconClass) {
+                    return '';
+                }
+                if (!unique.fa) {
+                    classes.unshift('fa');
+                }
+                return classes.join(' ');
+            };
+            const isIconifyValue = (iconName) => {
+                const raw = String(iconName || '')
+                    .trim()
+                    .toLowerCase();
+                if (!raw) {
+                    return false;
+                }
+                const cleaned = raw.startsWith('iconify:') ? raw.slice(8) : raw;
+                return /^[a-z0-9]+(?:-[a-z0-9]+)*:[a-z0-9][a-z0-9._-]*$/.test(cleaned);
+            };
+            const normalizeIconifyValue = (iconName) => {
+                let raw = String(iconName || '')
+                    .trim()
+                    .toLowerCase();
+                if (!raw) {
+                    return '';
+                }
+                raw = raw.startsWith('iconify:') ? raw.slice(8) : raw;
+                const parts = raw.split(':');
+                if (parts.length !== 2) {
+                    return '';
+                }
+
+                const prefix = parts[0]
+                    .replace(/[^a-z0-9-]+/g, '')
+                    .replace(/-+/g, '-')
+                    .replace(/^-|-$/g, '');
+                const icon = parts[1]
+                    .replace(/[^a-z0-9._-]+/g, '-')
+                    .replace(/-+/g, '-')
+                    .replace(/^[-._]+|[-._]+$/g, '');
+
+                return prefix && icon ? `${prefix}:${icon}` : '';
+            };
+            const buildPublicPath = (relativePath) => {
+                const normalized = String(relativePath || '').replace(/^\/+/, '');
+                if (!normalized) {
+                    return '';
+                }
+
+                const base = environment && typeof environment.baseUrl === 'string' ? environment.baseUrl : '/';
+                const basePath = base.endsWith('/') ? base : `${base}/`;
+                return new URL(normalized, `${window.location.origin}${basePath}`).toString();
+            };
+            const escapeAttribute = (value) =>
+                String(value || '')
+                    .replace(/&/g, '&amp;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+            const normalizeEventSymbol = (iconName) => {
+                let value = String(iconName || '').trim();
+                if (!value) {
+                    return 'camera';
+                }
+
+                if (value.toLowerCase().startsWith(customImagePrefix) || looksLikeCustomImagePath(value)) {
+                    const customImage = normalizeCustomImageValue(value);
+                    return customImage || 'camera';
+                }
+
+                const lower = value.toLowerCase();
+                if (lower.indexOf('lucide:') === 0) {
+                    value = value.slice(7);
+                } else if (lower.indexOf('fa:') === 0) {
+                    value = value.slice(3);
+                } else if (lower.indexOf('iconify:') === 0) {
+                    value = value.slice(8);
+                }
+
+                if (isFontAwesomeValue(value)) {
+                    return sanitizeFontAwesomeClasses(value) || 'fa fa-camera';
+                }
+
+                if (isIconifyValue(value)) {
+                    const iconifyName = normalizeIconifyValue(value);
+                    return iconifyName ? `iconify:${iconifyName}` : 'iconify:mdi:camera';
+                }
+
+                return String(value || '')
+                    .trim()
+                    .toLowerCase()
+                    .replace(/[^a-z0-9-]+/g, '-')
+                    .replace(/-+/g, '-')
+                    .replace(/^-|-$/g, '');
+            };
+            const renderEventSymbol = (symbolValue) => {
+                if (!symbolValue) {
+                    return '';
+                }
+                if (isCustomImageValue(symbolValue)) {
+                    const imageValue = normalizeCustomImageValue(symbolValue);
+                    if (!imageValue) {
+                        return '';
+                    }
+                    const relativePath = imageValue.slice(customImagePrefix.length);
+                    const publicPath = buildPublicPath(relativePath);
+                    if (!publicPath) {
+                        return '';
+                    }
+                    return `<img class="screensaver-event-icon screensaver-event-image" src="${escapeAttribute(publicPath)}" alt="" aria-hidden="true">`;
+                }
+                if (isFontAwesomeValue(symbolValue)) {
+                    const classes = sanitizeFontAwesomeClasses(symbolValue);
+                    return classes ? `<i class="screensaver-event-icon ${classes}" aria-hidden="true"></i>` : '';
+                }
+                if (isIconifyValue(symbolValue)) {
+                    const iconifyName = normalizeIconifyValue(symbolValue);
+                    if (!iconifyName) {
+                        return '';
+                    }
+                    return `<iconify-icon class="screensaver-event-icon" icon="${iconifyName}" aria-hidden="true"></iconify-icon>`;
+                }
+                const lucideName = String(symbolValue || '')
+                    .trim()
+                    .toLowerCase();
+                return `<i class="screensaver-event-icon" data-lucide="${lucideName}" aria-hidden="true"></i>`;
+            };
+            const renderLucideIcons = () => {
+                if (!window.lucide || !window.lucide.createIcons || !window.lucide.icons) {
+                    return;
+                }
+                window.lucide.createIcons({
+                    icons: window.lucide.icons
+                });
+                $('.screensaver-overlay [data-lucide] svg').attr('stroke-width', '2.8');
+            };
             const buildEventText = () => {
                 const left = config.event.textLeft || '';
                 const right = config.event.textRight || '';
-                const symbolClass = config.event.symbol || '';
-                const symbol = symbolClass ? `<i class="fa ${symbolClass}" aria-hidden="true"></i>` : '';
+                const symbolValue = normalizeEventSymbol(config.event.symbol || '');
+                const symbol = renderEventSymbol(symbolValue);
                 return [left, symbol, right].filter(Boolean).join(' ').trim();
             };
 
@@ -178,6 +419,7 @@
                     resetSlots();
                 }
             }
+            renderLucideIcons();
 
             screensaverFlip = !screensaverFlip;
         };

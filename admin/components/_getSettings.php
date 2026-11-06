@@ -48,6 +48,9 @@ foreach ($configsetup as $section => $fields) {
             case 'icon':
                 echo AdminInput::renderIcon($setting, $i18ntag);
                 break;
+            case 'lucide-icon':
+                echo AdminInput::renderLucideIcon($setting, $i18ntag);
+                break;
             case 'input':
             case 'number':
                 echo AdminInput::renderInput($setting, $i18ntag);
