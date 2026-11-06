@@ -38,6 +38,7 @@ Please read the license notice [here](https://github.com/PhotoboothProject/photo
 - Installer fixes: PHP PPA validation, permissions/source lists/Wayland flag, unavailable PPA removal, software-properties-common fallback.
 - Printing: copy casting and deprecations, rotate error surfacing, stop-second timing, iOS preview fixes, admin tooltip/label fixes, default path corrections.
 - Rembg typing/logging/error handling; collage/theme path fixes; preview caching; safer uploads/video background handling; collage defaults tightening.
+- Rembg: send model, alpha-matting and post-processing options as multipart form fields so the service applies the configured settings; speed up lossless PNG preparation, clean up temporary files on success and failure, decode responses in memory and avoid decoding the background twice ([#1647](https://github.com/PhotoboothProject/photobooth/pull/1647)).
 - Docs/link cleanups and various deprecation warnings addressed.
 - Printing works again after unlocking a reached print limit; the next lock is set to the following limit boundary ([#1667](https://github.com/PhotoboothProject/photobooth/pull/1667)).
 - Reboot and shutdown work when login is disabled; admin/rental authorization is still required when login is enabled ([#1599](https://github.com/PhotoboothProject/photobooth/pull/1599)).
