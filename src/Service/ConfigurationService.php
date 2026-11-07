@@ -49,7 +49,28 @@ class ConfigurationService
     public function update(array $data): void
     {
         $data = (new Processor())->processConfiguration(new PhotoboothConfiguration(), [$data]);
-        $content = "<?php\n\nreturn " . ArrayUtility::export(ArrayUtility::diffRecursive($data, $this->defaultConfiguration)) . ";\n";
+
+        // Force persist payments config so custom payment settings are always written
+        // to config/my.config.inc.php, even if they match defaults or are only partially
+        // provided in the submitted payload.
+        if (!isset($data['payments']) || !is_array($data['payments'])) {
+            $data['payments'] = [];
+        }
+
+        $mergedConfig = array_replace_recursive($this->configuration, $data);
+        $diff = ArrayUtility::diffRecursive($data, $this->defaultConfiguration);
+
+        if (!empty($mergedConfig['payments']) && is_array($mergedConfig['payments'])) {
+            $paymentsDiff = ArrayUtility::diffRecursive($mergedConfig['payments'], $this->defaultConfiguration['payments'] ?? []);
+            if (!empty($paymentsDiff)) {
+                $diff['payments'] = $paymentsDiff;
+            } elseif (!empty($data['payments'])) {
+                // Keep the payments node present if payment settings were explicitly submitted.
+                $diff['payments'] = $data['payments'];
+            }
+        }
+
+        $content = "<?php\n\nreturn " . ArrayUtility::export($diff) . ";\n";
         $userConfigurationFile = PathUtility::getAbsolutePath('config/my.config.inc.php');
         if (file_put_contents($userConfigurationFile, $content)) {
             Helper::clearCache($userConfigurationFile);
