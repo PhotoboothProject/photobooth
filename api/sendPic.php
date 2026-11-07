@@ -72,14 +72,16 @@ if (!empty($invalidEmails)) {
     exit();
 }
 
-if ($config['mail']['send_all_later']) {
+if ($config['mail']['send_all_later'] || isset($_POST['addToDb'])) {
     $mailService = MailService::getInstance();
     // Save each recipient to the database
     foreach ($recipients as $recipient) {
         $mailService->addRecipientToDatabase($recipient);
     }
-    echo json_encode(['success' => true, 'saved' => true]);
-    exit();
+    if ($config['mail']['send_all_later']) {
+        echo json_encode(['success' => true, 'saved' => true]);
+        exit();
+    }
 }
 
 if (empty($_POST['image'])) {
