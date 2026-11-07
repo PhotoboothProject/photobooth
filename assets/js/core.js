@@ -1345,22 +1345,25 @@ const photoBooth = (function () {
                 }
             });
 
-        // gallery doesn't support videos atm
-        if (!photoboothTools.isVideoFile(filename)) {
-            api.addImage(filename);
-        }
-
         // if image is a video render the qr code as image (video should be displayed over this)
         const imageUrl = photoboothTools.isVideoFile(filename)
             ? environment.publicFolders.api + '/qrcode.php?filename=' + filename
             : environment.publicFolders.images + '/' + filename;
+        // Preload the exact URL used as background so the image is only downloaded and decoded once.
+        const displayUrl = `${imageUrl}?filter=${imgFilter}`;
 
         const preloadImage = new Image();
         preloadImage.onload = () => {
+            // gallery doesn't support videos atm
+            if (!photoboothTools.isVideoFile(filename)) {
+                // Reuse the preloaded dimensions so the gallery doesn't download the full image a second time.
+                api.addImage(filename, { width: preloadImage.naturalWidth, height: preloadImage.naturalHeight });
+            }
+
             startPage.removeClass('stage--active');
 
             resultPage.css({
-                '--stage-background-image': `url(${imageUrl}?filter=${imgFilter})`
+                '--stage-background-image': `url(${displayUrl})`
             });
             resultPage.attr('data-img', filename);
             resultPage.addClass('stage--active');
@@ -1400,7 +1403,7 @@ const photoBooth = (function () {
             }
         };
 
-        preloadImage.src = imageUrl;
+        preloadImage.src = displayUrl;
 
         api.takingPic = false;
         remoteBuzzerClient.inProgress(false);
@@ -1420,7 +1423,7 @@ const photoBooth = (function () {
         api.screensaver.resetTimer();
     };
 
-    api.addImage = function (imageName) {
+    api.addImage = function (imageName, knownSize = null) {
         if (!config.gallery.enabled) {
             return;
         }
@@ -1443,9 +1446,9 @@ const photoBooth = (function () {
             }
         };
 
-        bigImg.onload = function () {
-            bigSizeW = this.width;
-            bigSizeH = this.height;
+        const onBigSize = function (width, height) {
+            bigSizeW = width;
+            bigSizeH = height;
             bigSize = bigSizeW + 'x' + bigSizeH;
             // Calculate PSWP dimensions to max 800x600 while keeping aspect ratio
             let aspectRatio = bigSizeW / bigSizeH;
@@ -1474,7 +1477,14 @@ const photoBooth = (function () {
             }
         };
 
-        bigImg.src = environment.publicFolders.images + '/' + imageName;
+        if (knownSize && knownSize.width > 0 && knownSize.height > 0) {
+            onBigSize(knownSize.width, knownSize.height);
+        } else {
+            bigImg.onload = function () {
+                onBigSize(this.width, this.height);
+            };
+            bigImg.src = environment.publicFolders.images + '/' + imageName;
+        }
         const thumbUrl =
             (useThumb ? environment.publicFolders.thumbs : environment.publicFolders.images) + '/' + imageName;
         thumbImg.src = thumbUrl;
