@@ -2777,6 +2777,12 @@ return [
             'name' => 'ftp[urlTemplate]',
             'value' => $config['ftp']['urlTemplate'],
         ],
+        'upload_in_background' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'ftp[upload_in_background]',
+            'value' => $config['ftp']['upload_in_background'],
+        ],
         'create_webpage' => [
             'view' => 'basic',
             'type' => 'checkbox',

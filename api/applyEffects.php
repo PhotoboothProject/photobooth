@@ -12,6 +12,7 @@ use Photobooth\Enum\ImageFilterEnum;
 use Photobooth\Processor\ImageProcessor;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\LoggerService;
+use Photobooth\Service\RemoteStorageQueueService;
 use Photobooth\Service\RemoteStorageService;
 use Photobooth\Utility\ImageUtility;
 use Photobooth\Utility\PathUtility;
@@ -25,6 +26,7 @@ $logger->debug(basename($_SERVER['PHP_SELF']));
 
 $database = DatabaseManagerService::getInstance();
 $remoteStorage = RemoteStorageService::getInstance();
+$queuedForUpload = false;
 
 $processor = null;
 
@@ -337,7 +339,11 @@ try {
         }
 
         // Store images on remote storage
-        if ($config['ftp']['enabled']) {
+        if ($config['ftp']['enabled'] && $config['ftp']['upload_in_background']) {
+            // Uploaded by a detached worker once all pictures are processed, see below.
+            RemoteStorageQueueService::getInstance()->enqueue($vars['singleImageFile']);
+            $queuedForUpload = true;
+        } elseif ($config['ftp']['enabled']) {
             $remoteStorage->write($remoteStorage->getStorageFolder() . '/images/' . $vars['singleImageFile'], (string) file_get_contents($vars['resultFile']));
             $remoteStorage->write($remoteStorage->getStorageFolder() . '/thumbs/' . $vars['singleImageFile'], (string) file_get_contents($vars['thumbFile']));
             if ($config['ftp']['create_webpage']) {
@@ -387,6 +393,13 @@ $data = [
     'file' => $vars['fileName'],
     'images' => $vars['srcImages'],
 ];
+if ($queuedForUpload) {
+    try {
+        RemoteStorageQueueService::getInstance()->startWorker();
+    } catch (\Throwable $e) {
+        $logger->error('Unable to start background upload worker: ' . $e->getMessage());
+    }
+}
 $logger->debug('effects applied', $data);
 echo json_encode($data);
 exit();
