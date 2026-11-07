@@ -132,6 +132,22 @@ class PrintManagerService
     public function unlockPrint(): bool
     {
         try {
+            if (file_exists($this->printLockFile)) {
+                unlink($this->printLockFile);
+            }
+
+            exec('sudo -n /usr/sbin/cupsenable Fotodrucker 2>&1', $output, $returnCode);
+
+            return $returnCode === 0;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+/**
+    public function unlockPrint(): bool
+    {
+        try {
             if (file_exists($this->printLockFile) && unlink($this->printLockFile)) {
                 return true;
             }
@@ -140,6 +156,8 @@ class PrintManagerService
             return false;
         }
     }
+*/
+
 
     /**
      * Remove the print database file.
