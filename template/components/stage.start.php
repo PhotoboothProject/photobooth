@@ -11,6 +11,7 @@ $startpageTextPosition = StartpageTextPosition::resolve(
 <!-- Start Page -->
 <div class="stage stage--start rotarygroup" data-stage="start">
     <?php include PathUtility::getAbsolutePath('template/components/start.logo.php'); ?>
+    <?php include PathUtility::getAbsolutePath('template/components/start.qr.php'); ?>
     <div class="stage-inner">
         <?php if ($config['event']['enabled'] || $config['start_screen']['title_visible'] || $config['start_screen']['subtitle_visible']): ?>
             <div class="stage-start__text stage-start__text--<?= $startpageTextPosition ?>">
