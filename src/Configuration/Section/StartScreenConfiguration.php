@@ -16,6 +16,13 @@ final class StartScreenConfiguration
                 ->booleanNode('title_visible')->defaultValue(false)->end()
                 ->scalarNode('subtitle')->defaultValue('')->end()
                 ->booleanNode('subtitle_visible')->defaultValue(false)->end()
+                ->booleanNode('qr_visible')->defaultValue(false)->end()
+                ->scalarNode('qr_url')->defaultValue('')->end()
+                ->scalarNode('qr_text')->defaultValue('')->end()
+                ->enumNode('qr_position')
+                    ->values(['top_right', 'top_left', 'bottom_right', 'bottom_left'])
+                    ->defaultValue('top_right')
+                    ->end()
             ->end();
     }
 }

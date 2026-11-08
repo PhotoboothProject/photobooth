@@ -249,6 +249,38 @@ return [
             'data-theme-field' => 'true',
             'value' => $config['start_screen']['subtitle_visible'],
         ],
+        'start_screen_qr_visible' => [
+            'view' => 'basic',
+            'type' => 'checkbox',
+            'name' => 'start_screen[qr_visible]',
+            'value' => $config['start_screen']['qr_visible'],
+        ],
+        'start_screen_qr_url' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'placeholder' => 'https://example.com/gallery',
+            'name' => 'start_screen[qr_url]',
+            'value' => htmlentities($config['start_screen']['qr_url'] ?? ''),
+        ],
+        'start_screen_qr_text' => [
+            'view' => 'basic',
+            'type' => 'input',
+            'placeholder' => $defaultConfig['start_screen']['qr_text'],
+            'name' => 'start_screen[qr_text]',
+            'value' => htmlentities($config['start_screen']['qr_text'] ?? ''),
+        ],
+        'start_screen_qr_position' => [
+            'view' => 'basic',
+            'type' => 'select',
+            'name' => 'start_screen[qr_position]',
+            'options' => [
+                'top_right' => 'Top Right',
+                'top_left' => 'Top Left',
+                'bottom_right' => 'Bottom Right',
+                'bottom_left' => 'Bottom Left',
+            ],
+            'value' => $config['start_screen']['qr_position'],
+        ],
         'picture_thumb_size' => [
             'view' => 'advanced',
             'type' => 'select',
