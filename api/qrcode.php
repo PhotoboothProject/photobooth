@@ -21,7 +21,7 @@ if ($filename) {
         $remoteStorageService = RemoteStorageService::getInstance();
         $url = $remoteStorageService->getWebpageUri();
         if ($config['qr']['append_filename']) {
-            $url .= '/?photo=';
+            $url .= '/images/';
         }
     }
     if ($config['qr']['append_filename']) {
