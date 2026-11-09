@@ -8,6 +8,7 @@ use Photobooth\Service\ApplicationService;
 use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\LanguageService;
 use Photobooth\Service\PrintManagerService;
+use Photobooth\Utility\EventSymbolUtility;
 use Photobooth\Utility\PathUtility;
 use Photobooth\Utility\StartpageTextPosition;
 
@@ -446,28 +447,11 @@ return [
         ],
         'event_symbol' => [
             'view' => 'basic',
-            'type' => 'select',
+            'type' => 'lucide-icon',
             'name' => 'event[symbol]',
-            'placeholder' => $defaultConfig['event']['symbol'],
-            'options' => [
-                'fa-camera' => 'Camera',
-                'fa-camera-retro' => 'Camera Retro',
-                'fa-birthday-cake' => 'Birthday Cake',
-                'fa-gift' => 'Gift',
-                'fa-tree' => 'Tree',
-                'fa-snowflake' => 'Snowflake',
-                'fa-regular fa-heart' => 'Heart',
-                'fa-solid fa-heart' => 'Heart filled',
-                'fa-solid fa-heart-pulse' => 'Heartbeat',
-                'fa-brands fa-apple' => 'Apple',
-                'fa-anchor' => 'Anchor',
-                'fa-light fa-champagne-glasses' => 'Champagne glasses',
-                'fa-gears' => 'Gears',
-                'fa-users' => 'People',
-                'fa-solid fa-sun' => 'Sun',
-            ],
+            'placeholder' => EventSymbolUtility::normalize($defaultConfig['event']['symbol'] ?? 'camera'),
             'data-theme-field' => 'true',
-            'value' => $config['event']['symbol'],
+            'value' => EventSymbolUtility::normalize($config['event']['symbol'] ?? ''),
         ],
         'event_textRight' => [
             'view' => 'basic',

@@ -299,6 +299,24 @@
   color: var(--event-text-color, inherit);
   font-weight: var(--event-text-weight, 400);
   font-style: var(--event-text-style, normal);
+
+  .lucide,
+  .event-symbol-icon,
+  iconify-icon.event-symbol-icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    display: inline-block;
+  }
+
+  .lucide,
+  .event-symbol-icon svg {
+    stroke-width: 2.8;
+  }
+
+  .event-symbol-image {
+    object-fit: contain;
+  }
 }
 
 @media (max-width: 767px) {

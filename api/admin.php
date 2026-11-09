@@ -11,12 +11,15 @@ use Photobooth\Environment;
 use Photobooth\Service\ConfigurationService;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\ImageMetadataCacheService;
+use Photobooth\Service\LanguageService;
 use Photobooth\Service\LoggerService;
 use Photobooth\Service\MailService;
 use Photobooth\Service\PrintManagerService;
 use Photobooth\Service\ProcessService;
 use Photobooth\Utility\ArrayUtility;
 use Photobooth\Utility\AdminKeypad;
+use Photobooth\Utility\EventIconCatalogUtility;
+use Photobooth\Utility\EventSymbolUtility;
 use Photobooth\Utility\PathUtility;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -25,6 +28,7 @@ header('Content-Type: application/json');
 $loggerService = LoggerService::getInstance();
 $logger = $loggerService->getLogger('main');
 $logger->debug(basename($_SERVER['PHP_SELF']));
+$languageService = LanguageService::getInstance();
 
 checkCsrfOrFail($_POST);
 
@@ -35,7 +39,190 @@ $data = ArrayUtility::replaceBooleanValues($_POST);
 $action = $data['type'] ?? null;
 
 // Reset
-if ($action === 'reset') {
+if ($action === 'event_symbol_upload') {
+    if (!isset($_FILES['event_symbol_image']) || !is_array($_FILES['event_symbol_image'])) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => $languageService->translate('event_symbol:api_no_file_uploaded'),
+        ]);
+        exit();
+    }
+
+    $upload = $_FILES['event_symbol_image'];
+    $uploadError = isset($upload['error']) ? (int) $upload['error'] : UPLOAD_ERR_NO_FILE;
+    if ($uploadError !== UPLOAD_ERR_OK) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => str_replace(
+                '%d',
+                (string) $uploadError,
+                $languageService->translate('event_symbol:api_upload_failed_code'),
+            ),
+        ]);
+        exit();
+    }
+
+    $tmpName = (string) ($upload['tmp_name'] ?? '');
+    if ($tmpName === '' || !is_uploaded_file($tmpName)) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => $languageService->translate('event_symbol:api_invalid_upload_file'),
+        ]);
+        exit();
+    }
+
+    $originalName = (string) ($upload['name'] ?? '');
+    $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+    if (!EventIconCatalogUtility::isAllowedCustomImageExtension($extension)) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => $languageService->translate('event_symbol:api_file_type_not_allowed'),
+        ]);
+        exit();
+    }
+
+    $maxBytes = 8 * 1024 * 1024;
+    $sizeBytes = isset($upload['size']) ? (int) $upload['size'] : 0;
+    if ($sizeBytes <= 0 || $sizeBytes > $maxBytes) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => $languageService->translate('event_symbol:api_file_empty_or_too_large'),
+        ]);
+        exit();
+    }
+
+    $allowedMimes = [
+        'svg' => ['image/svg+xml', 'text/xml', 'application/xml', 'text/plain'],
+        'png' => ['image/png'],
+        'jpg' => ['image/jpeg'],
+        'jpeg' => ['image/jpeg'],
+        'webp' => ['image/webp'],
+        'gif' => ['image/gif'],
+        'avif' => ['image/avif'],
+    ];
+    $mime = '';
+    if (function_exists('finfo_open')) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        if ($finfo !== false) {
+            $mime = (string) finfo_file($finfo, $tmpName);
+            finfo_close($finfo);
+        }
+    }
+    if ($mime === '' || !isset($allowedMimes[$extension]) || !in_array($mime, $allowedMimes[$extension], true)) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => $languageService->translate('event_symbol:api_invalid_mime_type'),
+        ]);
+        exit();
+    }
+
+    $targetDirRelative = EventIconCatalogUtility::getCustomImageDirectoryRelative();
+    $targetDirAbsolute = EventIconCatalogUtility::getCustomImageDirectoryAbsolute();
+    if (!is_dir($targetDirAbsolute) && !@mkdir($targetDirAbsolute, 0775, true) && !is_dir($targetDirAbsolute)) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => $languageService->translate('event_symbol:api_upload_dir_create_failed'),
+        ]);
+        exit();
+    }
+    if (!is_writable($targetDirAbsolute)) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => $languageService->translate('event_symbol:api_upload_dir_not_writable'),
+        ]);
+        exit();
+    }
+
+    $basename = strtolower(pathinfo($originalName, PATHINFO_FILENAME));
+    $basename = preg_replace('/[^a-z0-9._-]+/', '-', $basename);
+    $basename = trim((string) $basename, '-._');
+    if ($basename === '') {
+        $basename = 'symbol';
+    }
+
+    $fileName = $basename . '.' . $extension;
+    $counter = 1;
+    while (is_file($targetDirAbsolute . DIRECTORY_SEPARATOR . $fileName) && $counter < 1000) {
+        $fileName = $basename . '-' . $counter . '.' . $extension;
+        $counter++;
+    }
+
+    $targetAbsolutePath = $targetDirAbsolute . DIRECTORY_SEPARATOR . $fileName;
+    if (!move_uploaded_file($tmpName, $targetAbsolutePath)) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => $languageService->translate('event_symbol:api_file_save_failed'),
+        ]);
+        exit();
+    }
+    @chmod($targetAbsolutePath, 0644);
+
+    $relativePath = $targetDirRelative . '/' . $fileName;
+    $iconEntry = EventIconCatalogUtility::buildCustomImageEntry($relativePath);
+    if ($iconEntry === null) {
+        @unlink($targetAbsolutePath);
+        echo json_encode([
+            'status' => 'error',
+            'message' => $languageService->translate('event_symbol:api_custom_icon_create_failed'),
+        ]);
+        exit();
+    }
+
+    EventIconCatalogUtility::invalidateCache();
+
+    echo json_encode([
+        'status' => 'success',
+        'message' => $languageService->translate('event_symbol:api_upload_success'),
+        'icon' => $iconEntry,
+    ]);
+    exit();
+} elseif ($action === 'event_symbol_delete') {
+    $value = (string) ($data['value'] ?? '');
+    $normalized = EventSymbolUtility::normalize($value);
+    if (!EventSymbolUtility::isCustomImageSymbol($normalized)) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => $languageService->translate('event_symbol:api_invalid_custom_image_selection'),
+        ]);
+        exit();
+    }
+
+    $relativePath = EventSymbolUtility::getCustomImagePath($normalized);
+    $relativePath = ltrim(PathUtility::fixFilePath($relativePath), '/');
+    $allowedPrefix = rtrim(EventIconCatalogUtility::getCustomImageDirectoryRelative(), '/') . '/';
+    if (!str_starts_with($relativePath, $allowedPrefix) || str_contains($relativePath, '..')) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => $languageService->translate('event_symbol:api_invalid_file_path'),
+        ]);
+        exit();
+    }
+
+    $absolutePath = PathUtility::getAbsolutePath($relativePath);
+    if (!is_file($absolutePath)) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => $languageService->translate('event_symbol:api_file_not_found'),
+        ]);
+        exit();
+    }
+
+    if (!@unlink($absolutePath)) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => $languageService->translate('event_symbol:api_file_delete_failed'),
+        ]);
+        exit();
+    }
+
+    EventIconCatalogUtility::invalidateCache();
+
+    echo json_encode([
+        'status' => 'success',
+        'message' => $languageService->translate('event_symbol:api_delete_success'),
+    ]);
+    exit();
+} elseif ($action === 'reset') {
     // First step in resetting the photobooth is always resetting the logs
     // This ensures we are able to write logmessages afterwards.
     $loggerService->addLogger('main');
@@ -124,6 +311,14 @@ if ($action === 'reset') {
 } elseif ($action === 'config') {
     $logger->debug('Saving Photobooth configuration...');
     $newConfig = ArrayUtility::mergeRecursive($defaultConfig, $data);
+    if (isset($newConfig['event']['symbol'])) {
+        $newConfig['event']['symbol'] = EventSymbolUtility::normalize($newConfig['event']['symbol']);
+    }
+    $collageInput = $data['collage'] ?? null;
+    if (!is_array($collageInput) || !array_key_exists('background', $collageInput)) {
+        // Keep legacy single background value if the field is not part of the current admin form.
+        $newConfig['collage']['background'] = $config['collage']['background'] ?? '';
+    }
 
     $rootPath = PathUtility::getRootPath();
 
