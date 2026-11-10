@@ -1297,7 +1297,7 @@ const photoBooth = (function () {
         text.innerHTML = qrHelpText;
         body.appendChild(text);
 
-        if (config.ftp.enabled && config.ftp.useForQr) {
+        if (config.ftp.enabled && config.ftp.url) {
             $.getJSON({
                 url:
                     environment.publicFolders.api +
@@ -1426,7 +1426,7 @@ const photoBooth = (function () {
                     qrWrapper.append(qrCaption);
                 }
 
-                if (config.ftp.enabled && config.ftp.useForQr && api.remoteUploadFiles.length > 0) {
+                if (config.ftp.enabled && config.ftp.url && api.remoteUploadFiles.length > 0) {
                     const qrStatus = document.createElement('span');
                     qrStatus.id = 'qrUploadStatus';
                     qrStatus.classList.add('stage-code__status');

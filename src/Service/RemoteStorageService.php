@@ -24,9 +24,13 @@ class RemoteStorageService
     protected NamedLogger $logger;
     protected Filesystem $filesystem;
 
-    public function __construct()
+    /**
+     * @param array|null $config Remote storage settings to use instead of the
+     *                           saved ones (e.g. to test unsaved form values).
+     */
+    public function __construct(?array $config = null)
     {
-        $this->config = ConfigurationService::getInstance()->getConfiguration()['ftp'];
+        $this->config = $config ?? ConfigurationService::getInstance()->getConfiguration()['ftp'];
         $this->logger = LoggerService::getInstance()->getLogger('remotestorage');
         $this->filesystem = new Filesystem($this->getAdapter($this->config));
     }
@@ -90,21 +94,51 @@ class RemoteStorageService
         $this->write($this->getStorageFolder() . '/index.php', (string) file_get_contents($templateLocation));
     }
 
-    public function getWebpageUri(): string
+    /**
+     * Whether a public URL is configured, i.e. QR codes should point to the
+     * remote storage instead of the local Photobooth.
+     */
+    public function hasPublicUrl(): bool
     {
-        $template = (string) $this->config['urlTemplate'];
-        $template = str_replace('%website%', $this->config['website'], $template);
-        $template = str_replace('%folder%', $this->config['folder'], $template);
-        $template = str_replace('%title%', SlugUtility::create($this->config['title']), $template);
-
-        return $template;
+        return (bool) $this->config['enabled'] && trim((string) $this->config['url']) !== '';
     }
 
+    /**
+     * Public URL of the storage folder (the remote gallery), without trailing slash.
+     */
+    public function getWebpageUri(): string
+    {
+        return rtrim($this->replacePlaceholders(trim((string) $this->config['url'])), '/');
+    }
+
+    /**
+     * Public link to a single uploaded photo, as encoded in the QR code:
+     * the gallery URL followed by the "qr_link" setting, where %file% is
+     * replaced by the filename. An empty "qr_link" links to the gallery.
+     */
+    public function getPhotoUrl(string $filename): string
+    {
+        $link = trim((string) $this->config['qr_link']);
+
+        return $this->getWebpageUri() . str_replace('%file%', rawurlencode($filename), $link);
+    }
+
+    /**
+     * Folder on the remote server the files are uploaded to, relative to
+     * the server root. Written exactly as configured in "path"; only the
+     * %title% placeholder is replaced (by the slug of the title).
+     */
     public function getStorageFolder(): string
     {
-        $storageFolder = SlugUtility::create($this->config['folder']) . '/' . SlugUtility::create($this->config['title']);
+        $path = str_replace('\\', '/', $this->replacePlaceholders((string) $this->config['path']));
+        $segments = array_filter(array_map('trim', explode('/', $path)), fn (string $segment): bool => $segment !== '');
 
-        return $storageFolder;
+        return implode('/', $segments);
+    }
+
+    protected function replacePlaceholders(string $value): string
+    {
+        return str_replace('%title%', SlugUtility::create((string) $this->config['title']), $value);
     }
 
     public function fileExists(string $location): bool
@@ -159,8 +193,8 @@ class RemoteStorageService
     {
         return new FtpAdapter(
             FtpConnectionOptions::fromArray([
-                'host' => $config['baseURL'],
-                'root' => '/' . $config['baseFolder'],
+                'host' => $config['host'],
+                'root' => '/',
                 'username' => $config['username'],
                 'password' => $config['password'],
                 'port' => $config['port'],
@@ -172,12 +206,12 @@ class RemoteStorageService
     {
         return new SftpAdapter(
             SftpConnectionProvider::fromArray([
-                'host' => $config['baseURL'],
+                'host' => $config['host'],
                 'username' => $config['username'],
                 'password' => $config['password'],
                 'port' => $config['port']
             ]),
-            '/' . $config['baseFolder'],
+            '/',
             PortableVisibilityConverter::fromArray([
                 'file' => [
                     'public' => 0664,

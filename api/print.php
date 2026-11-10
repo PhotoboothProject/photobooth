@@ -148,16 +148,14 @@ if (!file_exists($vars['printFile'])) {
         }
 
         if ($config['print']['qrcode']) {
-            $url = $config['qr']['url'];
-            if ($config['ftp']['enabled'] && $config['ftp']['useForQr']) {
-                $remoteStorageService = RemoteStorageService::getInstance();
-                $url = $remoteStorageService->getWebpageUri();
+            $remoteStorageService = RemoteStorageService::getInstance();
+            if ($remoteStorageService->hasPublicUrl()) {
+                $url = $remoteStorageService->getPhotoUrl($vars['fileName']);
+            } else {
+                $url = $config['qr']['url'];
                 if ($config['qr']['append_filename']) {
-                    $url .= '/images/';
+                    $url .= $vars['fileName'];
                 }
-            }
-            if ($config['qr']['append_filename']) {
-                $url .= $vars['fileName'];
             }
             $imageHandler->qrUrl = PathUtility::getPublicPath($url, true);
             $imageHandler->qrSize = $config['print']['qrSize'];

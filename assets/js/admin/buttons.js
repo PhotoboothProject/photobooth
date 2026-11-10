@@ -97,6 +97,17 @@ $(function () {
         return false;
     });
 
+    // keep the default port in sync with the selected connection type
+    $('[name="ftp[type]"]').on('change', function () {
+        const defaultPorts = { ftp: '21', sftp: '22' };
+        const port = $('[name="ftp[port]"]');
+        const newPort = defaultPorts[$(this).val()];
+        const current = String(port.val());
+        if (newPort && (current === '' || Object.values(defaultPorts).includes(current))) {
+            port.val(newPort);
+        }
+    });
+
     $('#test-connection').on('click', function (e) {
         e.preventDefault();
         const elem = $(this);
@@ -123,7 +134,14 @@ $(function () {
                     photoboothTools.console.log(el);
                     $('#ftp\\:' + el).addClass('required');
                 });
-                alert(photoboothTools.getTranslation(resp.message));
+                let message = photoboothTools.getTranslation(resp.message);
+                if (resp.path) {
+                    message += '\n\n' + photoboothTools.getTranslation('ftp:test_path') + '\n' + resp.path;
+                }
+                if (resp.link) {
+                    message += '\n\n' + photoboothTools.getTranslation('ftp:test_link') + '\n' + resp.link;
+                }
+                alert(message);
             },
 
             error: (jqXHR) => {
