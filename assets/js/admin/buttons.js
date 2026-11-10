@@ -97,9 +97,19 @@ $(function () {
         return false;
     });
 
+    // keep the default port in sync with the selected connection type
+    $('[name="ftp[type]"]').on('change', function () {
+        const defaultPorts = { ftp: '21', sftp: '22' };
+        const port = $('[name="ftp[port]"]');
+        const newPort = defaultPorts[$(this).val()];
+        const current = String(port.val());
+        if (newPort && (current === '' || Object.values(defaultPorts).includes(current))) {
+            port.val(newPort);
+        }
+    });
+
     $('#test-connection').on('click', function (e) {
         e.preventDefault();
-        const elem = $(this);
 
         // show loader
         $('.pageLoader').addClass('isActive');
@@ -123,7 +133,17 @@ $(function () {
                     photoboothTools.console.log(el);
                     $('#ftp\\:' + el).addClass('required');
                 });
-                alert(photoboothTools.getTranslation(resp.message));
+                let message = photoboothTools.getTranslation(resp.message);
+                if (resp.detail) {
+                    message += '\n\n' + resp.detail;
+                }
+                if (resp.path) {
+                    message += '\n\n' + photoboothTools.getTranslation('ftp:test_path') + '\n' + resp.path;
+                }
+                if (resp.link) {
+                    message += '\n\n' + photoboothTools.getTranslation('ftp:test_link') + '\n' + resp.link;
+                }
+                alert(message);
             },
 
             error: (jqXHR) => {
@@ -131,18 +151,16 @@ $(function () {
             },
 
             complete: (jqXHR, textStatus) => {
-                const status = jqXHR.status;
-                let classes = 'isActive isSuccess';
-                let findClasses = '.success span';
-                if (status != 200 || jqXHR.responseJSON.response != 'success' || textStatus != 'success') {
-                    classes = 'isActive isError';
-                    findClasses = '.error span';
-                }
+                const response = jqXHR.responseJSON || {};
+                const failed = jqXHR.status != 200 || response.response != 'success' || textStatus != 'success';
+                // show the actual outcome: the toast headline defaults to "success"
+                const message = response.message || (failed ? 'ftp:no_connection' : 'ftp:connected');
 
                 $('.pageLoader').removeClass('isActive');
-                $('.adminToast').addClass(classes);
-                const msg = elem.find(findClasses).html();
-                $('.adminToast').find('.headline').html(msg);
+                $('.adminToast')
+                    .removeClass('isSuccess isError')
+                    .addClass(failed ? 'isActive isError' : 'isActive isSuccess');
+                $('.adminToast').find('.headline').text(photoboothTools.getTranslation(message));
 
                 setTimeout(function () {
                     $('.adminToast').removeClass('isActive');
