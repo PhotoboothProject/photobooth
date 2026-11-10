@@ -110,7 +110,6 @@ $(function () {
 
     $('#test-connection').on('click', function (e) {
         e.preventDefault();
-        const elem = $(this);
 
         // show loader
         $('.pageLoader').addClass('isActive');
@@ -135,6 +134,9 @@ $(function () {
                     $('#ftp\\:' + el).addClass('required');
                 });
                 let message = photoboothTools.getTranslation(resp.message);
+                if (resp.detail) {
+                    message += '\n\n' + resp.detail;
+                }
                 if (resp.path) {
                     message += '\n\n' + photoboothTools.getTranslation('ftp:test_path') + '\n' + resp.path;
                 }
@@ -149,18 +151,16 @@ $(function () {
             },
 
             complete: (jqXHR, textStatus) => {
-                const status = jqXHR.status;
-                let classes = 'isActive isSuccess';
-                let findClasses = '.success span';
-                if (status != 200 || jqXHR.responseJSON.response != 'success' || textStatus != 'success') {
-                    classes = 'isActive isError';
-                    findClasses = '.error span';
-                }
+                const response = jqXHR.responseJSON || {};
+                const failed = jqXHR.status != 200 || response.response != 'success' || textStatus != 'success';
+                // show the actual outcome: the toast headline defaults to "success"
+                const message = response.message || (failed ? 'ftp:no_connection' : 'ftp:connected');
 
                 $('.pageLoader').removeClass('isActive');
-                $('.adminToast').addClass(classes);
-                const msg = elem.find(findClasses).html();
-                $('.adminToast').find('.headline').html(msg);
+                $('.adminToast')
+                    .removeClass('isSuccess isError')
+                    .addClass(failed ? 'isActive isError' : 'isActive isSuccess');
+                $('.adminToast').find('.headline').text(photoboothTools.getTranslation(message));
 
                 setTimeout(function () {
                     $('.adminToast').removeClass('isActive');

@@ -23,6 +23,7 @@ class RemoteStorageService
     protected array $config;
     protected NamedLogger $logger;
     protected Filesystem $filesystem;
+    protected string $lastError = '';
 
     /**
      * @param array|null $config Remote storage settings to use instead of the
@@ -172,10 +173,37 @@ class RemoteStorageService
             $this->logger->debug('Connection established.', [$files]);
             return true;
         } catch (FilesystemException | UnableToListContents | UnableToReadFile $exception) {
-            $this->logger->error('Connection failed.', ['exception' => $exception->getMessage()]);
+            $this->lastError = self::describeException($exception);
+            $this->logger->error('Connection failed.', ['exception' => $this->lastError]);
         }
 
         return false;
+    }
+
+    /**
+     * Reason of the last failed testConnection() call.
+     */
+    public function getLastError(): string
+    {
+        return $this->lastError;
+    }
+
+    /**
+     * Flysystem wraps the actual cause (e.g. a failed login) into generic
+     * exceptions like "creating parent directory failed": append the
+     * messages of the previous exceptions so the real reason is visible.
+     */
+    public static function describeException(\Throwable $exception): string
+    {
+        $messages = [];
+        for ($e = $exception; $e !== null; $e = $e->getPrevious()) {
+            $message = trim((string) preg_replace('/\s+/', ' ', $e->getMessage()));
+            if ($message !== '' && !in_array($message, $messages, true)) {
+                $messages[] = $message;
+            }
+        }
+
+        return implode(' <- ', $messages);
     }
 
     protected function getAdapter(array $config): FilesystemAdapter

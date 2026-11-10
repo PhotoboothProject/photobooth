@@ -54,6 +54,7 @@ if (!$remoteStorage->testConnection()) {
         'response' => 'error',
         'message' => 'ftp:no_connection',
         'missing' => [],
+        'detail' => $remoteStorage->getLastError(),
     ]);
     exit();
 }

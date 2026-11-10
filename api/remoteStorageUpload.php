@@ -133,8 +133,9 @@ while (true) {
             }
         }
     } catch (\Throwable $e) {
-        $queue->markFailed($file, $e->getMessage());
-        $logger->error('Remote upload failed', ['file' => $file, 'error' => $e->getMessage()]);
+        $error = RemoteStorageService::describeException($e);
+        $queue->markFailed($file, $error);
+        $logger->error('Remote upload failed', ['file' => $file, 'error' => $error]);
         // Circuit breaker: consecutive failures usually mean the server is
         // unreachable (timeouts can take ~90s each) - stop hammering it and
         // leave the backlog pending for the next trigger.
