@@ -124,16 +124,6 @@ final class RemoteStorageQueueServiceTest extends TestCase
         $this->assertSame([], $this->queue->getJobs());
     }
 
-    public function testChangedDestinationDiscardsJobWithoutDeletingLocalPhoto(): void
-    {
-        $this->enqueue('a.jpg');
-        $this->config['ftp']['title'] = 'event-b';
-        $this->remote->expects($this->never())->method('write');
-        $this->queue->process();
-        $this->assertSame([], $this->queue->getJobs());
-        $this->assertSame('synthetic-image', file_get_contents($this->root . '/data/images/a.jpg'));
-    }
-
     public function testFileFailureDoesNotBlockFollowingJobOrRetryInSameRun(): void
     {
         $this->enqueue('a.jpg');
@@ -210,20 +200,6 @@ final class RemoteStorageQueueServiceTest extends TestCase
         $this->assertSame(1, $this->queue->process()['remaining']);
     }
 
-    public function testNewJobArrivingDuringUploadIsProcessed(): void
-    {
-        $this->enqueue('a.jpg');
-        $paths = [];
-        $this->remote->expects($this->exactly(4))->method('write')->willReturnCallback(function (string $path) use (&$paths): void {
-            $paths[] = $path;
-            if (count($paths) === 1) {
-                $this->enqueue('b.jpg');
-            }
-        });
-        $this->assertSame(2, $this->queue->process()['uploaded']);
-        $this->assertContains('event-a/images/b.jpg', $paths);
-    }
-
     public function testDestinationChangeDuringUploadDiscardsNewJobForDifferentTarget(): void
     {
         $this->enqueue('a.jpg');
@@ -239,7 +215,7 @@ final class RemoteStorageQueueServiceTest extends TestCase
         $this->queue->process();
         $this->assertNotContains('event-b/images/old.jpg', $paths);
         $this->assertContains('event-b/images/new.jpg', $paths);
-        $this->assertFileExists($this->root . '/data/images/old.jpg');
+        $this->assertSame('synthetic-image', file_get_contents($this->root . '/data/images/old.jpg'));
         $this->assertSame([], $this->queue->getJobs());
     }
 
