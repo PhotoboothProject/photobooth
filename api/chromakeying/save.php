@@ -12,6 +12,7 @@ use Photobooth\PhotoboothCapture;
 use Photobooth\Service\DatabaseManagerService;
 use Photobooth\Service\ImageMetadataCacheService;
 use Photobooth\Service\LoggerService;
+use Photobooth\Service\RemoteStorageQueueService;
 use Photobooth\Utility\ImageUtility;
 
 header('Content-Type: application/json');
@@ -211,6 +212,10 @@ try {
     if (!chmod($filename_photo, (int)octdec($picture_permissions))) {
         $imageHandler->addErrorData('Warning: Failed to change picture permissions.');
     }
+
+    if ($config['ftp']['enabled'] && $config['ftp']['upload_in_background']) {
+        RemoteStorageQueueService::getInstance()->enqueue($file);
+    }
 } catch (\Exception $e) {
     // Try to clear cache
     if (isset($thumbResource) && $thumbResource instanceof \GdImage) {
@@ -228,6 +233,14 @@ try {
         'error' => $e->getMessage(),
     ]);
     die();
+}
+
+if ($config['ftp']['enabled'] && $config['ftp']['upload_in_background']) {
+    try {
+        RemoteStorageQueueService::getInstance()->startWorker();
+    } catch (\Throwable $e) {
+        $logger->error('Unable to start background upload worker: ' . $e->getMessage());
+    }
 }
 
 // send imagename to frontend

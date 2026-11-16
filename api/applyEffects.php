@@ -338,12 +338,7 @@ try {
             }
         }
 
-        // Store images on remote storage
-        if ($config['ftp']['enabled'] && $config['ftp']['upload_in_background']) {
-            // Uploaded by a detached worker once all pictures are processed, see below.
-            RemoteStorageQueueService::getInstance()->enqueue($vars['singleImageFile']);
-            $queuedForUpload = true;
-        } elseif ($config['ftp']['enabled']) {
+        if ($config['ftp']['enabled'] && !$config['ftp']['upload_in_background']) {
             $remoteStorage->write($remoteStorage->getStorageFolder() . '/images/' . $vars['singleImageFile'], (string) file_get_contents($vars['resultFile']));
             $remoteStorage->write($remoteStorage->getStorageFolder() . '/thumbs/' . $vars['singleImageFile'], (string) file_get_contents($vars['thumbFile']));
             if ($config['ftp']['create_webpage']) {
@@ -370,6 +365,12 @@ try {
             if (!unlink($vars['thumbFile'])) {
                 $imageHandler->addErrorData('Warning: Failed to remove thumbnail.');
             }
+        }
+
+        if ($config['ftp']['enabled'] && $config['ftp']['upload_in_background'] && (!$vars['isChroma'] || $config['keying']['show_all'])) {
+            // Only publish final images after cleanup; hidden chroma captures have been removed.
+            RemoteStorageQueueService::getInstance()->enqueue($vars['singleImageFile']);
+            $queuedForUpload = true;
         }
     }
 } catch (\Exception $e) {
