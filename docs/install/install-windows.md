@@ -210,3 +210,17 @@ your "_take picture command_" (inside the "_Commands_" section):
 ## Enjoy
 
 You should now be able to [access photobooth](http://localhost/) (or [http://localhost/photobooth/](http://localhost/photobooth/)) on your Windows machine!
+
+
+## Background FTP/SFTP uploads
+
+When background upload is enabled in the FTP settings, each new photo or collage starts a short-lived worker. Windows uses the CLI executable `php.exe` from the web server PHP installation directory. `php-cgi.exe` cannot run this worker. Allow PHP to start local processes and grant the web server account read access to the PHP executable and write access to `data/remote-queue`. Installation paths containing spaces are supported. Paths containing shell expansion characters are rejected with a startup error rather than changed silently.
+
+From the Photobooth directory, pending work can also be processed manually:
+
+```bat
+C:\php\php.exe bin\photobooth photobooth:remote-storage:process
+C:\php\php.exe bin\photobooth photobooth:remote-storage:process --status
+```
+
+There is no scheduled retry. If the connection fails, queued photos stay local until the next capture or manual run. A file-specific failure does not block later photos, and failed remote gallery creation stays pending. Changing the FTP/SFTP server, account, base folder or event folder discards old upload jobs; local photos are not deleted. Jobs created by the earlier background-upload implementation have no destination identity and are discarded for the same reason. Password changes alone do not discard jobs.

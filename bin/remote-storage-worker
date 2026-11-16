@@ -1,0 +1,24 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Photobooth\Enum\FolderEnum;
+use Photobooth\Service\RemoteStorageQueueService;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$lock = RemoteStorageQueueService::acquireWorkerLock(FolderEnum::DATA->absolute() . '/' . RemoteStorageQueueService::QUEUE_FOLDER);
+if ($lock === false) {
+    exit(0);
+}
+
+try {
+    require __DIR__ . '/../lib/boot.php';
+    $result = RemoteStorageQueueService::getInstance()->process(null, $lock);
+    exit($result['failed'] > 0 ? 1 : 0);
+} catch (Throwable $error) {
+    // Do not write exception details containing connection credentials to shared logs.
+    error_log('Remote upload worker failed: ' . get_class($error));
+    exit(1);
+}

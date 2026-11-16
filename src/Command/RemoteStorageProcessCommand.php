@@ -36,8 +36,8 @@ class RemoteStorageProcessCommand extends Command
                 return Command::SUCCESS;
             }
             $io->table(
-                ['File', 'Attempts', 'Queued at'],
-                array_map(fn (array $job) => [$job['file'], $job['attempts'], date('Y-m-d H:i:s', $job['created'])], $jobs)
+                ['File', 'Queued at'],
+                array_map(fn (array $job) => [$job['file'], date('Y-m-d H:i:s', $job['created'])], $jobs)
             );
             return Command::SUCCESS;
         }

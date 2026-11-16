@@ -7,6 +7,9 @@ use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\Ftp\FtpAdapter;
 use League\Flysystem\Ftp\FtpConnectionOptions;
+use League\Flysystem\Ftp\FtpConnectionException;
+use League\Flysystem\Ftp\FtpConnectionProvider;
+use League\Flysystem\Ftp\NoopCommandConnectivityChecker;
 use League\Flysystem\PhpseclibV3\SftpAdapter;
 use League\Flysystem\PhpseclibV3\SftpConnectionProvider;
 use League\Flysystem\UnableToListContents;
@@ -23,12 +26,62 @@ class RemoteStorageService
     protected array $config;
     protected NamedLogger $logger;
     protected Filesystem $filesystem;
+    protected \Closure $connectionProbe;
 
     public function __construct()
     {
-        $this->config = ConfigurationService::getInstance()->getConfiguration()['ftp'];
         $this->logger = LoggerService::getInstance()->getLogger('remotestorage');
-        $this->filesystem = new Filesystem($this->getAdapter($this->config));
+        $this->refreshConfiguration();
+    }
+
+    public function refreshConfiguration(): void
+    {
+        $config = ConfigurationService::getInstance()->getConfiguration()['ftp'];
+        if (!isset($this->config) || $this->config !== $config) {
+            $this->config = $config;
+            $this->filesystem = new Filesystem($this->getAdapter($config));
+        }
+    }
+
+    public function getDestinationIdentity(): string
+    {
+        return hash('sha256', serialize([
+            $this->config['type']->value,
+            strtolower(trim($this->config['baseURL'])),
+            (int) $this->config['port'],
+            $this->config['username'],
+            trim((string) preg_replace('~/+~', '/', $this->config['baseFolder']), '/'),
+            $this->getStorageFolder(),
+        ]));
+    }
+
+    public function shouldStopAfterUploadFailure(\Throwable $error): bool
+    {
+        do {
+            if ($error instanceof FtpConnectionException
+                || $error instanceof \League\Flysystem\PhpseclibV3\UnableToConnectToSftpHost
+                || $error instanceof \League\Flysystem\PhpseclibV3\UnableToAuthenticate
+                || $error instanceof \League\Flysystem\PhpseclibV3\UnableToEstablishAuthenticityOfHost
+                || $error instanceof \League\Flysystem\PhpseclibV3\UnableToLoadPrivateKey) {
+                return true;
+            }
+            $error = $error->getPrevious();
+        } while ($error !== null);
+
+        try {
+            if ($this->isConnectionAlive()) {
+                return false;
+            }
+        } catch (\Throwable) {
+            // An unconfirmed connection must not trigger the remaining uploads.
+        }
+        $this->logger->warning('Upload failed and the remote connection could not be confirmed.');
+        return true;
+    }
+
+    protected function isConnectionAlive(): bool
+    {
+        return isset($this->connectionProbe) && ($this->connectionProbe)();
     }
 
     public function createWebpage(): void
@@ -38,8 +91,9 @@ class RemoteStorageService
         }
 
         $templateLocation = PathUtility::getAbsolutePath($this->config['template_location']);
-        if (!file_exists($templateLocation)) {
-            return;
+        $template = @file_get_contents($templateLocation);
+        if ($template === false) {
+            throw new \UnexpectedValueException('Remote gallery template is missing or unreadable.');
         }
 
         $config = ConfigurationService::getInstance()->getConfiguration();
@@ -74,7 +128,7 @@ class RemoteStorageService
         ];
 
         $this->write($this->getStorageFolder() . '/config.inc.php', "<?php\n\nreturn " . ArrayUtility::export($parameters) . ";\n");
-        $this->write($this->getStorageFolder() . '/index.php', (string) file_get_contents($templateLocation));
+        $this->write($this->getStorageFolder() . '/index.php', $template);
     }
 
     public function getWebpageUri(): string
@@ -144,6 +198,17 @@ class RemoteStorageService
 
     protected function getAdapterForFtp(array $config): FtpAdapter
     {
+        $provider = new class () extends FtpConnectionProvider {
+            public mixed $lastConnection = null;
+
+            public function createConnection(FtpConnectionOptions $options)
+            {
+                return $this->lastConnection = parent::createConnection($options);
+            }
+        };
+        $this->connectionProbe = static fn (): bool => $provider->lastConnection !== null
+            && (new NoopCommandConnectivityChecker())->isConnected($provider->lastConnection);
+
         return new FtpAdapter(
             FtpConnectionOptions::fromArray([
                 'host' => $config['baseURL'],
@@ -151,19 +216,28 @@ class RemoteStorageService
                 'username' => $config['username'],
                 'password' => $config['password'],
                 'port' => $config['port'],
-            ])
+            ]),
+            $provider
         );
     }
 
     protected function getAdapterForSftp(array $config): SftpAdapter
     {
+        $provider = new class ($config['baseURL'], $config['username'], $config['password'], port: $config['port']) extends SftpConnectionProvider {
+            public ?\phpseclib3\Net\SFTP $lastConnection = null;
+
+            public function provideConnection(): \phpseclib3\Net\SFTP
+            {
+                return $this->lastConnection = parent::provideConnection();
+            }
+        };
+        // ping() reconnects; check the connection used by the failed upload instead.
+        $this->connectionProbe = static fn (): bool => $provider->lastConnection !== null
+            && $provider->lastConnection->isConnected()
+            && $provider->lastConnection->isConnected(2);
+
         return new SftpAdapter(
-            SftpConnectionProvider::fromArray([
-                'host' => $config['baseURL'],
-                'username' => $config['username'],
-                'password' => $config['password'],
-                'port' => $config['port']
-            ]),
+            $provider,
             '/' . $config['baseFolder'],
             PortableVisibilityConverter::fromArray([
                 'file' => [
