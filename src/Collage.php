@@ -74,6 +74,36 @@ class Collage
         return null;
     }
 
+    private static function isPhotoStripLayout(string $layoutId): bool
+    {
+        $layoutId = strtolower($layoutId);
+
+        return str_contains($layoutId, 'strip')
+            || str_contains($layoutId, '2x3')
+            || str_contains($layoutId, '2x4');
+    }
+
+    private static function resolveConfiguredBackground(CollageConfig $c): string
+    {
+        $backgroundStrip = isset($c->collageBackgroundStrip) ? trim($c->collageBackgroundStrip) : '';
+        if (self::isPhotoStripLayout($c->collageLayout) && $backgroundStrip !== '') {
+            return $backgroundStrip;
+        }
+
+        $orientation = strtolower($c->collageOrientation);
+        $backgroundPortrait = isset($c->collageBackgroundPortrait) ? trim($c->collageBackgroundPortrait) : '';
+        if ($orientation === 'portrait' && $backgroundPortrait !== '') {
+            return $backgroundPortrait;
+        }
+
+        $backgroundLandscape = isset($c->collageBackgroundLandscape) ? trim($c->collageBackgroundLandscape) : '';
+        if ($orientation === 'landscape' && $backgroundLandscape !== '') {
+            return $backgroundLandscape;
+        }
+
+        return isset($c->collageBackground) ? $c->collageBackground : '';
+    }
+
     public static function reset(): void
     {
         self::$collageHeight = 0;
@@ -212,6 +242,7 @@ class Collage
         self::$pictureOrientation = $c->collageOrientation;
 
         $collageConfigFilePath = self::getCollageConfigPath($c->collageLayout, self::$pictureOrientation);
+        $layoutHasBackgroundOverride = false;
 
         // Save the original admin setting for text on collage
         $adminTextOnCollageEnabled = $c->textOnCollageEnabled;
@@ -235,6 +266,7 @@ class Collage
 
                     if (isset($collageJson['background']) && !empty($collageJson['background'])) {
                         $c->collageBackground = $collageJson['background'];
+                        $layoutHasBackgroundOverride = true;
                     }
 
                     if (isset($collageJson['width']) && isset($collageJson['height'])) {
@@ -501,7 +533,14 @@ class Collage
             throw new \Exception('Failed to create collage resource.');
         }
 
-        $c->collageBackground = Helper::getPrefixedFile($c->collageBackground, $c->collageLayout);
+        $backgroundRenderMode = isset($c->collageBackgroundRenderMode) ? $c->collageBackgroundRenderMode : 'behind_images';
+        $renderBackgroundAsOverlay = $backgroundRenderMode === 'overlay_frame';
+        $backgroundImage = null;
+
+        $selectedBackground = $layoutHasBackgroundOverride
+            ? $c->collageBackground
+            : self::resolveConfiguredBackground($c);
+        $c->collageBackground = Helper::getPrefixedFile($selectedBackground, $c->collageLayout);
         if (!empty($c->collageBackground)) {
             $backgroundImage = $imageHandler->createFromImage($c->collageBackground);
             if (!$backgroundImage instanceof \GdImage) {
@@ -511,6 +550,9 @@ class Collage
             if (!$backgroundImage instanceof \GdImage) {
                 throw new \Exception('Failed to resize collage background image resource.');
             }
+        }
+
+        if (!$renderBackgroundAsOverlay && $backgroundImage instanceof \GdImage) {
             imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, self::$collageWidth, self::$collageHeight);
         } else {
             $background = imagecolorallocate($my_collage, (int) $bg_r, (int) $bg_g, (int) $bg_b);
@@ -559,6 +601,11 @@ class Collage
 
             $imageHandler->addPicture($tmpImg, $my_collage);
             unset($tmpImg);
+        }
+
+        if ($renderBackgroundAsOverlay && $backgroundImage instanceof \GdImage) {
+            // Overlay mode keeps transparent "holes" in the background so images below stay visible.
+            imagecopy($my_collage, $backgroundImage, 0, 0, 0, 0, self::$collageWidth, self::$collageHeight);
         }
 
         if (self::$drawDashedLine == true) {
