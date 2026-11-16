@@ -85,9 +85,9 @@ foreach ($filesToDelete as $fileName) {
         // Cancel a queued upload; if it already reached (or may reach) the
         // remote storage, delete the remote copies as well. Entries removed
         // while uploading are cleaned up by the drain worker itself.
-        $removed = RemoteStorageQueueService::getInstance()->remove($fileName);
-        $status = $removed['status'] ?? null;
-        if ($config['ftp']['delete'] && ($status === null || in_array($status, [RemoteStorageQueueService::STATUS_DONE, RemoteStorageQueueService::STATUS_UPLOADING], true))) {
+        RemoteStorageQueueService::getInstance()->remove($fileName);
+        // Pending and failed entries may already have a partially uploaded copy.
+        if ($config['ftp']['delete']) {
             $remoteStorage->delete($remoteStorage->getStorageFolder() . '/images/' . $fileName);
             $remoteStorage->delete($remoteStorage->getStorageFolder() . '/thumbs/' . $fileName);
         }

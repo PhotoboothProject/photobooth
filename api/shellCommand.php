@@ -64,6 +64,12 @@ switch ($mode) {
         break;
     case 'reboot':
     case 'shutdown':
+        if (!$isAdmin && !$isRental) {
+            $data = ['success' => 'false', 'mode' => 'Unauthorized'];
+            $logger->debug('message', $data);
+            echo json_encode($data);
+            die();
+        }
         $sudoCmd = $mode === 'reboot' ? $config['commands']['reboot'] : $config['commands']['shutdown'];
         $cmd = 'sudo ' . sprintf($sudoCmd);
         break;

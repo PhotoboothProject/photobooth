@@ -399,14 +399,14 @@ In the end you can enable the `delete` functionality that will delete photos (an
 
 **Upgrading from an older version**
 
-The settings have been simplified and are not migrated automatically, please enter them again:
+Legacy settings are migrated automatically when loading the configuration. Explicit new settings take precedence:
 
 | Old setting                            | New setting                                                         |
 | -------------------------------------- | ------------------------------------------------------------------- |
 | `baseURL`                              | `host`                                                              |
 | `baseFolder` + `folder` + title folder | `path`, e.g. `<baseFolder>/<folder>/%title%`                        |
 | `website` + `urlTemplate`              | `url`, e.g. `<website>/<folder>/%title%`                            |
-| `useForQr`                             | removed, the QR code uses the remote server as soon as `url` is set |
+| `useForQr`                             | `url` stays empty when disabled, preserving local QR codes |
 
 ---
 
