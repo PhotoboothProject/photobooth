@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Result rendering fixture</title>
+<style>
+    body { font: 16px sans-serif; margin: 2rem; }
+    #result { display: none; width: 480px; height: 270px; background: #eee var(--stage-background-image) center / contain no-repeat; }
+    #result.stage--active { display: block; }
+    #loader { display: none; padding: 1rem; }
+    #loader.stage--active { display: block; }
+    #gallery img { width: 80px; }
+</style>
+<h1>Result rendering fixture</h1>
+<button onclick="run('clip.mp4', 'sepia', true)">Video</button>
+<button onclick="run('photo.jpg', 'plain', true)">Photo</button>
+<button onclick="run('photo.jpg', 'sepia', true)">Photo sepia</button>
+<button onclick="run('photo.jpg', 'plain', false)">Gallery disabled</button>
+<button onclick="addWithoutSize()">Gallery without known size</button>
+<p id="status">Loading production code…</p>
+<div id="start" class="stage--active">Start</div>
+<div id="loader" class="stage--active showBackgroundImage">Loading…</div>
+<div id="result"><button data-command="qrbtn">QR</button><button class="deletebtn">Delete</button></div>
+<div id="gallery"></div>
+<button id="print">Print</button><div id="filternav"></div>
+<script src="/faq/js/jquery-3.6.0.min.js"></script>
+<script>
+    const api = { resetTimeOut() {}, screensaver: { resetTimer() {} } };
+    const resultPage = $('#result'), startPage = $('#start'), loader = $('#loader');
+    const buttonPrint = $('#print'), filternav = $('#filternav'), galimages = $('#gallery');
+    const config = { print: {}, filters: {}, qr: {}, commands: {}, preview: {}, gallery: { enabled: true, use_thumb: true } };
+    const environment = { publicFolders: { api: '/api', images: '/images', thumbs: '/thumbs' } };
+    const photoboothTools = { isVideoFile: name => name.endsWith('.mp4'), console: { logDev() {} } };
+    const remoteBuzzerClient = { inProgress() {} }, rotaryController = { focusSet() {} };
+    let imgFilter = 'plain';
+    let ready = false;
+    fetch('/assets/js/core.js').then(response => response.text()).then(source => {
+        const code = source.slice(source.indexOf('    api.renderPic = function'), source.indexOf('    api.openGallery = function'));
+        eval(code);
+        ready = true;
+        $('#status').text('Ready');
+    });
+    function run(filename, filter, enabled) {
+        if (!ready) return;
+        $('#gallery').empty();
+        resultPage.removeClass('stage--active');
+        startPage.addClass('stage--active');
+        loader.addClass('stage--active showBackgroundImage');
+        config.gallery.enabled = enabled;
+        imgFilter = filter;
+        $('#status').text(`${filename}: ${filter}, gallery ${enabled}`);
+        api.renderPic(filename, [filename]);
+    }
+    function addWithoutSize() {
+        $('#gallery').empty();
+        config.gallery.enabled = true;
+        $('#status').text('Gallery without known size');
+        api.addImage('photo.jpg');
+    }
+</script>
+</html>

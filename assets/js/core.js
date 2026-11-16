@@ -1350,7 +1350,7 @@ const photoBooth = (function () {
             ? environment.publicFolders.api + '/qrcode.php?filename=' + filename
             : environment.publicFolders.images + '/' + filename;
         // Preload the exact URL used as background so the image is only downloaded and decoded once.
-        const displayUrl = `${imageUrl}?filter=${imgFilter}`;
+        const displayUrl = photoboothTools.isVideoFile(filename) ? imageUrl : `${imageUrl}?filter=${imgFilter}`;
 
         const preloadImage = new Image();
         preloadImage.onload = () => {
