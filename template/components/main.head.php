@@ -33,7 +33,7 @@ include PathUtility::getAbsolutePath('template/components/main.defaults.php');
 
     <!-- Fullscreen Mode on old iOS-Devices when starting photobooth from homescreen -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
     <link rel="stylesheet" href="<?=$assetService->getUrl('node_modules/normalize.css/normalize.css')?>" />
     <link rel="stylesheet" href="<?=$assetService->getUrl('node_modules/@fortawesome/fontawesome-free/css/all.min.css')?>" />
@@ -46,4 +46,12 @@ include PathUtility::getAbsolutePath('template/components/main.defaults.php');
     <?= ThemeUtility::renderCustomUserStyle($config); ?>
     <?= is_file(PathUtility::getAbsolutePath('private/overrides.css')) ? '<link rel="stylesheet" href="' . $assetService->getUrl('private/overrides.css') . '"/>' : '' ?>
     <script src="<?=$assetService->getUrl('node_modules/jquery/dist/jquery.min.js')?>"></script>
+    <style>
+        @media (display-mode: standalone), (display-mode: fullscreen) {
+            html {
+                color-scheme: dark;
+                background: #000000;
+            }
+        }
+    </style>
 </head>

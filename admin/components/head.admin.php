@@ -14,7 +14,7 @@ $assetService = AssetService::getInstance();
     <meta name="msapplication-TileColor" content="<?=$config['colors']['primary']?>">
     <meta name="theme-color" content="<?=$config['colors']['status_bar'] ?? '#000000'?>">
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
     <title><?=$pageTitle ?></title>
 
@@ -36,6 +36,12 @@ $assetService = AssetService::getInstance();
         :root {
             --brand-1: <?=$config['colors']['panel'];?>;
             --brand-2: <?=$config['colors']['primary_light'];?>;
+        }
+        @media (display-mode: standalone), (display-mode: fullscreen) {
+            html {
+                color-scheme: dark;
+                background: #000000;
+            }
         }
     </style>
 </head>
