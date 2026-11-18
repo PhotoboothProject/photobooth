@@ -16,16 +16,14 @@ if ($filename) {
         echo 'Invalid filename.';
         exit();
     }
-    $url = $config['qr']['url'];
-    if ($config['ftp']['enabled'] && $config['ftp']['useForQr']) {
-        $remoteStorageService = RemoteStorageService::getInstance();
-        $url = $remoteStorageService->getWebpageUri();
+    $remoteStorageService = RemoteStorageService::getInstance();
+    if ($remoteStorageService->hasPublicUrl()) {
+        $url = $remoteStorageService->getPhotoUrl($filename);
+    } else {
+        $url = $config['qr']['url'];
         if ($config['qr']['append_filename']) {
-            $url .= '/images/';
+            $url .= $filename;
         }
-    }
-    if ($config['qr']['append_filename']) {
-        $url .= $filename;
     }
     $url = PathUtility::getPublicPath($url, true);
     try {

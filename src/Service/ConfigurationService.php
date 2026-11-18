@@ -8,6 +8,7 @@ use Photobooth\Environment;
 use Photobooth\Helper;
 use Photobooth\Utility\ArrayUtility;
 use Photobooth\Utility\PathUtility;
+use Photobooth\Utility\SlugUtility;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderResolver;
@@ -128,6 +129,23 @@ class ConfigurationService
 
     protected function processMigration(array $config): array
     {
+        // Preserve the old adapter root, slugged storage folder and QR opt-in.
+        if (isset($config['ftp'])) {
+            $ftp = &$config['ftp'];
+            if (isset($ftp['baseURL'])) {
+                $ftp['host'] ??= $ftp['baseURL'];
+            }
+            if (isset($ftp['baseURL']) || isset($ftp['baseFolder']) || isset($ftp['folder'])) {
+                $ftp['path'] ??= trim($ftp['baseFolder'] ?? '', '/') . '/' . SlugUtility::create($ftp['folder'] ?? '') . '/%title%';
+            }
+            if (isset($ftp['useForQr']) || isset($ftp['website']) || isset($ftp['urlTemplate'])) {
+                $ftp['url'] ??= !empty($ftp['useForQr'])
+                    ? str_replace(['%website%', '%folder%'], [$ftp['website'] ?? '', $ftp['folder'] ?? ''], $ftp['urlTemplate'] ?? '%website%/%folder%/%title%')
+                    : '';
+            }
+            unset($ftp);
+        }
+
         // Normalize legacy paths that may contain absolute URLs or subfolder prefixes (e.g. /photobooth/)
         $baseUrl  = PathUtility::getBaseUrl();
         $hostBase = '';

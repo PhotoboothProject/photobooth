@@ -19,8 +19,10 @@ asort($images['thumbs']);
 $firstImage = $images['images'][0] ?? null;
 $totalImages = count($images['images']);
 
-$requestUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-$urlPrefix = $requestUrl;
+$requestHost = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+$requestUrl = $requestHost . $_SERVER['REQUEST_URI'];
+// links to the files must not contain the query string (e.g. ?photo=...)
+$urlPrefix = $requestHost . strtok($_SERVER['REQUEST_URI'], '?');
 if (substr($urlPrefix, -4) === '.php') {
     $baseName = basename($urlPrefix);
     $urlPrefix = rtrim($urlPrefix, $baseName);
@@ -30,6 +32,20 @@ if (substr($urlPrefix, -1) !== '/') {
 }
 
 $ogImage = $urlPrefix . $firstImage;
+
+// Deep link to a single photo (?photo=<filename>): the gallery opens with
+// that photo already shown in the lightbox (download, share, back to gallery).
+$requestedPhoto = isset($_GET['photo']) && is_string($_GET['photo']) ? basename($_GET['photo']) : null;
+$requestedKey = null;
+if ($requestedPhoto !== null) {
+    foreach ($images['images'] as $key => $file) {
+        if (basename($file) === $requestedPhoto) {
+            $requestedKey = $key;
+            $ogImage = $urlPrefix . $file;
+            break;
+        }
+    }
+}
 
 header('Cache-Control: max-age=' . $templateConfig['meta']['max-age']);
 
@@ -319,5 +335,12 @@ $styles .= '</style>' . PHP_EOL;
             <button type="submit" class="big-button"><?= $templateConfig['labels']['download'] ?></button>
         </form>
     </div>
+    <?php if ($requestedKey !== null) { ?>
+        <script>
+            if (!location.hash) {
+                location.replace('#lightbox-uid-<?= (int) $requestedKey ?>');
+            }
+        </script>
+    <?php } ?>
 </body>
 </html>
